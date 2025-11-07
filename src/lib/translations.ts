@@ -1,3 +1,4 @@
+
 export const colorPalettes = [
     { name: 'default', label: 'Default', color: '#7c3aed' },
     { name: 'emerald', label: 'Emerald', color: '#50C878' },
@@ -42,6 +43,7 @@ export const translations = {
         language_select_label: 'Language',
         color_palette: 'Color Palette',
         color_palette_desc: 'Select your favorite color theme for the application.',
+        select_color_palette: 'Select Colour Palette',
         randomize: 'Randomize',
         accessibility: 'Accessibility',
         accessibility_desc: 'Make SketchQuest easier to use with these accessibility settings.',
@@ -156,6 +158,7 @@ export const translations = {
         language_select_label: 'Idioma',
         color_palette: 'Paleta de colores',
         color_palette_desc: 'Selecciona tu tema de color favorito para la aplicación.',
+        select_color_palette: 'Seleccionar paleta de colores',
         randomize: 'Aleatorizar',
         accessibility: 'Accesibilidad',
         accessibility_desc: 'Facilita el uso de SketchQuest con esta configuración de accesibilidad.',
@@ -270,6 +273,7 @@ export const translations = {
         language_select_label: 'Langue',
         color_palette: 'Palette de couleurs',
         color_palette_desc: 'Sélectionnez votre thème de couleur préféré pour l\'application.',
+        select_color_palette: 'Sélectionner la palette de couleurs',
         randomize: 'Aléatoire',
         accessibility: 'Accessibilité',
         accessibility_desc: 'Facilitez l\'utilisation de SketchQuest avec ces paramètres d\'accessibilité.',
@@ -384,6 +388,7 @@ export const translations = {
         language_select_label: 'Sprache',
         color_palette: 'Farbpalette',
         color_palette_desc: 'Wählen Sie Ihr bevorzugtes Farbthema für die Anwendung.',
+        select_color_palette: 'Farbpalette auswählen',
         randomize: 'Zufällig',
         accessibility: 'Barrierefreiheit',
         accessibility_desc: 'Machen Sie SketchQuest mit diesen Eingabehilfen einfacher zu bedienen.',
@@ -498,6 +503,7 @@ export const translations = {
         language_select_label: 'भाषा',
         color_palette: 'रंग पैलेट',
         color_palette_desc: 'एप्लिकेशन के लिए अपना पसंदीदा रंग विषय चुनें।',
+        select_color_palette: 'रंग पैलेट चुनें',
         randomize: 'यादृच्छिक करें',
         accessibility: 'सरल उपयोग',
         accessibility_desc: 'इन एक्सेसिबिलिटी सेटिंग्स के साथ स्केचक्वेस्ट का उपयोग करना आसान बनाएं।',
@@ -612,6 +618,7 @@ export const translations = {
         language_select_label: 'زبان',
         color_palette: 'رنگ پیلیٹ',
         color_palette_desc: 'ایپلیکیشن کے لیے اپنا پسندیدہ رنگین تھیم منتخب کریں۔',
+        select_color_palette: 'رنگ پیلیٹ منتخب کریں',
         randomize: 'بے ترتیب',
         accessibility: 'رسائی',
         accessibility_desc: 'ان رسائی ترتیبات کے ساتھ اسکیچ کویسٹ کا استعمال آسان بنائیں۔',
@@ -713,5 +720,7 @@ export const translations = {
         frost: 'پالا',
     },
 };
+
+    
 
     

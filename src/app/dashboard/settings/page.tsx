@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 
 export default function SettingsPage() {
@@ -138,24 +139,38 @@ export default function SettingsPage() {
                     {t('randomize')}
                 </Button>
             </div>
-            <RadioGroup
-              value={settings.colorPalette}
-              onValueChange={(value) => updateSetting('colorPalette', value)}
-              className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 pt-2"
-            >
-              {colorPalettes.map((palette) => (
-                <div key={palette.name}>
-                    <RadioGroupItem value={palette.name} id={palette.name} className="peer sr-only" />
-                    <Label
-                        htmlFor={palette.name}
-                        className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                    >
-                        <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
-                        {t(palette.name as keyof typeof translations['en'])}
-                    </Label>
-                </div>
-              ))}
-            </RadioGroup>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full md:w-auto">
+                        <Palette className="mr-2 h-4 w-4" />
+                        {t('select_color_palette')}
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>{t('color_palette')}</DialogTitle>
+                        <DialogDescription>{t('color_palette_desc')}</DialogDescription>
+                    </DialogHeader>
+                    <RadioGroup
+                        value={settings.colorPalette}
+                        onValueChange={(value) => updateSetting('colorPalette', value)}
+                        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 pt-2"
+                        >
+                        {colorPalettes.map((palette) => (
+                            <div key={palette.name}>
+                                <RadioGroupItem value={palette.name} id={`modal-${palette.name}`} className="peer sr-only" />
+                                <Label
+                                    htmlFor={`modal-${palette.name}`}
+                                    className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                >
+                                    <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
+                                    {t(palette.name as keyof typeof translations['en'])}
+                                </Label>
+                            </div>
+                        ))}
+                    </RadioGroup>
+                </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
       </Card>
@@ -498,5 +513,7 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
 
     
