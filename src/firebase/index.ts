@@ -46,5 +46,7 @@ export * from './firestore/use-collection';
 export * from './firestore/use-doc';
 export * from './non-blocking-updates';
 export * from './non-blocking-login';
-export * from './errors';
-export * from './error-emitter';
+// Errors and the emitter are exported, but use-collection and use-doc are the primary consumers.
+export { FirestorePermissionError } from './errors';
+export { errorEmitter } from './error-emitter';
+
