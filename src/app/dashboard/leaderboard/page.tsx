@@ -1,9 +1,14 @@
-import { Award, Crown } from 'lucide-react';
+
+'use client';
+
+import { Award, Crown, Share2 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const leaderboardData = [
@@ -17,7 +22,17 @@ const leaderboardData = [
 ];
 
 export default function LeaderboardPage() {
+  const { toast } = useToast();
   const getAvatar = (id: string) => PlaceHolderImages.find(img => img.id === id);
+
+  const handleShare = (name: string, rank: number) => {
+    toast({
+      title: 'Share Your Achievement!',
+      description: `You shared ${name}'s rank of #${rank}. Great job!`,
+    });
+    // In a real app, this would open a share dialog
+    console.log(`Sharing rank for ${name}: #${rank}`);
+  };
 
   return (
     <Card>
@@ -39,6 +54,7 @@ export default function LeaderboardPage() {
                   <TableHead className="w-[80px]">Rank</TableHead>
                   <TableHead>Student</TableHead>
                   <TableHead className="text-right">XP</TableHead>
+                  <TableHead className="w-[100px] text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -64,6 +80,16 @@ export default function LeaderboardPage() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right font-bold">{player.xp.toLocaleString()}</TableCell>
+                      <TableCell className="text-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleShare(player.name, player.rank)}
+                          aria-label={`Share ${player.name}'s rank`}
+                        >
+                          <Share2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
