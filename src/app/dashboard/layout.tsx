@@ -143,7 +143,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </header>
           <main className="flex-1 p-4 sm:p-6">{children}</main>
         </SidebarInset>
-      </SidebarProvider>
+      </Sidebar>
     </SidebarProvider>
   )
 }
