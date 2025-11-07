@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,29 +22,40 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
     try {
-      // We are not awaiting here to avoid blocking UI
-      initiateEmailSignIn(auth, email, password);
-      // The auth state change will be handled by the onAuthStateChanged listener in FirebaseProvider
-      // and the layout will redirect. For now, we'll just show a toast.
+      await signInWithEmailAndPassword(auth, email, password);
       toast({
-        title: "Logging In...",
-        description: "You will be redirected shortly.",
+        title: "Login Successful",
+        description: "Redirecting to your dashboard...",
       });
-      // A small delay to allow the auth state to propagate
-      setTimeout(() => {
-        // Fallback redirection in case auth state listener is slow
-        if (router) {
-            router.push('/dashboard');
-        }
-      }, 2000);
+      router.push('/dashboard');
     } catch (error: any) {
-      setIsLoading(false);
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: error.message || "An unexpected error occurred.",
-      });
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        // If user not found, try to create a new user
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          toast({
+            title: "Account Created & Logged In",
+            description: "Redirecting to your dashboard...",
+          });
+          router.push('/dashboard');
+        } catch (signupError: any) {
+          setIsLoading(false);
+          toast({
+            variant: "destructive",
+            title: "Signup Failed",
+            description: signupError.message || "Could not create your account.",
+          });
+        }
+      } else {
+        setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: error.message || "An unexpected error occurred.",
+        });
+      }
     }
   };
 
