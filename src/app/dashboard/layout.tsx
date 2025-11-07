@@ -47,12 +47,9 @@ import { BottomSidebar } from "@/components/bottom-sidebar"
 
 function DashboardNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const router = useRouter();
-  const auth = useAuth();
   const { user, isUserLoading } = useUser();
   const { settings } = useSettings();
-  const avatarImage = PlaceHolderImages.find((img) => img.id === 'avatar-1');
-  
+
   const t = (key: keyof typeof translations['en']) => {
     if (!settings) return translations['en'][key];
     return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
@@ -63,18 +60,9 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
     { href: "/dashboard/quests", icon: Book, label: t('quests') },
     { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
   ]
-
-  React.useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.push('/login');
-    }
-  }, [isUserLoading, user, router]);
-
-  const handleLogout = () => {
-    auth.signOut();
-    router.push('/');
-  }
-
+  
+  const isHorizontalSidebar = settings.sidebarPosition === 'top' || settings.sidebarPosition === 'bottom';
+  
   if (isUserLoading || !user || !settings) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -82,8 +70,6 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
       </div>
     )
   }
-
-  const isHorizontalSidebar = settings.sidebarPosition === 'top' || settings.sidebarPosition === 'bottom';
 
   if (isHorizontalSidebar) {
     return (
@@ -155,6 +141,23 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
+    const { user, isUserLoading } = useUser();
+    
+    React.useEffect(() => {
+        if (!isUserLoading && !user) {
+            router.push('/login');
+        }
+    }, [isUserLoading, user, router]);
+
+    if (isUserLoading || !user) {
+        return (
+          <div className="flex h-screen items-center justify-center">
+            <Loader className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )
+    }
+
     return <DashboardNav>{children}</DashboardNav>;
 }
 
