@@ -23,7 +23,7 @@ export interface SettingsState {
   isSocialRestricted: boolean;
   colorPalette: string;
   viewMode: 'desktop' | 'mobile' | 'auto';
-  sidebarPosition: 'left' | 'right' | 'top' | 'bottom';
+  sidebarPosition: 'left' | 'right' | 'top';
 }
 
 // Define the default settings
@@ -150,7 +150,3 @@ export const useSettings = () => {
   }
   return context;
 };
-
-    
-
-    

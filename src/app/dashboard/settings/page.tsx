@@ -184,8 +184,8 @@ export default function SettingsPage() {
             </p>
             <RadioGroup
               value={settings.sidebarPosition}
-              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right' | 'top' | 'bottom')}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2"
+              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right' | 'top')}
+              className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2"
             >
               <div>
                 <RadioGroupItem value="left" id="pos-left" className="peer sr-only" />
@@ -203,12 +203,6 @@ export default function SettingsPage() {
                 <RadioGroupItem value="top" id="pos-top" className="peer sr-only" />
                 <Label htmlFor="pos-top" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
                   <ArrowUpToLine className="h-6 w-6" /> {t('top')}
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="bottom" id="pos-bottom" className="peer sr-only" />
-                <Label htmlFor="pos-bottom" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
-                  <ArrowDownToLine className="h-6 w-6" /> {t('bottom')}
                 </Label>
               </div>
             </RadioGroup>
