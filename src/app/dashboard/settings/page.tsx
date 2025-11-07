@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -6,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette, Wand2 } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette, Wand2, RotateCcw } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { useSettings } from '@/context/settings-context';
+import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
 
 
@@ -194,10 +195,40 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="space-y-4">
-            <Label htmlFor="font-size-slider">{t('text_size')}</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="font-size-slider">{t('text_size')}</Label>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => updateSetting('textSize', defaultSettings.textSize)}
+                disabled={settings.textSize === defaultSettings.textSize}
+              >
+                <RotateCcw className="mr-2 h-4 w-4" />
+                Reset to default
+              </Button>
+            </div>
             <div className="flex items-center gap-4">
               <Text className="h-5 w-5 text-muted-foreground" />
-              <Slider id="font-size-slider" value={[settings.textSize]} onValueChange={(value) => updateSetting('textSize', value[0])} max={100} step={10} />
+              <div className="relative w-full">
+                <Slider 
+                  id="font-size-slider" 
+                  value={[settings.textSize]} 
+                  onValueChange={(value) => updateSetting('textSize', value[0])} 
+                  max={100} 
+                  step={10} 
+                />
+                <div className="absolute top-full w-full flex justify-between text-xs text-muted-foreground mt-2 px-1">
+                  <span>|</span>
+                  <span>|</span>
+                  <span className="font-bold text-primary">|</span>
+                  <span>|</span>
+                  <span>|</span>
+                  <span>|</span>
+                </div>
+                 <div className="absolute top-full w-full text-center text-xs text-muted-foreground mt-6">
+                    <span style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Default</span>
+                </div>
+              </div>
               <Text className="h-8 w-8 text-muted-foreground" />
             </div>
           </div>
@@ -435,3 +466,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+    
