@@ -22,6 +22,7 @@ export interface SettingsState {
   playtimeLimitMinutes: number;
   isSocialRestricted: boolean;
   colorPalette: string;
+  viewMode: 'desktop' | 'mobile' | 'auto';
 }
 
 // Define the default settings
@@ -42,6 +43,7 @@ export const defaultSettings: SettingsState = {
   playtimeLimitMinutes: 0,
   isSocialRestricted: false,
   colorPalette: 'crimson',
+  viewMode: 'auto',
 };
 
 // Define the context shape
@@ -150,4 +152,5 @@ export const useSettings = () => {
     
 
     
+
 
