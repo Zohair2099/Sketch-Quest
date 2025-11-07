@@ -150,6 +150,12 @@ export const translations = {
         desktop: 'Desktop',
         mobile: 'Mobile',
         auto: 'Auto',
+        sidebar_position: 'Sidebar Position',
+        sidebar_position_desc: 'Change the location of the main navigation sidebar.',
+        top: 'Top',
+        bottom: 'Bottom',
+        left: 'Left',
+        right: 'Right',
     },
     es: {
         settings: 'Configuración',
@@ -271,6 +277,12 @@ export const translations = {
         desktop: 'Escritorio',
         mobile: 'Móvil',
         auto: 'Auto',
+        sidebar_position: 'Posición de la barra lateral',
+        sidebar_position_desc: 'Cambia la ubicación de la barra lateral de navegación principal.',
+        top: 'Arriba',
+        bottom: 'Abajo',
+        left: 'Izquierda',
+        right: 'Derecha',
     },
     fr: {
         settings: 'Paramètres',
@@ -392,6 +404,12 @@ export const translations = {
         desktop: 'Bureau',
         mobile: 'Mobile',
         auto: 'Auto',
+        sidebar_position: 'Position de la barre latérale',
+        sidebar_position_desc: 'Modifiez l\'emplacement de la barre latérale de navigation principale.',
+        top: 'Haut',
+        bottom: 'Bas',
+        left: 'Gauche',
+        right: 'Droite',
     },
     de: {
         settings: 'Einstellungen',
@@ -513,6 +531,12 @@ export const translations = {
         desktop: 'Desktop',
         mobile: 'Handy',
         auto: 'Auto',
+        sidebar_position: 'Seitenleistenposition',
+        sidebar_position_desc: 'Ändern Sie die Position der Hauptnavigations-Seitenleiste.',
+        top: 'Oben',
+        bottom: 'Unten',
+        left: 'Links',
+        right: 'Rechts',
     },
     hi: {
         settings: 'सेटिंग्स',
@@ -634,6 +658,12 @@ export const translations = {
         desktop: 'डेस्कटॉप',
         mobile: 'मोबाइल',
         auto: 'ऑटो',
+        sidebar_position: 'साइडबार स्थिति',
+        sidebar_position_desc: 'मुख्य नेविगेशन साइडबार का स्थान बदलें।',
+        top: 'शीर्ष',
+        bottom: 'तल',
+        left: 'बायाँ',
+        right: 'दायाँ',
     },
     ur: {
         settings: 'ترتیبات',
@@ -755,10 +785,15 @@ export const translations = {
         desktop: 'ڈیسک ٹاپ',
         mobile: 'موبائل',
         auto: 'آٹو',
+        sidebar_position: 'سائڈبار کی پوزیشن',
+        sidebar_position_desc: 'مرکزی نیویگیشن سائڈبار کا مقام تبدیل کریں۔',
+        top: 'اوپر',
+        bottom: 'نیچے',
+        left: 'بائیں',
+        right: 'دائیں',
     },
 };
 
     
 
     
-

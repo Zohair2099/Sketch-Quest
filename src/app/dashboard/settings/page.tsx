@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette, Wand2, RotateCcw, Monitor, Smartphone } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette, Wand2, RotateCcw, Monitor, Smartphone, ArrowDownToLine, ArrowLeftToLine, ArrowRightToLine, ArrowUpToLine } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -17,8 +17,6 @@ import { cn } from '@/lib/utils';
 import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
-
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -148,7 +146,7 @@ export default function SettingsPage() {
                         {t('select_color_palette')}
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-4xl">
+                <DialogContent className="sm:max-w-4xl max-h-[80vh]">
                     <DialogHeader>
                         <DialogTitle>{t('color_palette')}</DialogTitle>
                         <DialogDescription>{t('color_palette_desc')}</DialogDescription>
@@ -178,6 +176,42 @@ export default function SettingsPage() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+          </div>
+           <div className="space-y-2">
+            <Label>{t('sidebar_position')}</Label>
+            <p className="text-sm text-muted-foreground">
+              {t('sidebar_position_desc')}
+            </p>
+            <RadioGroup
+              value={settings.sidebarPosition}
+              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right' | 'top' | 'bottom')}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2"
+            >
+              <div>
+                <RadioGroupItem value="left" id="pos-left" className="peer sr-only" />
+                <Label htmlFor="pos-left" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                  <ArrowLeftToLine className="h-6 w-6" /> {t('left')}
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="right" id="pos-right" className="peer sr-only" />
+                <Label htmlFor="pos-right" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                  <ArrowRightToLine className="h-6 w-6" /> {t('right')}
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="top" id="pos-top" className="peer sr-only" />
+                <Label htmlFor="pos-top" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                  <ArrowUpToLine className="h-6 w-6" /> {t('top')}
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="bottom" id="pos-bottom" className="peer sr-only" />
+                <Label htmlFor="pos-bottom" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                  <ArrowDownToLine className="h-6 w-6" /> {t('bottom')}
+                </Label>
+              </div>
+            </RadioGroup>
           </div>
         </CardContent>
       </Card>
@@ -383,15 +417,13 @@ export default function SettingsPage() {
             <Switch id="event-announcements-switch" checked={settings.isEventAnnouncements} onCheckedChange={(checked) => updateSetting('isEventAnnouncements', checked)} />
           </div>
           <div className="flex items-center justify-between">
-             <div>
-              <Label htmlFor="quiet-hours-switch" className="flex items-center">
+             <Label htmlFor="quiet-hours-switch" className="flex items-center">
                 <BellOff className="mr-2 h-5 w-5 text-muted-foreground" />
                 {t('quiet_hours')}
               </Label>
               <p className="text-sm text-muted-foreground">
                 {t('quiet_hours_desc')}
               </p>
-            </div>
             <Switch id="quiet-hours-switch" checked={settings.isQuietHours} onCheckedChange={(checked) => updateSetting('isQuietHours', checked)} />
           </div>
         </CardContent>
@@ -470,7 +502,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* View Mode Card */}
       <Card>
         <CardHeader>

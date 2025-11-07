@@ -23,6 +23,7 @@ export interface SettingsState {
   isSocialRestricted: boolean;
   colorPalette: string;
   viewMode: 'desktop' | 'mobile' | 'auto';
+  sidebarPosition: 'left' | 'right' | 'top' | 'bottom';
 }
 
 // Define the default settings
@@ -44,6 +45,7 @@ export const defaultSettings: SettingsState = {
   isSocialRestricted: false,
   colorPalette: 'crimson',
   viewMode: 'auto',
+  sidebarPosition: 'left',
 };
 
 // Define the context shape
@@ -152,5 +154,3 @@ export const useSettings = () => {
     
 
     
-
-

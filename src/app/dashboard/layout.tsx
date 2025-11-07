@@ -42,6 +42,8 @@ import { useUser, useAuth, useSidebar } from "@/firebase"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { useSettings } from "@/context/settings-context"
 import { translations } from "@/lib/translations"
+import { TopSidebar } from "@/components/top-sidebar"
+import { BottomSidebar } from "@/components/bottom-sidebar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -81,9 +83,33 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     )
   }
 
+  const isHorizontalSidebar = settings.sidebarPosition === 'top' || settings.sidebarPosition === 'bottom';
+
+  if (isHorizontalSidebar) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        {settings.sidebarPosition === 'top' && <TopSidebar navItems={navItems} />}
+        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
+           <div className="md:hidden">
+              {/* Maybe a mobile menu trigger here if needed for top/bottom */}
+            </div>
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold capitalize">
+                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
+            </h1>
+          </div>
+          <UserMenu />
+        </header>
+        <main className="flex-1 p-4 sm:p-6">{children}</main>
+        {settings.sidebarPosition === 'bottom' && <BottomSidebar navItems={navItems} />}
+      </div>
+    )
+  }
+
+
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon">
+      <Sidebar collapsible="icon" side={settings.sidebarPosition as 'left' | 'right'}>
         <SidebarHeader>
           <Logo />
         </SidebarHeader>
@@ -120,49 +146,73 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
             </h1>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
-                  <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.displayName || 'Alex'}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/profile">
-                  <UserCircle className="mr-2 h-4 w-4" />
-                  <span>{t('profile')}</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>{t('settings')}</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>{t('logout')}</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <UserMenu />
         </header>
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )
+}
+
+function UserMenu() {
+  const { user } = useUser();
+  const { settings } = useSettings();
+  const router = useRouter();
+  const auth = useAuth();
+  const avatarImage = PlaceHolderImages.find((img) => img.id === 'avatar-1');
+
+  const t = (key: keyof typeof translations['en']) => {
+    if (!settings) return translations['en'][key];
+    return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
+  };
+  
+  const handleLogout = () => {
+    auth.signOut();
+    router.push('/');
+  }
+
+  if(!user) return null;
+
+  return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
+              {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
+              <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
+            </Avatar>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">{user.displayName || 'Alex'}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/profile">
+              <UserCircle className="mr-2 h-4 w-4" />
+              <span>{t('profile')}</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/settings">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>{t('settings')}</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>{t('logout')}</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+  );
 }
 
 function SidebarToggleButton() {
@@ -194,5 +244,3 @@ function SidebarToggleButton() {
     </Button>
   )
 }
-
-    
