@@ -1,4 +1,5 @@
 
+
 export const colorPalettes = [
     { name: 'default', label: 'Default', color: '#7c3aed' },
     { name: 'emerald', label: 'Emerald', color: '#50C878' },
@@ -760,3 +761,4 @@ export const translations = {
     
 
     
+
