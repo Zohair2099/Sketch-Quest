@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -130,6 +130,48 @@ export default function SettingsPage() {
       </Card>
       <Card>
         <CardHeader>
+          <CardTitle>Audio &amp; Visual Experience</CardTitle>
+          <CardDescription>
+            Manage sound, music, and voice settings.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="bg-music-switch" className="flex items-center">
+                        <Music className="mr-2 h-5 w-5 text-purple-500" />
+                        Background Music
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Toggle ambient music during quests.
+                    </p>
+                </div>
+                <Switch id="bg-music-switch" defaultChecked />
+            </div>
+            <div className="space-y-4">
+                <Label htmlFor="sfx-volume-slider">Sound Effects Volume</Label>
+                <div className="flex items-center gap-4">
+                    <Volume2 className="h-5 w-5 text-muted-foreground" />
+                    <Slider id="sfx-volume-slider" defaultValue={[80]} max={100} step={5} />
+                    <Volume2 className="h-8 w-8 text-muted-foreground" />
+                </div>
+            </div>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="voice-narration-switch" className="flex items-center">
+                        <Mic className="mr-2 h-5 w-5 text-blue-500" />
+                        Voice Narration
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Enable voice-over for instructions and content.
+                    </p>
+                </div>
+                <Switch id="voice-narration-switch" />
+            </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
           <CardTitle>Gamification</CardTitle>
           <CardDescription>
             Manage your gaming and engagement experience.
@@ -164,7 +206,7 @@ export default function SettingsPage() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Notifications & Reminders</CardTitle>
+          <CardTitle>Notifications &amp; Reminders</CardTitle>
           <CardDescription>
             Manage when and how you receive notifications from SketchQuest.
           </CardDescription>
@@ -198,7 +240,7 @@ export default function SettingsPage() {
                 <div>
                     <Label htmlFor="event-announcements-switch" className="flex items-center">
                         <Languages className="mr-2 h-5 w-5 text-blue-500" />
-                        Event & Competition Announcements
+                        Event &amp; Competition Announcements
                     </Label>
                     <p className="text-sm text-muted-foreground">
                         Stay informed about upcoming special events.
