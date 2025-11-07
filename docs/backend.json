@@ -1,0 +1,386 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user within the SketchQuest application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "role": {
+          "type": "string",
+          "description": "User's role (Student, Teacher, Admin)."
+        },
+        "xp": {
+          "type": "number",
+          "description": "User's total experience points."
+        },
+        "streak": {
+          "type": "number",
+          "description": "User's current streak of consecutive days of activity."
+        },
+        "badges": {
+          "type": "array",
+          "description": "Array of badge identifiers that the user has earned.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "avatar": {
+          "type": "string",
+          "description": "URL or path to the user's avatar image.",
+          "format": "uri"
+        },
+        "bio": {
+          "type": "string",
+          "description": "User's biographical information or description."
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Reference to Institution. (Relationship: Institution 1:N User)"
+        },
+        "gradeYear": {
+          "type": "string",
+          "description": "The grade or year of the user. Can be a string if non numerical grades are needed."
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "description": "The user's preferred language for the app."
+        },
+        "darkMode": {
+          "type": "boolean",
+          "description": "Flag indicating whether the user prefers dark mode."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "role"
+      ]
+    },
+    "Quest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Quest",
+      "type": "object",
+      "description": "Represents a learning quest or lesson.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Quest entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the quest."
+        },
+        "topic": {
+          "type": "string",
+          "description": "The topic or subject area of the quest."
+        },
+        "level": {
+          "type": "number",
+          "description": "Difficulty level of the quest."
+        },
+        "questionIds": {
+          "type": "array",
+          "description": "References to Questions. (Relationship: Quest 1:N Question)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "xpReward": {
+          "type": "number",
+          "description": "Amount of XP awarded upon completion of the quest."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "topic"
+      ]
+    },
+    "Question": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Question",
+      "type": "object",
+      "description": "Represents a question within a quest.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Question entity."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of question (e.g., MCQ, drag-drop, puzzle)."
+        },
+        "content": {
+          "type": "string",
+          "description": "The actual question text or content."
+        },
+        "options": {
+          "type": "array",
+          "description": "Array of possible answer options.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "correctAnswer": {
+          "type": "string",
+          "description": "The correct answer to the question."
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "content",
+        "correctAnswer"
+      ]
+    },
+    "Teacher": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Teacher",
+      "type": "object",
+      "description": "Represents a teacher user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Teacher entity."
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Reference to Institution. (Relationship: Institution 1:N Teacher)"
+        },
+        "studentIds": {
+          "type": "array",
+          "description": "References to Students. (Relationship: Teacher 1:N Student)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classIds": {
+          "type": "array",
+          "description": "References to Classes. (Relationship: Teacher 1:N Class)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "Progress": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Progress",
+      "type": "object",
+      "description": "Represents a user's progress on a specific quest.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Progress entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Progress)"
+        },
+        "questId": {
+          "type": "string",
+          "description": "Reference to Quest. (Relationship: Quest 1:N Progress)"
+        },
+        "score": {
+          "type": "number",
+          "description": "User's score on the quest."
+        },
+        "completionStatus": {
+          "type": "string",
+          "description": "Status of the quest completion (e.g., 'completed', 'in progress')."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "questId"
+      ]
+    },
+    "Institution": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Institution",
+      "type": "object",
+      "description": "Represents a school or college.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Institution entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the institution."
+        },
+        "location": {
+          "type": "string",
+          "description": "Location of the institution."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Class": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Class",
+      "type": "object",
+      "description": "Represents a class or course.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Class entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the class."
+        },
+        "questIds": {
+          "type": "array",
+          "description": "References to Quests. (Relationship: Class N:N Quest)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "studentIds": {
+          "type": "array",
+          "description": "References to Students. (Relationship: Class N:N Student)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. Includes denormalized `institutionId` for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/quests/{questId}",
+        "definition": {
+          "entityName": "Quest",
+          "schema": {
+            "$ref": "#/backend/entities/Quest"
+          },
+          "description": "Stores quest definitions.",
+          "params": [
+            {
+              "name": "questId",
+              "description": "The unique identifier for the quest."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/quests/{questId}/questions/{questionId}",
+        "definition": {
+          "entityName": "Question",
+          "schema": {
+            "$ref": "#/backend/entities/Question"
+          },
+          "description": "Stores questions associated with a specific quest.",
+          "params": [
+            {
+              "name": "questId",
+              "description": "The unique identifier for the quest."
+            },
+            {
+              "name": "questionId",
+              "description": "The unique identifier for the question."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/progress/{progressId}",
+        "definition": {
+          "entityName": "Progress",
+          "schema": {
+            "$ref": "#/backend/entities/Progress"
+          },
+          "description": "Stores user's progress on specific quests.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "progressId",
+              "description": "The unique identifier for the progress entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/institutions/{institutionId}",
+        "definition": {
+          "entityName": "Institution",
+          "schema": {
+            "$ref": "#/backend/entities/Institution"
+          },
+          "description": "Stores institution data.",
+          "params": [
+            {
+              "name": "institutionId",
+              "description": "The unique identifier for the institution."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/classes/{classId}",
+        "definition": {
+          "entityName": "Class",
+          "schema": {
+            "$ref": "#/backend/entities/Class"
+          },
+          "description": "Stores class data.",
+          "params": [
+            {
+              "name": "classId",
+              "description": "The unique identifier for the class."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support a gamified education app with users, quests, questions, and progress tracking. It prioritizes authorization independence and follows structural segregation principles for enhanced security and scalability. User roles (Student, Teacher, Admin) are stored directly in the User document, adhering to the DBAC principle. Authorization independence is achieved by denormalizing relevant authorization data (e.g., `institutionId` in Users) where necessary, avoiding `get()` calls in security rules. Path-based ownership is used where appropriate to simply security rules, especially for user-owned data. The structure also supports the required QAPs by using segregation (e.g., separate collections for different types of content) and membership models (e.g., for class memberships).\n\nSpecifically, User profiles are stored under `/users/{userId}` with the user's role embedded directly in the document, making role-based access control simple. Quests are stored in a top-level `/quests` collection, while Questions are stored in a subcollection `/quests/{questId}/questions` to maintain a clear parent-child relationship. User progress is tracked in `/users/{userId}/progress/{progressId}`. Institution and Class data are stored in top-level collections `/institutions` and `/classes`, respectively.\n\nDenormalization Strategy:\n- The `User` document includes the `institutionId`, enabling security rules to be written to check if a user belongs to a specific institution without needing to perform a `get()` operation. This is crucial for authorization independence, especially when managing user access to institution-specific data or features.\n\nQAP Support:\n- Secure `list` operations are supported by segregating data based on access requirements. For example, quests intended for a particular institution are placed under that institution's document, making it easier to write rules that only allow listing quests for users within that institution.\n- Role-based access is facilitated by storing the `role` field directly in the `User` document. This enables security rules to quickly determine a user's role without additional lookups, ensuring efficient and secure access control."
+  }
+}

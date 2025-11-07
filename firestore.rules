@@ -1,0 +1,138 @@
+/**
+ * @file Firestore Security Rules for SketchQuest
+ * @version Prototyping Mode - Data shape is not strictly enforced.
+ *
+ * @Core Philosophy: This ruleset enforces a user-ownership model for user-specific data,
+ * and allows public read access to shared content like quests. It leverages denormalization
+ * to avoid costly `get()` calls and maintains clear segregation of data for secure access control.
+ *
+ * @Data Structure:
+ * - `/users/{userId}`: Stores individual user profiles.
+ * - `/quests/{questId}`: Stores quest definitions.
+ * - `/quests/{questId}/questions/{questionId}`: Stores questions for each quest.
+ * - `/users/{userId}/progress/{progressId}`: Stores user progress data.
+ * - `/institutions/{institutionId}`: Stores institution information.
+ * - `/classes/{classId}`: Stores class information.
+ *
+ * @Key Security Decisions:
+ * - User data is strictly controlled by the owning user.
+ * - Quests are publicly readable, but writes are not secured due to the missing ownership field.
+ * - Listing of quests and questions is allowed to everyone.
+ *
+ * @Denormalization for Authorization:
+ * - User documents include `institutionId` to avoid `get()` calls when checking institution membership.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows users to manage their own profile data.
+     * @path /users/{userId}
+     * @allow (create) User with ID 'user123' can create their own profile if request.auth.uid == 'user123'.
+     * @allow (update) User with ID 'user123' can update their own profile if request.auth.uid == 'user123'.
+     * @allow (delete) User with ID 'user123' can delete their own profile if request.auth.uid == 'user123' and the document exists.
+     * @deny (create) User with ID 'user456' cannot create a profile with ID 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow get: if true;
+      allow list: if false;
+
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Allows public read access to quest definitions, but writes are not secured because of a missing ownership field.
+     * @path /quests/{questId}
+     * @allow (get) Any user can read quest details.
+     * @allow (list) Any user can list quests.
+     * @deny (create) No write permissions yet as the document has no owner
+     * @principle Allows public read access, but TODO requires ownership field for secure writes.
+     */
+    match /quests/{questId} {
+      allow get: if true;
+      allow list: if true;
+
+      allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+    /**
+     * @description Allows public read access to questions within a quest, but writes are not secured because of a missing ownership field.
+     * @path /quests/{questId}/questions/{questionId}
+     * @allow (get) Any user can read question details within a quest.
+     * @allow (list) Any user can list questions within a quest.
+     * @deny (create) No write permissions yet as the document has no owner
+     * @principle Allows public read access, but TODO requires ownership field for secure writes.
+     */
+    match /quests/{questId}/questions/{questionId} {
+      allow get: if true;
+      allow list: if true;
+      allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+    /**
+     * @description Allows users to manage their own progress data.
+     * @path /users/{userId}/progress/{progressId}
+     * @allow (create) User with ID 'user123' can create their own progress if request.auth.uid == 'user123'.
+     * @allow (update) User with ID 'user123' can update their own progress if request.auth.uid == 'user123' and the document exists.
+     * @allow (delete) User with ID 'user123' can delete their own progress if request.auth.uid == 'user123' and the document exists.
+     * @deny (create) User with ID 'user456' cannot create progress with ID 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/progress/{progressId} {
+      function isOwner(userId) {
+        return request.auth.uid == userId;
+      }
+
+       function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+
+      allow get: if true;
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+     /**
+      * @description Allows public read access to institution data, but writes are not secured because of a missing ownership field.
+      * @path /institutions/{institutionId}
+      * @allow (get) Any user can read institution details.
+      * @allow (list) Any user can list institutions.
+      * @deny (create) No write permissions yet as the document has no owner
+      * @principle Allows public read access, but TODO requires ownership field for secure writes.
+      */
+    match /institutions/{institutionId} {
+       allow get: if true;
+       allow list: if true;
+       allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+
+     /**
+      * @description Allows public read access to class data, but writes are not secured because of a missing ownership field.
+      * @path /classes/{classId}
+      * @allow (get) Any user can read class details.
+      * @allow (list) Any user can list classes.
+      * @deny (create) No write permissions yet as the document has no owner
+      * @principle Allows public read access, but TODO requires ownership field for secure writes.
+      */
+    match /classes/{classId} {
+       allow get: if true;
+       allow list: if true;
+       allow create, update, delete: if false; // TODO: Add owner validation once the schema is updated with an ownership field.
+    }
+  }
+}
