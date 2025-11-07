@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -28,6 +28,7 @@ interface SettingsState {
   isQuietHours: boolean;
   isPlaytimeLimited: boolean;
   isSocialRestricted: boolean;
+  colorPalette: string;
 }
 
 // Define the default settings
@@ -45,7 +46,15 @@ const defaultSettings: SettingsState = {
   isQuietHours: false,
   isPlaytimeLimited: false,
   isSocialRestricted: false,
+  colorPalette: 'default',
 };
+
+const colorPalettes = [
+    { name: 'default', label: 'Default', color: 'hsl(262.1 83.3% 57.8%)' },
+    { name: 'forest', label: 'Forest', color: 'hsl(142.1 76.2% 36.3%)' },
+    { name: 'ocean', label: 'Ocean', color: 'hsl(221.2 83.2% 53.3%)' },
+    { name: 'sunset', label: 'Sunset', color: 'hsl(24.6 95% 53.1%)' },
+]
 
 
 export default function SettingsPage() {
@@ -65,6 +74,8 @@ export default function SettingsPage() {
 
   const handleApplyChanges = () => {
     setSavedSettings(currentSettings);
+    // Apply color palette change to the body
+    document.body.dataset.theme = currentSettings.colorPalette;
     toast({
       title: 'Settings Saved',
       description: 'Your changes have been applied.',
@@ -140,6 +151,30 @@ export default function SettingsPage() {
                   System
                 </Label>
               </div>
+            </RadioGroup>
+          </div>
+          <div className="space-y-2">
+            <Label>Color Palette</Label>
+            <p className="text-sm text-muted-foreground">
+                Select your favorite color theme for the application.
+            </p>
+            <RadioGroup
+              value={currentSettings.colorPalette}
+              onValueChange={(value) => handleSettingChange('colorPalette', value)}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2"
+            >
+              {colorPalettes.map((palette) => (
+                <div key={palette.name}>
+                    <RadioGroupItem value={palette.name} id={palette.name} className="peer sr-only" />
+                    <Label
+                        htmlFor={palette.name}
+                        className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    >
+                        <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
+                        {palette.label}
+                    </Label>
+                </div>
+              ))}
             </RadioGroup>
           </div>
         </CardContent>
