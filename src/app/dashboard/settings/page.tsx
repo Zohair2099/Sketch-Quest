@@ -51,11 +51,14 @@ export default function SettingsPage() {
     });
   };
   
-  const handleFeedbackClick = (type: string) => {
-    toast({
-      title: 'Feedback Submitted',
-      description: `Thank you for offering to ${type}. This feature is coming soon!`,
-    });
+  const handleFeedbackLink = (type: 'bug' | 'feature' | 'support') => {
+    const subjects = {
+      bug: "Bug Report from SketchQuest User",
+      feature: "Feature Suggestion for SketchQuest",
+      support: "Support Request from SketchQuest User"
+    };
+    const subject = encodeURIComponent(subjects[type]);
+    window.location.href = `mailto:support@sketchquest.com?subject=${subject}`;
   };
 
   const t = (key: keyof typeof translations['en']) => {
@@ -455,15 +458,15 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row gap-4">
-          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('report a bug')}>
+          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackLink('bug')}>
             <Bug className="mr-2 h-5 w-5 text-destructive" />
             {t('report_bug')}
           </Button>
-          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('suggest a feature')}>
+          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackLink('feature')}>
             <LightbulbIcon className="mr-2 h-5 w-5 text-yellow-500" />
             {t('suggest_feature')}
           </Button>
-          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('contact_support')}>
+          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackLink('support')}>
             <HelpCircle className="mr-2 h-5 w-5 text-primary" />
             {t('contact_support')}
           </Button>
