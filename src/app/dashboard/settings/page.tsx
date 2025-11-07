@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 export default function SettingsPage() {
@@ -150,24 +151,26 @@ export default function SettingsPage() {
                         <DialogTitle>{t('color_palette')}</DialogTitle>
                         <DialogDescription>{t('color_palette_desc')}</DialogDescription>
                     </DialogHeader>
-                    <RadioGroup
-                        value={settings.colorPalette}
-                        onValueChange={(value) => updateSetting('colorPalette', value)}
-                        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 py-4"
-                        >
-                        {colorPalettes.map((palette) => (
-                            <div key={palette.name}>
-                                <RadioGroupItem value={palette.name} id={`modal-${palette.name}`} className="peer sr-only" />
-                                <Label
-                                    htmlFor={`modal-${palette.name}`}
-                                    className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                                >
-                                    <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
-                                    {t(palette.name as keyof typeof translations['en'])}
-                                </Label>
-                            </div>
-                        ))}
-                    </RadioGroup>
+                    <ScrollArea className="h-72 w-full">
+                      <RadioGroup
+                          value={settings.colorPalette}
+                          onValueChange={(value) => updateSetting('colorPalette', value)}
+                          className="grid grid-cols-2 sm:grid-cols-5 gap-4 py-4"
+                          >
+                          {colorPalettes.map((palette) => (
+                              <div key={palette.name}>
+                                  <RadioGroupItem value={palette.name} id={`modal-${palette.name}`} className="peer sr-only" />
+                                  <Label
+                                      htmlFor={`modal-${palette.name}`}
+                                      className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                  >
+                                      <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
+                                      {t(palette.name as keyof typeof translations['en'])}
+                                  </Label>
+                              </div>
+                          ))}
+                      </RadioGroup>
+                    </ScrollArea>
                     <DialogFooter>
                         <DialogClose asChild>
                             <Button type="button">{t('done')}</Button>
@@ -523,3 +526,6 @@ export default function SettingsPage() {
     
 
 
+
+
+    
