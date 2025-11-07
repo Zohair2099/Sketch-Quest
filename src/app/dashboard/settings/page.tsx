@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,9 +10,37 @@ import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
+
+  // State for all settings
+  const [language, setLanguage] = React.useState('en');
+  const [textSize, setTextSize] = React.useState(50);
+  const [isDyslexiaFont, setIsDyslexiaFont] = React.useState(false);
+
+  const [isMusicOn, setIsMusicOn] = React.useState(true);
+  const [sfxVolume, setSfxVolume] = React.useState(80);
+  const [isVoiceNarration, setIsVoiceNarration] = React.useState(false);
+
+  const [isGamification, setIsGamification] = React.useState(true);
+  const [isAchievementNotifications, setIsAchievementNotifications] = React.useState(true);
+  
+  const [isDailyReminders, setIsDailyReminders] = React.useState(true);
+  const [isEventAnnouncements, setIsEventAnnouncements] = React.useState(false);
+  const [isQuietHours, setIsQuietHours] = React.useState(false);
+
+  const [isPlaytimeLimited, setIsPlaytimeLimited] = React.useState(false);
+  const [isSocialRestricted, setIsSocialRestricted] = React.useState(false);
+
+  const handleFeedbackClick = (type: string) => {
+    toast({
+      title: 'Feedback Submitted',
+      description: `Thank you for offering to ${type}. This feature is coming soon!`,
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -78,7 +107,7 @@ export default function SettingsPage() {
         <CardContent className="space-y-6">
           <div className="space-y-2">
              <Label htmlFor="language-select">Language</Label>
-             <Select defaultValue="en">
+             <Select value={language} onValueChange={setLanguage}>
                 <SelectTrigger id="language-select" className="w-full md:w-1/2">
                     <SelectValue placeholder="Select a language" />
                 </SelectTrigger>
@@ -104,7 +133,7 @@ export default function SettingsPage() {
                 <Label htmlFor="font-size-slider">Text Size</Label>
                 <div className="flex items-center gap-4">
                     <Text className="h-5 w-5 text-muted-foreground" />
-                    <Slider id="font-size-slider" defaultValue={[50]} max={100} step={10} />
+                    <Slider id="font-size-slider" value={[textSize]} onValueChange={(value) => setTextSize(value[0])} max={100} step={10} />
                     <Text className="h-8 w-8 text-muted-foreground" />
                 </div>
             </div>
@@ -115,7 +144,7 @@ export default function SettingsPage() {
                         Uses a font designed for easier reading.
                     </p>
                 </div>
-                <Switch id="dyslexia-font-switch" />
+                <Switch id="dyslexia-font-switch" checked={isDyslexiaFont} onCheckedChange={setIsDyslexiaFont} />
             </div>
              <div className="flex items-center justify-between">
                 <div>
@@ -146,13 +175,13 @@ export default function SettingsPage() {
                         Toggle ambient music during quests.
                     </p>
                 </div>
-                <Switch id="bg-music-switch" defaultChecked />
+                <Switch id="bg-music-switch" checked={isMusicOn} onCheckedChange={setIsMusicOn} />
             </div>
             <div className="space-y-4">
                 <Label htmlFor="sfx-volume-slider">Sound Effects Volume</Label>
                 <div className="flex items-center gap-4">
                     <Volume2 className="h-5 w-5 text-muted-foreground" />
-                    <Slider id="sfx-volume-slider" defaultValue={[80]} max={100} step={5} />
+                    <Slider id="sfx-volume-slider" value={[sfxVolume]} onValueChange={(value) => setSfxVolume(value[0])} max={100} step={5} />
                     <Volume2 className="h-8 w-8 text-muted-foreground" />
                 </div>
             </div>
@@ -166,7 +195,7 @@ export default function SettingsPage() {
                         Enable voice-over for instructions and content.
                     </p>
                 </div>
-                <Switch id="voice-narration-switch" />
+                <Switch id="voice-narration-switch" checked={isVoiceNarration} onCheckedChange={setIsVoiceNarration}/>
             </div>
         </CardContent>
       </Card>
@@ -188,7 +217,7 @@ export default function SettingsPage() {
                         Turn badges, streaks, and leaderboards on or off.
                     </p>
                 </div>
-                <Switch id="gamification-switch" defaultChecked />
+                <Switch id="gamification-switch" checked={isGamification} onCheckedChange={setIsGamification} />
             </div>
              <div className="flex items-center justify-between">
                 <div>
@@ -200,7 +229,7 @@ export default function SettingsPage() {
                         Receive alerts for new badges and milestones.
                     </p>
                 </div>
-                <Switch id="notifications-switch" defaultChecked />
+                <Switch id="notifications-switch" checked={isAchievementNotifications} onCheckedChange={setIsAchievementNotifications} />
             </div>
         </CardContent>
       </Card>
@@ -222,7 +251,7 @@ export default function SettingsPage() {
                         Get a push notification to keep your streak going.
                     </p>
                 </div>
-                <Switch id="daily-reminder-switch" defaultChecked />
+                <Switch id="daily-reminder-switch" checked={isDailyReminders} onCheckedChange={setIsDailyReminders} />
             </div>
             <div className="flex items-center justify-between">
                 <div>
@@ -234,7 +263,7 @@ export default function SettingsPage() {
                         Receive an alert when you earn a new badge or milestone.
                     </p>
                 </div>
-                <Switch id="achievement-alerts-switch-2" defaultChecked />
+                <Switch id="achievement-alerts-switch-2" checked={isAchievementNotifications} onCheckedChange={setIsAchievementNotifications} />
             </div>
             <div className="flex items-center justify-between">
                 <div>
@@ -246,7 +275,7 @@ export default function SettingsPage() {
                         Stay informed about upcoming special events.
                     </p>
                 </div>
-                <Switch id="event-announcements-switch" />
+                <Switch id="event-announcements-switch" checked={isEventAnnouncements} onCheckedChange={setIsEventAnnouncements} />
             </div>
             <div className="flex items-center justify-between">
                 <div>
@@ -258,7 +287,7 @@ export default function SettingsPage() {
                         Mute all notifications between 10 PM and 8 AM.
                     </p>
                 </div>
-                <Switch id="quiet-hours-switch" />
+                <Switch id="quiet-hours-switch" checked={isQuietHours} onCheckedChange={setIsQuietHours} />
             </div>
         </CardContent>
       </Card>
@@ -280,7 +309,7 @@ export default function SettingsPage() {
                         Set daily time limits for app usage.
                     </p>
                 </div>
-                <Switch id="playtime-switch" />
+                <Switch id="playtime-switch" checked={isPlaytimeLimited} onCheckedChange={setIsPlaytimeLimited} />
             </div>
             <div className="flex items-center justify-between">
                 <div>
@@ -292,7 +321,7 @@ export default function SettingsPage() {
                         Disable chat and friend requests.
                     </p>
                 </div>
-                <Switch id="social-switch" />
+                <Switch id="social-switch" checked={isSocialRestricted} onCheckedChange={setIsSocialRestricted} />
             </div>
         </CardContent>
       </Card>
@@ -304,15 +333,15 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row gap-4">
-            <Button variant="outline" className="w-full justify-start">
+            <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('report a bug')}>
                 <Bug className="mr-2 h-5 w-5 text-destructive" />
                 Report a Bug
             </Button>
-             <Button variant="outline" className="w-full justify-start">
+             <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('suggest a feature')}>
                 <LightbulbIcon className="mr-2 h-5 w-5 text-yellow-500" />
                 Suggest a Feature
             </Button>
-            <Button variant="outline" className="w-full justify-start">
+            <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('contact support')}>
                 <HelpCircle className="mr-2 h-5 w-5 text-primary" />
                 Contact Support
             </Button>
@@ -320,3 +349,4 @@ export default function SettingsPage() {
       </Card>
     </div>
   );
+}
