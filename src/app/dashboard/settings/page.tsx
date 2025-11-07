@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -159,6 +159,64 @@ export default function SettingsPage() {
                     </p>
                 </div>
                 <Switch id="notifications-switch" defaultChecked />
+            </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Notifications & Reminders</CardTitle>
+          <CardDescription>
+            Manage when and how you receive notifications from SketchQuest.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="daily-reminder-switch" className="flex items-center">
+                        <Bell className="mr-2 h-5 w-5 text-primary" />
+                        Daily Learning Reminders
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                        Get a push notification to keep your streak going.
+                    </p>
+                </div>
+                <Switch id="daily-reminder-switch" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="achievement-alerts-switch-2" className="flex items-center">
+                        <Trophy className="mr-2 h-5 w-5 text-yellow-500" />
+                        Achievement Unlock Alerts
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                        Receive an alert when you earn a new badge or milestone.
+                    </p>
+                </div>
+                <Switch id="achievement-alerts-switch-2" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="event-announcements-switch" className="flex items-center">
+                        <Languages className="mr-2 h-5 w-5 text-blue-500" />
+                        Event & Competition Announcements
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                        Stay informed about upcoming special events.
+                    </p>
+                </div>
+                <Switch id="event-announcements-switch" />
+            </div>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="quiet-hours-switch" className="flex items-center">
+                        <BellOff className="mr-2 h-5 w-5 text-muted-foreground" />
+                        Quiet Hours
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                        Mute all notifications between 10 PM and 8 AM.
+                    </p>
+                </div>
+                <Switch id="quiet-hours-switch" />
             </div>
         </CardContent>
       </Card>
