@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-illustration",
+      "description": "A friendly mascot character pointing at a screen with learning icons.",
+      "imageUrl": "https://images.unsplash.com/photo-1619918456523-268fbe7eee44?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGVhcm5pbmclMjBpbGx1c3RyYXRpb258ZW58MHx8fHwxNzYyNTIxODQzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "learning illustration"
+    },
+    {
+      "id": "avatar-1",
+      "description": "Avatar for a student named Alex.",
+      "imageUrl": "https://images.unsplash.com/photo-1729824186570-4d4aede00043?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwYXZhdGFyfGVufDB8fHx8MTc2MjUyMTg0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Avatar for a student named Bella.",
+      "imageUrl": "https://images.unsplash.com/photo-1729821728830-068bbff90645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3R1ZGVudCUyMGF2YXRhcnxlbnwwfHx8fDE3NjI1MjE4NDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Avatar for a student named Charlie.",
+      "imageUrl": "https://images.unsplash.com/photo-1729824186684-eaff43f7d1d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdHVkZW50JTIwYXZhdGFyfGVufDB8fHx8MTc2MjUyMTg0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "mascot-friendly",
+      "description": "A friendly robot mascot waving.",
+      "imageUrl": "https://images.unsplash.com/photo-1589254065909-b7086229d08c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllbmRseSUyMHJvYm90fGVufDB8fHx8MTc2MjUxNTkxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "friendly robot"
+    },
+    {
+      "id": "quest-science",
+      "description": "Icon for science quests.",
+      "imageUrl": "https://images.unsplash.com/photo-1761223956853-7c7c12ebff18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzY2llbmNlJTIwaWNvbnxlbnwwfHx8fDE3NjI1MjE4NDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "science icon"
+    },
+    {
+      "id": "quest-coding",
+      "description": "Icon for coding quests.",
+      "imageUrl": "https://images.unsplash.com/photo-1649180564403-db28d5673f48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2RpbmclMjBpY29ufGVufDB8fHx8MTc2MjUyMTg0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coding icon"
+    },
+    {
+      "id": "quest-art",
+      "description": "Icon for art quests.",
+      "imageUrl": "https://images.unsplash.com/photo-1650138716474-58d5a9c339a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhcnQlMjBpY29ufGVufDB8fHx8MTc2MjUyMTg0M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "art icon"
+    }
+  ]
 }
