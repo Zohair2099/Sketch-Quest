@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -262,6 +262,61 @@ export default function SettingsPage() {
             </div>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Parental Controls</CardTitle>
+          <CardDescription>
+            Manage settings for younger users.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="playtime-switch" className="flex items-center">
+                        <Hourglass className="mr-2 h-5 w-5 text-rose-500" />
+                        Limit Playtime
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Set daily time limits for app usage.
+                    </p>
+                </div>
+                <Switch id="playtime-switch" />
+            </div>
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="social-switch" className="flex items-center">
+                        <MessageCircleOff className="mr-2 h-5 w-5 text-muted-foreground" />
+                        Restrict Social Features
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Disable chat and friend requests.
+                    </p>
+                </div>
+                <Switch id="social-switch" />
+            </div>
+        </CardContent>
+      </Card>
+       <Card>
+        <CardHeader>
+          <CardTitle>Feedback &amp; Support</CardTitle>
+          <CardDescription>
+            Need help or have an idea? Let us know.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col sm:flex-row gap-4">
+            <Button variant="outline" className="w-full justify-start">
+                <Bug className="mr-2 h-5 w-5 text-destructive" />
+                Report a Bug
+            </Button>
+             <Button variant="outline" className="w-full justify-start">
+                <LightbulbIcon className="mr-2 h-5 w-5 text-yellow-500" />
+                Suggest a Feature
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+                <HelpCircle className="mr-2 h-5 w-5 text-primary" />
+                Contact Support
+            </Button>
+        </CardContent>
+      </Card>
     </div>
   );
-}
