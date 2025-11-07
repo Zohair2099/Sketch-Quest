@@ -92,9 +92,8 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
     )
   }
 
-
   return (
-    <SidebarProvider>
+    <>
       <Sidebar collapsible="icon" side={settings.sidebarPosition as 'left' | 'right'}>
         <SidebarHeader>
           <Logo />
@@ -136,7 +135,7 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </SidebarInset>
-    </SidebarProvider>
+    </>
   )
 }
 
@@ -159,7 +158,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )
     }
 
-    return <DashboardNav>{children}</DashboardNav>;
+    return <SidebarProvider><DashboardNav>{children}</DashboardNav></SidebarProvider>;
 }
 
 function UserMenu() {

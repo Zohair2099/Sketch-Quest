@@ -5,7 +5,6 @@ import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
-import { useSidebar } from '@/components/ui/sidebar'; // Ensure useSidebar is imported if needed here.
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -177,4 +176,4 @@ export const useUser = (): UserHookResult => { // Renamed from useAuthUser
 };
 
 // Re-export useSidebar to be available from the main firebase index
-export { useSidebar };
+export { useSidebar } from '@/components/ui/sidebar';
