@@ -79,6 +79,58 @@ const colorPalettes = [
     { name: 'frost', label: 'Frost', color: '#E0FFFF' },
 ];
 
+const translations: Record<string, Record<string, string>> = {
+    en: {
+        settings: 'Settings',
+        appearance: 'Appearance',
+        appearance_desc: 'Customize the look and feel of your SketchQuest experience.',
+        language: 'Language',
+        language_desc: 'Choose your preferred language for the app interface.',
+        language_select_label: 'Language',
+        // ... add other en translations
+    },
+    es: {
+        settings: 'Configuración',
+        appearance: 'Apariencia',
+        appearance_desc: 'Personaliza la apariencia de tu experiencia SketchQuest.',
+        language: 'Idioma',
+        language_desc: 'Elige tu idioma preferido para la interfaz de la aplicación.',
+        language_select_label: 'Idioma',
+    },
+    fr: {
+        settings: 'Paramètres',
+        appearance: 'Apparence',
+        appearance_desc: 'Personnalisez l\'apparence de votre expérience SketchQuest.',
+        language: 'Langue',
+        language_desc: 'Choisissez votre langue préférée pour l\'interface de l\'application.',
+        language_select_label: 'Langue',
+    },
+    de: {
+        settings: 'Einstellungen',
+        appearance: 'Erscheinungsbild',
+        appearance_desc: 'Passen Sie das Erscheinungsbild Ihrer SketchQuest-Erfahrung an.',
+        language: 'Sprache',
+        language_desc: 'Wählen Sie Ihre bevorzugte Sprache für die App-Oberfläche.',
+        language_select_label: 'Sprache',
+    },
+    hi: {
+        settings: 'सेटिंग्स',
+        appearance: 'दिखावट',
+        appearance_desc: 'अपने स्केचक्वेस्ट अनुभव के रंग-रूप को अनुकूलित करें।',
+        language: 'भाषा',
+        language_desc: 'ऐप इंटरफ़ेस के लिए अपनी पसंदीदा भाषा चुनें।',
+        language_select_label: 'भाषा',
+    },
+    ur: {
+        settings: 'ترتیبات',
+        appearance: 'ظاہری شکل',
+        appearance_desc: 'اپنے اسکیچ کویسٹ کے تجربے کی شکل و صورت کو حسب ضرورت بنائیں۔',
+        language: 'زبان',
+        language_desc: 'ایپ انٹرفیس کے لیے اپنی پسندیدہ زبان منتخب کریں۔',
+        language_select_label: 'زبان',
+    }
+};
+
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
@@ -154,17 +206,21 @@ export default function SettingsPage() {
     const randomPalette = availablePalettes[randomIndex];
     handleSettingChange('colorPalette', randomPalette.name);
   };
+  
+  const t = (key: string) => {
+    return translations[currentSettings.language]?.[key] || translations['en'][key];
+  };
 
   return (
     <div className="space-y-6 pb-24">
-      <h1 className="text-3xl font-bold font-headline">Settings</h1>
+      <h1 className="text-3xl font-bold font-headline">{t('settings')}</h1>
       
       {/* Appearance Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Appearance</CardTitle>
+          <CardTitle>{t('appearance')}</CardTitle>
           <CardDescription>
-            Customize the look and feel of your SketchQuest experience.
+            {t('appearance_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -248,14 +304,14 @@ export default function SettingsPage() {
       {/* Language Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Language</CardTitle>
+          <CardTitle>{t('language')}</CardTitle>
           <CardDescription>
-            Choose your preferred language for the app interface.
+            {t('language_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <Label htmlFor="language-select">Language</Label>
+            <Label htmlFor="language-select">{t('language_select_label')}</Label>
             <Select value={currentSettings.language} onValueChange={(value) => handleSettingChange('language', value)}>
               <SelectTrigger id="language-select" className="w-full md:w-1/2">
                 <SelectValue placeholder="Select a language" />
@@ -265,6 +321,8 @@ export default function SettingsPage() {
                 <SelectItem value="es">Español (Spanish)</SelectItem>
                 <SelectItem value="fr">Français (French)</SelectItem>
                 <SelectItem value="de">Deutsch (German)</SelectItem>
+                <SelectItem value="hi">हिन्दी (Hindi)</SelectItem>
+                <SelectItem value="ur">اردو (Urdu)</SelectItem>
               </SelectContent>
             </Select>
           </div>
