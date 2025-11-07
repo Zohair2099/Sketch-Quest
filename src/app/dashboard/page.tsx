@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, BookOpen, Flame, Zap, Target, CheckCircle } from 'lucide-react';
+import { Award, BookOpen, Flame, Zap, Target, CheckCircle, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
@@ -15,6 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { AiRecommendations } from '@/components/ai-recommendations';
 
 export default function DashboardPage() {
     const scienceQuestImage = PlaceHolderImages.find(img => img.id === 'quest-science');
@@ -122,6 +123,7 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
             </div>
+            <AiRecommendations />
         </div>
     );
 }
