@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell, BellOff, Music, Volume2, Mic, Shield, Hourglass, MessageCircleOff, Bug, Lightbulb as LightbulbIcon, HelpCircle, Save, Undo, Palette, Wand2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -147,6 +147,13 @@ export default function SettingsPage() {
       description: `Thank you for offering to ${type}. This feature is coming soon!`,
     });
   };
+  
+  const handleRandomizePalette = () => {
+    const availablePalettes = colorPalettes.filter(p => p.name !== 'default');
+    const randomIndex = Math.floor(Math.random() * availablePalettes.length);
+    const randomPalette = availablePalettes[randomIndex];
+    handleSettingChange('colorPalette', randomPalette.name);
+  };
 
   return (
     <div className="space-y-6 pb-24">
@@ -204,10 +211,18 @@ export default function SettingsPage() {
             </RadioGroup>
           </div>
           <div className="space-y-2">
-            <Label>Color Palette</Label>
-            <p className="text-sm text-muted-foreground">
-                Select your favorite color theme for the application.
-            </p>
+             <div className="flex items-center justify-between">
+                <div>
+                    <Label>Color Palette</Label>
+                    <p className="text-sm text-muted-foreground">
+                        Select your favorite color theme for the application.
+                    </p>
+                </div>
+                <Button variant="outline" onClick={handleRandomizePalette}>
+                    <Wand2 className="mr-2 h-4 w-4" />
+                    Randomize
+                </Button>
+            </div>
             <RadioGroup
               value={currentSettings.colorPalette}
               onValueChange={(value) => handleSettingChange('colorPalette', value)}
