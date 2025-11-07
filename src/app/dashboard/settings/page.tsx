@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 export default function SettingsPage() {
@@ -153,7 +154,7 @@ export default function SettingsPage() {
                     <RadioGroup
                         value={settings.colorPalette}
                         onValueChange={(value) => updateSetting('colorPalette', value)}
-                        className="grid grid-cols-3 gap-4 py-4"
+                        className="grid grid-cols-2 sm:grid-cols-3 gap-4 py-4"
                         >
                         {colorPalettes.map((palette) => (
                             <div key={palette.name}>
@@ -179,54 +180,6 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
       
-      {/* View Mode Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('view_mode')}</CardTitle>
-          <CardDescription>
-            {t('view_mode_desc')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <RadioGroup
-              value={settings.viewMode}
-              onValueChange={(value) => updateSetting('viewMode', value as 'desktop' | 'mobile' | 'auto')}
-              className="grid grid-cols-3 gap-4 pt-2"
-            >
-              <div>
-                <RadioGroupItem value="desktop" id="desktop" className="peer sr-only" />
-                <Label
-                  htmlFor="desktop"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                >
-                  <Monitor className="h-6 w-6" />
-                  {t('desktop')}
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="mobile" id="mobile" className="peer sr-only" />
-                <Label
-                  htmlFor="mobile"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                >
-                  <Smartphone className="h-6 w-6" />
-                  {t('mobile')}
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="auto" id="auto" className="peer sr-only" />
-                <Label
-                  htmlFor="auto"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                >
-                  <Laptop className="h-6 w-6" />
-                  {t('auto')}
-                </Label>
-              </div>
-            </RadioGroup>
-        </CardContent>
-      </Card>
-
       {/* Language Card */}
       <Card>
         <CardHeader>
@@ -515,6 +468,54 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* View Mode Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('view_mode')}</CardTitle>
+          <CardDescription>
+            {t('view_mode_desc')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <RadioGroup
+              value={settings.viewMode}
+              onValueChange={(value) => updateSetting('viewMode', value as 'desktop' | 'mobile' | 'auto')}
+              className="grid grid-cols-3 gap-4 pt-2"
+            >
+              <div>
+                <RadioGroupItem value="desktop" id="desktop" className="peer sr-only" />
+                <Label
+                  htmlFor="desktop"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  <Monitor className="h-6 w-6" />
+                  {t('desktop')}
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="mobile" id="mobile" className="peer sr-only" />
+                <Label
+                  htmlFor="mobile"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  <Smartphone className="h-6 w-6" />
+                  {t('mobile')}
+                </Label>
+              </div>
+              <div>
+                <RadioGroupItem value="auto" id="auto" className="peer sr-only" />
+                <Label
+                  htmlFor="auto"
+                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                >
+                  <Laptop className="h-6 w-6" />
+                  {t('auto')}
+                </Label>
+              </div>
+            </RadioGroup>
+        </CardContent>
+      </Card>
       
       {/* Feedback & Support Card */}
       <Card>
@@ -565,14 +566,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
-
-    
-
-
-
-
-    
-
-
