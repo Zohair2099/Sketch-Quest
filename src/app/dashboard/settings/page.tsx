@@ -241,15 +241,6 @@ export default function SettingsPage() {
             </div>
             <Switch id="dyslexia-font-switch" checked={settings.isDyslexiaFont} onCheckedChange={(checked) => updateSetting('isDyslexiaFont', checked)} />
           </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="screen-reader-info">{t('screen_reader')}</Label>
-              <p className="text-sm text-muted-foreground">
-                {t('screen_reader_desc')}
-              </p>
-            </div>
-            <Bot className="h-6 w-6 text-muted-foreground" />
-          </div>
         </CardContent>
       </Card>
       
@@ -466,5 +457,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    
