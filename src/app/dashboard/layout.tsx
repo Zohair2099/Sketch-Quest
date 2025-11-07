@@ -40,49 +40,27 @@ import { Logo } from "@/components/logo"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
 import { useUser, useAuth, useSidebar } from "@/firebase"
 import { SidebarInset } from "@/components/ui/sidebar"
-
-const navItems = [
-  { href: "/dashboard", icon: Home, label: "Dashboard" },
-  { href: "/dashboard/quests", icon: Book, label: "Quests" },
-  { href: "/dashboard/leaderboard", icon: BarChart2, label: "Leaderboard" },
-]
-
-function SidebarToggleButton() {
-  const { state, toggleSidebar } = useSidebar();
-
-  if (state === 'collapsed') {
-    return (
-        <Button
-            variant="ghost"
-            size="icon"
-            className="w-full"
-            onClick={toggleSidebar}
-            aria-label="Expand sidebar"
-        >
-            <ChevronsLeft className="w-5 h-5 rotate-180" />
-        </Button>
-    )
-  }
-
-  return (
-    <Button
-        variant="ghost"
-        size="icon"
-        className="w-full"
-        onClick={toggleSidebar}
-        aria-label="Collapse sidebar"
-    >
-        <ChevronsLeft className="w-5 h-5" />
-    </Button>
-  )
-}
+import { useSettings } from "@/context/settings-context"
+import { translations } from "@/lib/translations"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter();
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
+  const { settings } = useSettings();
   const avatarImage = PlaceHolderImages.find((img) => img.id === 'avatar-1');
+  
+  const t = (key: keyof typeof translations['en']) => {
+    if (!settings) return translations['en'][key];
+    return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
+  };
+
+  const navItems = [
+    { href: "/dashboard", icon: Home, label: t('dashboard') },
+    { href: "/dashboard/quests", icon: Book, label: t('quests') },
+    { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
+  ]
 
   React.useEffect(() => {
     if (!isUserLoading && !user) {
@@ -95,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push('/');
   }
 
-  if (isUserLoading || !user) {
+  if (isUserLoading || !user || !settings) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader className="h-8 w-8 animate-spin text-primary" />
@@ -139,7 +117,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <SidebarTrigger className="md:hidden" />
           <div className="flex-1">
             <h1 className="text-lg font-semibold capitalize">
-              {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
+                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
             </h1>
           </div>
           <DropdownMenu>
@@ -164,19 +142,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/profile">
                   <UserCircle className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
+                  <span>{t('profile')}</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/settings">
                   <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
+                  <span>{t('settings')}</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>{t('logout')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -186,3 +164,35 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </SidebarProvider>
   )
 }
+
+function SidebarToggleButton() {
+  const { state, toggleSidebar } = useSidebar();
+
+  if (state === 'collapsed') {
+    return (
+        <Button
+            variant="ghost"
+            size="icon"
+            className="w-full"
+            onClick={toggleSidebar}
+            aria-label="Expand sidebar"
+        >
+            <ChevronsLeft className="w-5 h-5 rotate-180" />
+        </Button>
+    )
+  }
+
+  return (
+    <Button
+        variant="ghost"
+        size="icon"
+        className="w-full"
+        onClick={toggleSidebar}
+        aria-label="Collapse sidebar"
+    >
+        <ChevronsLeft className="w-5 h-5" />
+    </Button>
+  )
+}
+
+    

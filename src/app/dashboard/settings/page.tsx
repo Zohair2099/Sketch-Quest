@@ -12,204 +12,59 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
-
-// Define the shape of our settings
-interface SettingsState {
-  language: string;
-  textSize: number;
-  isDyslexiaFont: boolean;
-  isMusicOn: boolean;
-  sfxVolume: number;
-  isVoiceNarration: boolean;
-  isGamification: boolean;
-  isAchievementNotifications: boolean;
-  isDailyReminders: boolean;
-  isEventAnnouncements: boolean;
-  isQuietHours: boolean;
-  isPlaytimeLimited: boolean;
-  isSocialRestricted: boolean;
-  colorPalette: string;
-}
-
-// Define the default settings
-const defaultSettings: SettingsState = {
-  language: 'en',
-  textSize: 50,
-  isDyslexiaFont: false,
-  isMusicOn: true,
-  sfxVolume: 80,
-  isVoiceNarration: false,
-  isGamification: true,
-  isAchievementNotifications: true,
-  isDailyReminders: true,
-  isEventAnnouncements: false,
-  isQuietHours: false,
-  isPlaytimeLimited: false,
-  isSocialRestricted: false,
-  colorPalette: 'default',
-};
-
-const colorPalettes = [
-    { name: 'default', label: 'Default', color: '#7c3aed' },
-    { name: 'emerald', label: 'Emerald', color: '#50C878' },
-    { name: 'crimson', label: 'Crimson', color: '#DC143C' },
-    { name: 'midnight', label: 'Midnight', color: '#191970' },
-    { name: 'sunset', label: 'Sunset', color: '#FF6F61' },
-    { name: 'sapphire', label: 'Sapphire', color: '#0F52BA' },
-    { name: 'amber', label: 'Amber', color: '#FFBF00' },
-    { name: 'ivory', label: 'Ivory', color: '#FFFFF0' },
-    { name: 'charcoal', label: 'Charcoal', color: '#36454F' },
-    { name: 'lavender', label: 'Lavender', color: '#E6E6FA' },
-    { name: 'coral', label: 'Coral', color: '#FF7F50' },
-    { name: 'mint', label: 'Mint', color: '#98FF98' },
-    { name: 'ruby', label: 'Ruby', color: '#E0115F' },
-    { name: 'cobalt', label: 'Cobalt', color: '#0047AB' },
-    { name: 'sandstone', label: 'Sandstone', color: '#C2B280' },
-    { name: 'onyx', label: 'Onyx', color: '#353839' },
-    { name: 'peach', label: 'Peach', color: '#FFDAB9' },
-    { name: 'turquoise', label: 'Turquoise', color: '#40E0D0' },
-    { name: 'plum', label: 'Plum', color: '#8E4585' },
-    { name: 'olive', label: 'Olive', color: '#808000' },
-    { name: 'rosewood', label: 'Rosewood', color: '#65000B' },
-    { name: 'sky', label: 'Sky', color: '#87CEEB' },
-    { name: 'graphite', label: 'Graphite', color: '#53565A' },
-    { name: 'teal', label: 'Teal', color: '#008080' },
-    { name: 'marigold', label: 'Marigold', color: '#EAA221' },
-    { name: 'frost', label: 'Frost', color: '#E0FFFF' },
-];
-
-const translations: Record<string, Record<string, string>> = {
-    en: {
-        settings: 'Settings',
-        appearance: 'Appearance',
-        appearance_desc: 'Customize the look and feel of your SketchQuest experience.',
-        language: 'Language',
-        language_desc: 'Choose your preferred language for the app interface.',
-        language_select_label: 'Language',
-        // ... add other en translations
-    },
-    es: {
-        settings: 'Configuración',
-        appearance: 'Apariencia',
-        appearance_desc: 'Personaliza la apariencia de tu experiencia SketchQuest.',
-        language: 'Idioma',
-        language_desc: 'Elige tu idioma preferido para la interfaz de la aplicación.',
-        language_select_label: 'Idioma',
-    },
-    fr: {
-        settings: 'Paramètres',
-        appearance: 'Apparence',
-        appearance_desc: 'Personnalisez l\'apparence de votre expérience SketchQuest.',
-        language: 'Langue',
-        language_desc: 'Choisissez votre langue préférée pour l\'interface de l\'application.',
-        language_select_label: 'Langue',
-    },
-    de: {
-        settings: 'Einstellungen',
-        appearance: 'Erscheinungsbild',
-        appearance_desc: 'Passen Sie das Erscheinungsbild Ihrer SketchQuest-Erfahrung an.',
-        language: 'Sprache',
-        language_desc: 'Wählen Sie Ihre bevorzugte Sprache für die App-Oberfläche.',
-        language_select_label: 'Sprache',
-    },
-    hi: {
-        settings: 'सेटिंग्स',
-        appearance: 'दिखावट',
-        appearance_desc: 'अपने स्केचक्वेस्ट अनुभव के रंग-रूप को अनुकूलित करें।',
-        language: 'भाषा',
-        language_desc: 'ऐप इंटरफ़ेस के लिए अपनी पसंदीदा भाषा चुनें।',
-        language_select_label: 'भाषा',
-    },
-    ur: {
-        settings: 'ترتیبات',
-        appearance: 'ظاہری شکل',
-        appearance_desc: 'اپنے اسکیچ کویسٹ کے تجربے کی شکل و صورت کو حسب ضرورت بنائیں۔',
-        language: 'زبان',
-        language_desc: 'ایپ انٹرفیس کے لیے اپنی پسندیدہ زبان منتخب کریں۔',
-        language_select_label: 'زبان',
-    }
-};
+import { useSettings } from '@/context/settings-context';
+import { translations, colorPalettes } from '@/lib/translations';
 
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
-  const pathname = usePathname();
+  const {
+    settings,
+    updateSetting,
+    isDirty,
+    revertSettings,
+    saveSettings
+  } = useSettings();
 
-  // State for the currently applied settings (saved state)
-  const [savedSettings, setSavedSettings] = React.useState<SettingsState>(defaultSettings);
-  // State for the currently edited settings (dirty/preview state)
-  const [currentSettings, setCurrentSettings] = React.useState<SettingsState>(defaultSettings);
-  
-  // This effect runs on mount to set the initial saved state, and when we save new settings.
-  React.useEffect(() => {
-    // Here you would typically load saved settings from a database or localStorage
-    const loadedSettings = defaultSettings; // Placeholder
-    setSavedSettings(loadedSettings);
-    setCurrentSettings(loadedSettings);
-  }, [pathname]); // Rerunning on path change is a proxy for component mount in this case
-
-  // This effect handles applying the PREVIEW of the settings
-  React.useEffect(() => {
-    // Preview color palette
-    document.body.dataset.theme = currentSettings.colorPalette;
-    
-    // Preview font size (as a percentage of the base size)
-    document.documentElement.style.fontSize = `${62.5 * (currentSettings.textSize / 50)}%`;
-
-    // Preview dyslexia-friendly font
-    if (currentSettings.isDyslexiaFont) {
-        document.body.classList.add('font-dyslexic');
-    } else {
-        document.body.classList.remove('font-dyslexic');
-    }
-
-  }, [currentSettings]);
-
-
-  const isDirty = React.useMemo(() => JSON.stringify(savedSettings) !== JSON.stringify(currentSettings), [savedSettings, currentSettings]);
-
-  const handleSettingChange = <K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
-    setCurrentSettings(prev => ({ ...prev, [key]: value }));
+  const handleRandomizePalette = () => {
+    const availablePalettes = colorPalettes.filter(p => p.name !== 'default');
+    const randomIndex = Math.floor(Math.random() * availablePalettes.length);
+    const randomPalette = availablePalettes[randomIndex];
+    updateSetting('colorPalette', randomPalette.name);
   };
 
   const handleApplyChanges = () => {
-    setSavedSettings(currentSettings);
+    saveSettings();
     toast({
       title: 'Settings Saved',
       description: 'Your changes have been applied.',
     });
-    // In a real app, you would save `currentSettings` to the database here.
   };
 
   const handleRevertChanges = () => {
-    // Revert the preview state to the last saved state
-    setCurrentSettings(savedSettings);
+    revertSettings();
     toast({
       title: 'Changes Reverted',
       description: 'Your settings have been reverted to the last saved state.',
     });
   };
-
-
+  
   const handleFeedbackClick = (type: string) => {
     toast({
       title: 'Feedback Submitted',
       description: `Thank you for offering to ${type}. This feature is coming soon!`,
     });
   };
-  
-  const handleRandomizePalette = () => {
-    const availablePalettes = colorPalettes.filter(p => p.name !== 'default');
-    const randomIndex = Math.floor(Math.random() * availablePalettes.length);
-    const randomPalette = availablePalettes[randomIndex];
-    handleSettingChange('colorPalette', randomPalette.name);
+
+  const t = (key: keyof typeof translations['en']) => {
+    if(!settings) return translations['en'][key];
+    return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
   };
-  
-  const t = (key: string) => {
-    return translations[currentSettings.language]?.[key] || translations['en'][key];
-  };
+
+  if (!settings) {
+    return <div>Loading...</div>; // Or a skeleton loader
+  }
 
   return (
     <div className="space-y-6 pb-24">
@@ -225,9 +80,9 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Theme</Label>
+            <Label>{t('theme')}</Label>
             <p className="text-sm text-muted-foreground">
-              Choose how you want to experience SketchQuest.
+              {t('theme_desc')}
             </p>
             <RadioGroup
               value={theme}
@@ -241,7 +96,7 @@ export default function SettingsPage() {
                   className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                   <Sun className="mb-2 h-6 w-6" />
-                  Light
+                  {t('theme_light')}
                 </Label>
               </div>
               <div>
@@ -251,7 +106,7 @@ export default function SettingsPage() {
                   className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                   <Moon className="mb-2 h-6 w-6" />
-                  Dark
+                  {t('theme_dark')}
                 </Label>
               </div>
               <div>
@@ -261,7 +116,7 @@ export default function SettingsPage() {
                   className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                   <Laptop className="mb-2 h-6 w-6" />
-                  System
+                  {t('theme_system')}
                 </Label>
               </div>
             </RadioGroup>
@@ -269,19 +124,19 @@ export default function SettingsPage() {
           <div className="space-y-2">
              <div className="flex items-center justify-between">
                 <div>
-                    <Label>Color Palette</Label>
+                    <Label>{t('color_palette')}</Label>
                     <p className="text-sm text-muted-foreground">
-                        Select your favorite color theme for the application.
+                        {t('color_palette_desc')}
                     </p>
                 </div>
                 <Button variant="outline" onClick={handleRandomizePalette}>
                     <Wand2 className="mr-2 h-4 w-4" />
-                    Randomize
+                    {t('randomize')}
                 </Button>
             </div>
             <RadioGroup
-              value={currentSettings.colorPalette}
-              onValueChange={(value) => handleSettingChange('colorPalette', value)}
+              value={settings.colorPalette}
+              onValueChange={(value) => updateSetting('colorPalette', value)}
               className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 pt-2"
             >
               {colorPalettes.map((palette) => (
@@ -292,7 +147,7 @@ export default function SettingsPage() {
                         className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                     >
                         <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
-                        {palette.label}
+                        {t(palette.name as keyof typeof translations['en'])}
                     </Label>
                 </div>
               ))}
@@ -312,7 +167,7 @@ export default function SettingsPage() {
         <CardContent>
           <div className="space-y-2">
             <Label htmlFor="language-select">{t('language_select_label')}</Label>
-            <Select value={currentSettings.language} onValueChange={(value) => handleSettingChange('language', value)}>
+            <Select value={settings.language} onValueChange={(value) => updateSetting('language', value)}>
               <SelectTrigger id="language-select" className="w-full md:w-1/2">
                 <SelectValue placeholder="Select a language" />
               </SelectTrigger>
@@ -332,34 +187,34 @@ export default function SettingsPage() {
       {/* Accessibility Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Accessibility</CardTitle>
+          <CardTitle>{t('accessibility')}</CardTitle>
           <CardDescription>
-            Make SketchQuest easier to use with these accessibility settings.
+            {t('accessibility_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="space-y-4">
-            <Label htmlFor="font-size-slider">Text Size</Label>
+            <Label htmlFor="font-size-slider">{t('text_size')}</Label>
             <div className="flex items-center gap-4">
               <Text className="h-5 w-5 text-muted-foreground" />
-              <Slider id="font-size-slider" value={[currentSettings.textSize]} onValueChange={(value) => handleSettingChange('textSize', value[0])} max={100} step={10} />
+              <Slider id="font-size-slider" value={[settings.textSize]} onValueChange={(value) => updateSetting('textSize', value[0])} max={100} step={10} />
               <Text className="h-8 w-8 text-muted-foreground" />
             </div>
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="dyslexia-font-switch">Dyslexia-Friendly Font</Label>
+              <Label htmlFor="dyslexia-font-switch">{t('dyslexia_font')}</Label>
               <p className="text-sm text-muted-foreground">
-                Uses a font designed for easier reading.
+                {t('dyslexia_font_desc')}
               </p>
             </div>
-            <Switch id="dyslexia-font-switch" checked={currentSettings.isDyslexiaFont} onCheckedChange={(checked) => handleSettingChange('isDyslexiaFont', checked)} />
+            <Switch id="dyslexia-font-switch" checked={settings.isDyslexiaFont} onCheckedChange={(checked) => updateSetting('isDyslexiaFont', checked)} />
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <Label htmlFor="screen-reader-info">Screen Reader Support</Label>
+              <Label htmlFor="screen-reader-info">{t('screen_reader')}</Label>
               <p className="text-sm text-muted-foreground">
-                The app is built with ARIA landmarks for screen readers.
+                {t('screen_reader_desc')}
               </p>
             </div>
             <Bot className="h-6 w-6 text-muted-foreground" />
@@ -370,9 +225,9 @@ export default function SettingsPage() {
       {/* Audio & Visual Experience Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Audio &amp; Visual Experience</CardTitle>
+          <CardTitle>{t('audio_visual')}</CardTitle>
           <CardDescription>
-            Manage sound, music, and voice settings.
+            {t('audio_visual_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -380,19 +235,19 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="bg-music-switch" className="flex items-center">
                 <Music className="mr-2 h-5 w-5 text-purple-500" />
-                Background Music
+                {t('background_music')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Toggle ambient music during quests.
+                {t('background_music_desc')}
               </p>
             </div>
-            <Switch id="bg-music-switch" checked={currentSettings.isMusicOn} onCheckedChange={(checked) => handleSettingChange('isMusicOn', checked)} />
+            <Switch id="bg-music-switch" checked={settings.isMusicOn} onCheckedChange={(checked) => updateSetting('isMusicOn', checked)} />
           </div>
           <div className="space-y-4">
-            <Label htmlFor="sfx-volume-slider">Sound Effects Volume</Label>
+            <Label htmlFor="sfx-volume-slider">{t('sfx_volume')}</Label>
             <div className="flex items-center gap-4">
               <Volume2 className="h-5 w-5 text-muted-foreground" />
-              <Slider id="sfx-volume-slider" value={[currentSettings.sfxVolume]} onValueChange={(value) => handleSettingChange('sfxVolume', value[0])} max={100} step={5} />
+              <Slider id="sfx-volume-slider" value={[settings.sfxVolume]} onValueChange={(value) => updateSetting('sfxVolume', value[0])} max={100} step={5} />
               <Volume2 className="h-8 w-8 text-muted-foreground" />
             </div>
           </div>
@@ -400,13 +255,13 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="voice-narration-switch" className="flex items-center">
                 <Mic className="mr-2 h-5 w-5 text-blue-500" />
-                Voice Narration
+                {t('voice_narration')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Enable voice-over for instructions and content.
+                {t('voice_narration_desc')}
               </p>
             </div>
-            <Switch id="voice-narration-switch" checked={currentSettings.isVoiceNarration} onCheckedChange={(checked) => handleSettingChange('isVoiceNarration', checked)} />
+            <Switch id="voice-narration-switch" checked={settings.isVoiceNarration} onCheckedChange={(checked) => updateSetting('isVoiceNarration', checked)} />
           </div>
         </CardContent>
       </Card>
@@ -414,9 +269,9 @@ export default function SettingsPage() {
       {/* Gamification Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Gamification</CardTitle>
+          <CardTitle>{t('gamification')}</CardTitle>
           <CardDescription>
-            Manage your gaming and engagement experience.
+            {t('gamification_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -424,25 +279,25 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="gamification-switch" className="flex items-center">
                 <Trophy className="mr-2 h-5 w-5 text-yellow-500" />
-                Enable Gamification
+                {t('enable_gamification')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Turn badges, streaks, and leaderboards on or off.
+                {t('enable_gamification_desc')}
               </p>
             </div>
-            <Switch id="gamification-switch" checked={currentSettings.isGamification} onCheckedChange={(checked) => handleSettingChange('isGamification', checked)} />
+            <Switch id="gamification-switch" checked={settings.isGamification} onCheckedChange={(checked) => updateSetting('isGamification', checked)} />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="notifications-switch" className="flex items-center">
                 <Bell className="mr-2 h-5 w-5 text-primary" />
-                Achievement Notifications
+                {t('achievement_notifications')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Receive alerts for new badges and milestones.
+                {t('achievement_notifications_desc')}
               </p>
             </div>
-            <Switch id="notifications-switch" checked={currentSettings.isAchievementNotifications} onCheckedChange={(checked) => handleSettingChange('isAchievementNotifications', checked)} />
+            <Switch id="notifications-switch" checked={settings.isAchievementNotifications} onCheckedChange={(checked) => updateSetting('isAchievementNotifications', checked)} />
           </div>
         </CardContent>
       </Card>
@@ -450,9 +305,9 @@ export default function SettingsPage() {
       {/* Notifications & Reminders Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Notifications &amp; Reminders</CardTitle>
+          <CardTitle>{t('notifications')}</CardTitle>
           <CardDescription>
-            Manage when and how you receive notifications from SketchQuest.
+            {t('notifications_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -460,37 +315,37 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="daily-reminder-switch" className="flex items-center">
                 <Bell className="mr-2 h-5 w-5 text-primary" />
-                Daily Learning Reminders
+                {t('daily_reminders')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Get a push notification to keep your streak going.
+                {t('daily_reminders_desc')}
               </p>
             </div>
-            <Switch id="daily-reminder-switch" checked={currentSettings.isDailyReminders} onCheckedChange={(checked) => handleSettingChange('isDailyReminders', checked)} />
+            <Switch id="daily-reminder-switch" checked={settings.isDailyReminders} onCheckedChange={(checked) => updateSetting('isDailyReminders', checked)} />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="event-announcements-switch" className="flex items-center">
                 <Languages className="mr-2 h-5 w-5 text-blue-500" />
-                Event &amp; Competition Announcements
+                {t('event_announcements')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Stay informed about upcoming special events.
+                {t('event_announcements_desc')}
               </p>
             </div>
-            <Switch id="event-announcements-switch" checked={currentSettings.isEventAnnouncements} onCheckedChange={(checked) => handleSettingChange('isEventAnnouncements', checked)} />
+            <Switch id="event-announcements-switch" checked={settings.isEventAnnouncements} onCheckedChange={(checked) => updateSetting('isEventAnnouncements', checked)} />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="quiet-hours-switch" className="flex items-center">
                 <BellOff className="mr-2 h-5 w-5 text-muted-foreground" />
-                Quiet Hours
+                {t('quiet_hours')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Mute all notifications between 10 PM and 8 AM.
+                {t('quiet_hours_desc')}
               </p>
             </div>
-            <Switch id="quiet-hours-switch" checked={currentSettings.isQuietHours} onCheckedChange={(checked) => handleSettingChange('isQuietHours', checked)} />
+            <Switch id="quiet-hours-switch" checked={settings.isQuietHours} onCheckedChange={(checked) => updateSetting('isQuietHours', checked)} />
           </div>
         </CardContent>
       </Card>
@@ -498,9 +353,9 @@ export default function SettingsPage() {
       {/* Parental Controls Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Parental Controls</CardTitle>
+          <CardTitle>{t('parental_controls')}</CardTitle>
           <CardDescription>
-            Manage settings for younger users.
+            {t('parental_controls_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -508,25 +363,25 @@ export default function SettingsPage() {
             <div>
               <Label htmlFor="playtime-switch" className="flex items-center">
                 <Hourglass className="mr-2 h-5 w-5 text-rose-500" />
-                Limit Playtime
+                {t('limit_playtime')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Set daily time limits for app usage.
+                {t('limit_playtime_desc')}
               </p>
             </div>
-            <Switch id="playtime-switch" checked={currentSettings.isPlaytimeLimited} onCheckedChange={(checked) => handleSettingChange('isPlaytimeLimited', checked)} />
+            <Switch id="playtime-switch" checked={settings.isPlaytimeLimited} onCheckedChange={(checked) => updateSetting('isPlaytimeLimited', checked)} />
           </div>
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="social-switch" className="flex items-center">
                 <MessageCircleOff className="mr-2 h-5 w-5 text-muted-foreground" />
-                Restrict Social Features
+                {t('restrict_social')}
               </Label>
               <p className="text-sm text-muted-foreground">
-                Disable chat and friend requests.
+                {t('restrict_social_desc')}
               </p>
             </div>
-            <Switch id="social-switch" checked={currentSettings.isSocialRestricted} onCheckedChange={(checked) => handleSettingChange('isSocialRestricted', checked)} />
+            <Switch id="social-switch" checked={settings.isSocialRestricted} onCheckedChange={(checked) => updateSetting('isSocialRestricted', checked)} />
           </div>
         </CardContent>
       </Card>
@@ -534,23 +389,23 @@ export default function SettingsPage() {
       {/* Feedback & Support Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Feedback &amp; Support</CardTitle>
+          <CardTitle>{t('feedback_support')}</CardTitle>
           <CardDescription>
-            Need help or have an idea? Let us know.
+            {t('feedback_support_desc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col sm:flex-row gap-4">
           <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('report a bug')}>
             <Bug className="mr-2 h-5 w-5 text-destructive" />
-            Report a Bug
+            {t('report_bug')}
           </Button>
           <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('suggest a feature')}>
             <LightbulbIcon className="mr-2 h-5 w-5 text-yellow-500" />
-            Suggest a Feature
+            {t('suggest_feature')}
           </Button>
-          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('contact support')}>
+          <Button variant="outline" className="w-full justify-start" onClick={() => handleFeedbackClick('contact_support')}>
             <HelpCircle className="mr-2 h-5 w-5 text-primary" />
-            Contact Support
+            {t('contact_support')}
           </Button>
         </CardContent>
       </Card>
@@ -562,15 +417,15 @@ export default function SettingsPage() {
       )}>
         <div className="max-w-3xl mx-auto">
             <div className="bg-card border rounded-lg shadow-2xl p-4 flex items-center justify-between">
-                <p className="text-sm font-medium">You have unsaved changes.</p>
+                <p className="text-sm font-medium">{t('unsaved_changes')}</p>
                 <div className="flex items-center gap-2">
                     <Button variant="ghost" onClick={handleRevertChanges}>
                         <Undo className="mr-2 h-4 w-4" />
-                        Revert
+                        {t('revert')}
                     </Button>
                     <Button onClick={handleApplyChanges}>
                         <Save className="mr-2 h-4 w-4" />
-                        Apply Changes
+                        {t('apply_changes')}
                     </Button>
                 </div>
             </div>
