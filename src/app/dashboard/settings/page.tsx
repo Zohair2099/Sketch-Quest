@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -146,29 +147,31 @@ export default function SettingsPage() {
                         {t('select_color_palette')}
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>{t('color_palette')}</DialogTitle>
                         <DialogDescription>{t('color_palette_desc')}</DialogDescription>
                     </DialogHeader>
-                    <RadioGroup
-                        value={settings.colorPalette}
-                        onValueChange={(value) => updateSetting('colorPalette', value)}
-                        className="grid grid-cols-2 sm:grid-cols-3 gap-4 py-4"
-                        >
-                        {colorPalettes.map((palette) => (
-                            <div key={palette.name}>
-                                <RadioGroupItem value={palette.name} id={`modal-${palette.name}`} className="peer sr-only" />
-                                <Label
-                                    htmlFor={`modal-${palette.name}`}
-                                    className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                                >
-                                    <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
-                                    {t(palette.name as keyof typeof translations['en'])}
-                                </Label>
-                            </div>
-                        ))}
-                    </RadioGroup>
+                    <ScrollArea className="h-72 w-full">
+                        <RadioGroup
+                            value={settings.colorPalette}
+                            onValueChange={(value) => updateSetting('colorPalette', value)}
+                            className="grid grid-cols-5 gap-4 py-4 pr-4"
+                            >
+                            {colorPalettes.map((palette) => (
+                                <div key={palette.name}>
+                                    <RadioGroupItem value={palette.name} id={`modal-${palette.name}`} className="peer sr-only" />
+                                    <Label
+                                        htmlFor={`modal-${palette.name}`}
+                                        className="flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                    >
+                                        <div className="w-6 h-6 rounded-full mb-2" style={{ backgroundColor: palette.color }} />
+                                        {t(palette.name as keyof typeof translations['en'])}
+                                    </Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </ScrollArea>
                     <DialogFooter>
                         <DialogClose asChild>
                             <Button type="button">{t('done')}</Button>
@@ -381,7 +384,7 @@ export default function SettingsPage() {
             <Switch id="event-announcements-switch" checked={settings.isEventAnnouncements} onCheckedChange={(checked) => updateSetting('isEventAnnouncements', checked)} />
           </div>
           <div className="flex items-center justify-between">
-            <div>
+             <div>
               <Label htmlFor="quiet-hours-switch" className="flex items-center">
                 <BellOff className="mr-2 h-5 w-5 text-muted-foreground" />
                 {t('quiet_hours')}
@@ -468,7 +471,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
-
+      
       {/* View Mode Card */}
       <Card>
         <CardHeader>
