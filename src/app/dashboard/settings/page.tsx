@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import * as React from 'react';
@@ -15,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { useSettings, defaultSettings } from '@/context/settings-context';
 import { translations, colorPalettes } from '@/lib/translations';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 
 export default function SettingsPage() {
@@ -146,7 +147,7 @@ export default function SettingsPage() {
                         {t('select_color_palette')}
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl">
+                <DialogContent className="sm:max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>{t('color_palette')}</DialogTitle>
                         <DialogDescription>{t('color_palette_desc')}</DialogDescription>
@@ -154,7 +155,7 @@ export default function SettingsPage() {
                     <RadioGroup
                         value={settings.colorPalette}
                         onValueChange={(value) => updateSetting('colorPalette', value)}
-                        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 pt-2"
+                        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 py-4"
                         >
                         {colorPalettes.map((palette) => (
                             <div key={palette.name}>
@@ -169,6 +170,11 @@ export default function SettingsPage() {
                             </div>
                         ))}
                     </RadioGroup>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button">{t('done')}</Button>
+                        </DialogClose>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
           </div>

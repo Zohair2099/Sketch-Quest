@@ -143,6 +143,7 @@ export const translations = {
         teal: 'Teal',
         marigold: 'Marigold',
         frost: 'Frost',
+        done: 'Done',
     },
     es: {
         settings: 'Configuración',
@@ -258,6 +259,7 @@ export const translations = {
         teal: 'Verde azulado',
         marigold: 'Maravilla',
         frost: 'Escarcha',
+        done: 'Hecho',
     },
     fr: {
         settings: 'Paramètres',
@@ -373,6 +375,7 @@ export const translations = {
         teal: 'Sarcelle',
         marigold: 'Souci',
         frost: 'Givre',
+        done: 'Terminé',
     },
     de: {
         settings: 'Einstellungen',
@@ -488,6 +491,7 @@ export const translations = {
         teal: 'Blaugrün',
         marigold: 'Ringelblume',
         frost: 'Frost',
+        done: 'Fertig',
     },
     hi: {
         settings: 'सेटिंग्स',
@@ -580,7 +584,7 @@ export const translations = {
         default: 'डिफ़ॉल्ट',
         emerald: 'पन्ना',
         crimson: 'किरमिजी',
-        midnight: 'आधी रात',
+        midnight: ' आधी रात',
         sunset: 'सूर्यास्त',
         sapphire: 'नीलम',
         amber: 'एम्बर',
@@ -603,6 +607,7 @@ export const translations = {
         teal: 'टील',
         marigold: 'गेंदा',
         frost: 'पाला',
+        done: 'हो गया',
     },
     ur: {
         settings: 'ترتیبات',
@@ -718,6 +723,7 @@ export const translations = {
         teal: 'نیلا سبز',
         marigold: 'گیندا',
         frost: 'پالا',
+        done: 'ہو گیا',
     },
 };
 
