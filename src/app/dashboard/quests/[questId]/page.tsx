@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Check, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
@@ -35,8 +35,23 @@ export default function QuestPage({ params }: { params: { questId: string } }) {
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [sketchData, setSketchData] = useState<string | null>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: 700, height: 400 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const quest = questsData.find((q) => q.id === params.questId);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setCanvasSize({ width: width, height: width * (4 / 7) }); // Maintain aspect ratio
+      }
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   if (!quest) {
     notFound();
@@ -87,12 +102,12 @@ export default function QuestPage({ params }: { params: { questId: string } }) {
           </div>
           <CardDescription className="pt-2">{quest.description}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4" ref={containerRef}>
           <div>
             <h3 className="font-semibold">Your Mission:</h3>
             <p className="text-muted-foreground">{quest.task}</p>
           </div>
-          <SketchPad width={700} height={400} onSketchChange={setSketchData} />
+          <SketchPad width={canvasSize.width} height={canvasSize.height} onSketchChange={setSketchData} />
         </CardContent>
         <CardFooter className="flex flex-col items-start gap-4">
           <Button onClick={handleAnalyzeSketch} disabled={isLoading || !sketchData}>
