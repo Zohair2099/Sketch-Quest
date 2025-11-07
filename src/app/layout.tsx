@@ -25,8 +25,8 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          forcedTheme="light"
+          defaultTheme="system"
+          enableSystem
           disableTransitionOnChange
         >
           <SettingsProvider>
@@ -40,3 +40,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    

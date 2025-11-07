@@ -65,39 +65,54 @@ body.font-dyslexic {
     --sidebar-ring: 262.1 83.3% 57.8%;
   }
 
-  body[data-theme='emerald'] { --background: 145 58% 96%; }
-  body[data-theme='crimson'] { --background: 348 83% 96%; }
-  body[data-theme='midnight'] { --background: 240 64% 96%; }
-  body[data-theme='sunset'] { --background: 5 100% 96%; }
-  body[data-theme='sapphire'] { --background: 217 91% 96%; }
-  body[data-theme='amber'] { --background: 45 100% 96%; }
-  body[data-theme='ivory'] { --background: 60 100% 98%; }
-  body[data-theme='charcoal'] { --background: 204 15% 96%; }
-  body[data-theme='lavender'] { --background: 240 67% 98%; }
-  body[data-theme='coral'] { --background: 16 100% 96%; }
-  body[data-theme='mint'] { --background: 120 100% 97%; }
-  body[data-theme='ruby'] { --background: 337 88% 96%; }
-  body[data-theme='cobalt'] { --background: 215 100% 96%; }
-  body[data-theme='sandstone'] { --background: 43 25% 96%; }
-  body[data-theme='onyx'] { --background: 210 3% 96%; }
-  body[data-theme='peach'] { --background: 39 100% 98%; }
-  body[data-theme='turquoise'] { --background: 174 72% 96%; }
-  body[data-theme='plum'] { --background: 307 34% 96%; }
-  body[data-theme='olive'] { --background: 60 100% 96%; }
-  body[data-theme='rosewood'] { --background: 355 100% 96%; }
-  body[data-theme='sky'] { --background: 197 71% 97%; }
-  body[data-theme='graphite'] { --background: 210 4% 96%; }
-  body[data-theme='teal'] { --background: 180 100% 96%; }
-  body[data-theme='marigold'] { --background: 38 83% 96%; }
-  body[data-theme='frost'] { --background: 180 100% 98%; }
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 262.1 83.3% 57.8%;
+    --sidebar-background: 224 71.4% 4.1%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 262.1 83.3% 57.8%;
+    --sidebar-primary-foreground: 210 20% 98%;
+    --sidebar-accent: 215 27.9% 16.9%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 215 27.9% 16.9%;
+    --sidebar-ring: 262.1 83.3% 57.8%;
+  }
 
+  body[data-theme='emerald'] { --background: 145 58% 96%; }
+  .dark body[data-theme='emerald'] { --background: 145 58% 5%; }
   body[data-theme='emerald'] {
+    --primary: 145 58% 41%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 145 58% 41% / 0.1;
+    --accent-foreground: 145 58% 41%;
+    --ring: 145 58% 41%;
+  }
+  .dark body[data-theme='emerald'] {
     --primary: 145 58% 54%;
     --primary-foreground: 210 20% 98%;
     --accent: 145 58% 54% / 0.1;
     --accent-foreground: 145 58% 54%;
     --ring: 145 58% 54%;
   }
+  body[data-theme='crimson'] { --background: 348 83% 96%; }
+  .dark body[data-theme='crimson'] { --background: 348 83% 5%; }
   body[data-theme='crimson'] {
     --primary: 348 83% 47%;
     --primary-foreground: 210 20% 98%;
@@ -105,6 +120,15 @@ body.font-dyslexic {
     --accent-foreground: 348 83% 47%;
     --ring: 348 83% 47%;
   }
+  .dark body[data-theme='crimson'] {
+    --primary: 348 83% 60%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 348 83% 60% / 0.1;
+    --accent-foreground: 348 83% 60%;
+    --ring: 348 83% 60%;
+  }
+  body[data-theme='midnight'] { --background: 240 64% 96%; }
+  .dark body[data-theme='midnight'] { --background: 240 64% 5%; }
   body[data-theme='midnight'] {
     --primary: 240 64% 27%;
     --primary-foreground: 210 20% 98%;
@@ -112,6 +136,15 @@ body.font-dyslexic {
     --accent-foreground: 240 64% 27%;
     --ring: 240 64% 27%;
   }
+  .dark body[data-theme='midnight'] {
+    --primary: 240 64% 52%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 240 64% 52% / 0.1;
+    --accent-foreground: 240 64% 52%;
+    --ring: 240 64% 52%;
+  }
+  body[data-theme='sunset'] { --background: 5 100% 96%; }
+  .dark body[data-theme='sunset'] { --background: 5 100% 5%; }
   body[data-theme='sunset'] {
     --primary: 5 100% 69%;
     --primary-foreground: 210 20% 98%;
@@ -119,6 +152,15 @@ body.font-dyslexic {
     --accent-foreground: 5 100% 69%;
     --ring: 5 100% 69%;
   }
+  .dark body[data-theme='sunset'] {
+    --primary: 5 100% 79%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 5 100% 79% / 0.1;
+    --accent-foreground: 5 100% 79%;
+    --ring: 5 100% 79%;
+  }
+  body[data-theme='sapphire'] { --background: 217 91% 96%; }
+  .dark body[data-theme='sapphire'] { --background: 217 91% 5%; }
   body[data-theme='sapphire'] {
     --primary: 217 91% 41%;
     --primary-foreground: 210 20% 98%;
@@ -126,6 +168,15 @@ body.font-dyslexic {
     --accent-foreground: 217 91% 41%;
     --ring: 217 91% 41%;
   }
+  .dark body[data-theme='sapphire'] {
+    --primary: 217 91% 61%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 217 91% 61% / 0.1;
+    --accent-foreground: 217 91% 61%;
+    --ring: 217 91% 61%;
+  }
+  body[data-theme='amber'] { --background: 45 100% 96%; }
+  .dark body[data-theme='amber'] { --background: 45 100% 5%; }
   body[data-theme='amber'] {
     --primary: 45 100% 50%;
     --primary-foreground: 60 9.1% 97.8%;
@@ -133,6 +184,15 @@ body.font-dyslexic {
     --accent-foreground: 45 100% 50%;
     --ring: 45 100% 50%;
   }
+  .dark body[data-theme='amber'] {
+    --primary: 45 100% 60%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --accent: 45 100% 60% / 0.1;
+    --accent-foreground: 45 100% 60%;
+    --ring: 45 100% 60%;
+  }
+  body[data-theme='ivory'] { --background: 60 100% 98%; }
+  .dark body[data-theme='ivory'] { --background: 60 100% 7%; }
   body[data-theme='ivory'] {
     --primary: 60 100% 97%;
     --primary-foreground: 224 71.4% 4.1%;
@@ -140,6 +200,15 @@ body.font-dyslexic {
     --accent-foreground: 60 100% 40%;
     --ring: 60 100% 97%;
   }
+  .dark body[data-theme='ivory'] {
+    --primary: 60 100% 12%;
+    --primary-foreground: 224 71.4% 94.1%;
+    --accent: 60 100% 12% / 0.1;
+    --accent-foreground: 60 100% 80%;
+    --ring: 60 100% 12%;
+  }
+  body[data-theme='charcoal'] { --background: 204 15% 96%; }
+  .dark body[data-theme='charcoal'] { --background: 204 15% 5%; }
   body[data-theme='charcoal'] {
     --primary: 204 15% 26%;
     --primary-foreground: 210 20% 98%;
@@ -147,6 +216,15 @@ body.font-dyslexic {
     --accent-foreground: 204 15% 26%;
     --ring: 204 15% 26%;
   }
+  .dark body[data-theme='charcoal'] {
+    --primary: 204 15% 56%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 204 15% 56% / 0.1;
+    --accent-foreground: 204 15% 56%;
+    --ring: 204 15% 56%;
+  }
+  body[data-theme='lavender'] { --background: 240 67% 98%; }
+  .dark body[data-theme='lavender'] { --background: 240 67% 7%; }
   body[data-theme='lavender'] {
     --primary: 240 67% 94%;
     --primary-foreground: 224 71.4% 4.1%;
@@ -154,6 +232,15 @@ body.font-dyslexic {
     --accent-foreground: 240 67% 64%;
     --ring: 240 67% 94%;
   }
+  .dark body[data-theme='lavender'] {
+    --primary: 240 67% 14%;
+    --primary-foreground: 224 71.4% 94.1%;
+    --accent: 240 67% 14% / 0.1;
+    --accent-foreground: 240 67% 84%;
+    --ring: 240 67% 14%;
+  }
+  body[data-theme='coral'] { --background: 16 100% 96%; }
+  .dark body[data-theme='coral'] { --background: 16 100% 5%; }
   body[data-theme='coral'] {
     --primary: 16 100% 66%;
     --primary-foreground: 210 20% 98%;
@@ -161,6 +248,15 @@ body.font-dyslexic {
     --accent-foreground: 16 100% 66%;
     --ring: 16 100% 66%;
   }
+  .dark body[data-theme='coral'] {
+    --primary: 16 100% 76%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 16 100% 76% / 0.1;
+    --accent-foreground: 16 100% 76%;
+    --ring: 16 100% 76%;
+  }
+  body[data-theme='mint'] { --background: 120 100% 97%; }
+  .dark body[data-theme='mint'] { --background: 120 100% 6%; }
   body[data-theme='mint'] {
     --primary: 120 100% 80%;
     --primary-foreground: 224 71.4% 4.1%;
@@ -168,6 +264,15 @@ body.font-dyslexic {
     --accent-foreground: 120 100% 50%;
     --ring: 120 100% 80%;
   }
+  .dark body[data-theme='mint'] {
+    --primary: 120 100% 15%;
+    --primary-foreground: 224 71.4% 94.1%;
+    --accent: 120 100% 15% / 0.1;
+    --accent-foreground: 120 100% 85%;
+    --ring: 120 100% 15%;
+  }
+  body[data-theme='ruby'] { --background: 337 88% 96%; }
+  .dark body[data-theme='ruby'] { --background: 337 88% 5%; }
   body[data-theme='ruby'] {
     --primary: 337 88% 47%;
     --primary-foreground: 210 20% 98%;
@@ -175,6 +280,15 @@ body.font-dyslexic {
     --accent-foreground: 337 88% 47%;
     --ring: 337 88% 47%;
   }
+  .dark body[data-theme='ruby'] {
+    --primary: 337 88% 62%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 337 88% 62% / 0.1;
+    --accent-foreground: 337 88% 62%;
+    --ring: 337 88% 62%;
+  }
+  body[data-theme='cobalt'] { --background: 215 100% 96%; }
+  .dark body[data-theme='cobalt'] { --background: 215 100% 5%; }
   body[data-theme='cobalt'] {
     --primary: 215 100% 34%;
     --primary-foreground: 210 20% 98%;
@@ -182,6 +296,15 @@ body.font-dyslexic {
     --accent-foreground: 215 100% 34%;
     --ring: 215 100% 34%;
   }
+  .dark body[data-theme='cobalt'] {
+    --primary: 215 100% 54%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 215 100% 54% / 0.1;
+    --accent-foreground: 215 100% 54%;
+    --ring: 215 100% 54%;
+  }
+  body[data-theme='sandstone'] { --background: 43 25% 96%; }
+  .dark body[data-theme='sandstone'] { --background: 43 25% 5%; }
   body[data-theme='sandstone'] {
     --primary: 43 25% 63%;
     --primary-foreground: 60 9.1% 97.8%;
@@ -189,6 +312,15 @@ body.font-dyslexic {
     --accent-foreground: 43 25% 63%;
     --ring: 43 25% 63%;
   }
+  .dark body[data-theme='sandstone'] {
+    --primary: 43 25% 73%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --accent: 43 25% 73% / 0.1;
+    --accent-foreground: 43 25% 73%;
+    --ring: 43 25% 73%;
+  }
+  body[data-theme='onyx'] { --background: 210 3% 96%; }
+  .dark body[data-theme='onyx'] { --background: 210 3% 5%; }
   body[data-theme='onyx'] {
     --primary: 210 3% 21%;
     --primary-foreground: 210 20% 98%;
@@ -196,6 +328,15 @@ body.font-dyslexic {
     --accent-foreground: 210 3% 21%;
     --ring: 210 3% 21%;
   }
+  .dark body[data-theme='onyx'] {
+    --primary: 210 3% 51%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 210 3% 51% / 0.1;
+    --accent-foreground: 210 3% 51%;
+    --ring: 210 3% 51%;
+  }
+  body[data-theme='peach'] { --background: 39 100% 98%; }
+  .dark body[data-theme='peach'] { --background: 39 100% 7%; }
   body[data-theme='peach'] {
     --primary: 39 100% 86%;
     --primary-foreground: 24.6 95% 53.1%;
@@ -203,6 +344,15 @@ body.font-dyslexic {
     --accent-foreground: 39 100% 56%;
     --ring: 39 100% 86%;
   }
+  .dark body[data-theme='peach'] {
+    --primary: 39 100% 16%;
+    --primary-foreground: 24.6 95% 93.1%;
+    --accent: 39 100% 16% / 0.1;
+    --accent-foreground: 39 100% 86%;
+    --ring: 39 100% 16%;
+  }
+  body[data-theme='turquoise'] { --background: 174 72% 96%; }
+  .dark body[data-theme='turquoise'] { --background: 174 72% 5%; }
   body[data-theme='turquoise'] {
     --primary: 174 72% 56%;
     --primary-foreground: 210 20% 98%;
@@ -210,6 +360,15 @@ body.font-dyslexic {
     --accent-foreground: 174 72% 56%;
     --ring: 174 72% 56%;
   }
+  .dark body[data-theme='turquoise'] {
+    --primary: 174 72% 66%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 174 72% 66% / 0.1;
+    --accent-foreground: 174 72% 66%;
+    --ring: 174 72% 66%;
+  }
+  body[data-theme='plum'] { --background: 307 34% 96%; }
+  .dark body[data-theme='plum'] { --background: 307 34% 5%; }
   body[data-theme='plum'] {
     --primary: 307 34% 41%;
     --primary-foreground: 210 20% 98%;
@@ -217,6 +376,15 @@ body.font-dyslexic {
     --accent-foreground: 307 34% 41%;
     --ring: 307 34% 41%;
   }
+  .dark body[data-theme='plum'] {
+    --primary: 307 34% 61%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 307 34% 61% / 0.1;
+    --accent-foreground: 307 34% 61%;
+    --ring: 307 34% 61%;
+  }
+  body[data-theme='olive'] { --background: 60 100% 96%; }
+  .dark body[data-theme='olive'] { --background: 60 100% 5%; }
   body[data-theme='olive'] {
     --primary: 60 100% 25%;
     --primary-foreground: 210 20% 98%;
@@ -224,6 +392,15 @@ body.font-dyslexic {
     --accent-foreground: 60 100% 25%;
     --ring: 60 100% 25%;
   }
+  .dark body[data-theme='olive'] {
+    --primary: 60 100% 40%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 60 100% 40% / 0.1;
+    --accent-foreground: 60 100% 40%;
+    --ring: 60 100% 40%;
+  }
+  body[data-theme='rosewood'] { --background: 355 100% 96%; }
+  .dark body[data-theme='rosewood'] { --background: 355 100% 5%; }
   body[data-theme='rosewood'] {
     --primary: 355 100% 20%;
     --primary-foreground: 210 20% 98%;
@@ -231,6 +408,15 @@ body.font-dyslexic {
     --accent-foreground: 355 100% 20%;
     --ring: 355 100% 20%;
   }
+  .dark body[data-theme='rosewood'] {
+    --primary: 355 100% 40%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 355 100% 40% / 0.1;
+    --accent-foreground: 355 100% 40%;
+    --ring: 355 100% 40%;
+  }
+  body[data-theme='sky'] { --background: 197 71% 97%; }
+  .dark body[data-theme='sky'] { --background: 197 71% 6%; }
   body[data-theme='sky'] {
     --primary: 197 71% 73%;
     --primary-foreground: 224 71.4% 4.1%;
@@ -238,6 +424,15 @@ body.font-dyslexic {
     --accent-foreground: 197 71% 43%;
     --ring: 197 71% 73%;
   }
+  .dark body[data-theme='sky'] {
+    --primary: 197 71% 18%;
+    --primary-foreground: 224 71.4% 94.1%;
+    --accent: 197 71% 18% / 0.1;
+    --accent-foreground: 197 71% 88%;
+    --ring: 197 71% 18%;
+  }
+  body[data-theme='graphite'] { --background: 210 4% 96%; }
+  .dark body[data-theme='graphite'] { --background: 210 4% 5%; }
   body[data-theme='graphite'] {
     --primary: 210 4% 33%;
     --primary-foreground: 210 20% 98%;
@@ -245,6 +440,15 @@ body.font-dyslexic {
     --accent-foreground: 210 4% 33%;
     --ring: 210 4% 33%;
   }
+  .dark body[data-theme='graphite'] {
+    --primary: 210 4% 63%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 210 4% 63% / 0.1;
+    --accent-foreground: 210 4% 63%;
+    --ring: 210 4% 63%;
+  }
+  body[data-theme='teal'] { --background: 180 100% 96%; }
+  .dark body[data-theme='teal'] { --background: 180 100% 5%; }
   body[data-theme='teal'] {
     --primary: 180 100% 25%;
     --primary-foreground: 210 20% 98%;
@@ -252,6 +456,15 @@ body.font-dyslexic {
     --accent-foreground: 180 100% 25%;
     --ring: 180 100% 25%;
   }
+  .dark body[data-theme='teal'] {
+    --primary: 180 100% 40%;
+    --primary-foreground: 210 20% 98%;
+    --accent: 180 100% 40% / 0.1;
+    --accent-foreground: 180 100% 40%;
+    --ring: 180 100% 40%;
+  }
+  body[data-theme='marigold'] { --background: 38 83% 96%; }
+  .dark body[data-theme='marigold'] { --background: 38 83% 5%; }
   body[data-theme='marigold'] {
     --primary: 38 83% 52%;
     --primary-foreground: 60 9.1% 97.8%;
@@ -259,12 +472,28 @@ body.font-dyslexic {
     --accent-foreground: 38 83% 52%;
     --ring: 38 83% 52%;
   }
+  .dark body[data-theme='marigold'] {
+    --primary: 38 83% 62%;
+    --primary-foreground: 60 9.1% 97.8%;
+    --accent: 38 83% 62% / 0.1;
+    --accent-foreground: 38 83% 62%;
+    --ring: 38 83% 62%;
+  }
+  body[data-theme='frost'] { --background: 180 100% 98%; }
+  .dark body[data-theme='frost'] { --background: 180 100% 7%; }
   body[data-theme='frost'] {
     --primary: 180 100% 94%;
     --primary-foreground: 224 71.4% 4.1%;
     --accent: 180 100% 94% / 0.1;
     --accent-foreground: 180 100% 64%;
     --ring: 180 100% 94%;
+  }
+  .dark body[data-theme='frost'] {
+    --primary: 180 100% 14%;
+    --primary-foreground: 224 71.4% 94.1%;
+    --accent: 180 100% 14% / 0.1;
+    --accent-foreground: 180 100% 84%;
+    --ring: 180 100% 14%;
   }
 }
 
@@ -276,3 +505,5 @@ body.font-dyslexic {
     @apply bg-background text-foreground text-base;
   }
 }
+
+    
