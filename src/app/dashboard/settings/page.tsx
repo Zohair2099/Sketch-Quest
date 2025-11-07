@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Sun, Moon, Laptop, Text, Languages, Bot } from 'lucide-react';
+import { Sun, Moon, Laptop, Text, Languages, Bot, Trophy, Bell } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -125,6 +125,40 @@ export default function SettingsPage() {
                     </p>
                 </div>
                  <Bot className="h-6 w-6 text-muted-foreground" />
+            </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Gamification</CardTitle>
+          <CardDescription>
+            Manage your gaming and engagement experience.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+            <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="gamification-switch" className="flex items-center">
+                        <Trophy className="mr-2 h-5 w-5 text-yellow-500" />
+                        Enable Gamification
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Turn badges, streaks, and leaderboards on or off.
+                    </p>
+                </div>
+                <Switch id="gamification-switch" defaultChecked />
+            </div>
+             <div className="flex items-center justify-between">
+                <div>
+                    <Label htmlFor="notifications-switch" className="flex items-center">
+                        <Bell className="mr-2 h-5 w-5 text-primary" />
+                        Achievement Notifications
+                    </Label>
+                     <p className="text-sm text-muted-foreground">
+                        Receive alerts for new badges and milestones.
+                    </p>
+                </div>
+                <Switch id="notifications-switch" defaultChecked />
             </div>
         </CardContent>
       </Card>
