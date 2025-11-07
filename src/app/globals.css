@@ -2,8 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    /* Base font size */
+    font-size: 62.5%;
+  }
+}
+
 body {
   font-family: 'Poppins', sans-serif;
+}
+
+body.font-dyslexic {
+    /* In a real app, you'd load a specific dyslexia-friendly font like OpenDyslexic */
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 @layer base {
@@ -59,6 +71,9 @@ body {
     --accent: 142.1 76.2% 36.3% / 0.1;
     --accent-foreground: 142.1 76.2% 36.3%;
     --ring: 142.1 76.2% 36.3%;
+    --sidebar-primary: 142.1 76.2% 36.3%;
+    --sidebar-accent-foreground: 142.1 76.2% 36.3%;
+    --sidebar-ring: 142.1 76.2% 36.3%;
   }
 
   body[data-theme='ocean'] {
@@ -67,6 +82,9 @@ body {
     --accent: 221.2 83.2% 53.3% / 0.1;
     --accent-foreground: 221.2 83.2% 53.3%;
     --ring: 221.2 83.2% 53.3%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
+    --sidebar-accent-foreground: 221.2 83.2% 53.3%;
+    --sidebar-ring: 221.2 83.2% 53.3%;
   }
 
   body[data-theme='sunset'] {
@@ -75,6 +93,9 @@ body {
     --accent: 24.6 95% 53.1% / 0.1;
     --accent-foreground: 24.6 95% 53.1%;
     --ring: 24.6 95% 53.1%;
+    --sidebar-primary: 24.6 95% 53.1%;
+    --sidebar-accent-foreground: 24.6 95% 53.1%;
+    --sidebar-ring: 24.6 95% 53.1%;
   }
 
   .dark {
@@ -118,6 +139,9 @@ body {
     --accent: 142.1 76.2% 36.3% / 0.1;
     --accent-foreground: 142.1 76.2% 36.3%;
     --ring: 142.1 76.2% 36.3%;
+    --sidebar-primary: 142.1 76.2% 36.3%;
+    --sidebar-accent-foreground: 142.1 76.2% 36.3%;
+    --sidebar-ring: 142.1 76.2% 36.3%;
   }
 
   .dark body[data-theme='ocean'] {
@@ -126,6 +150,9 @@ body {
     --accent: 221.2 83.2% 53.3% / 0.1;
     --accent-foreground: 221.2 83.2% 53.3%;
     --ring: 221.2 83.2% 53.3%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
+    --sidebar-accent-foreground: 221.2 83.2% 53.3%;
+    --sidebar-ring: 221.2 83.2% 53.3%;
   }
 
   .dark body[data-theme='sunset'] {
@@ -134,6 +161,9 @@ body {
     --accent: 24.6 95% 53.1% / 0.1;
     --accent-foreground: 24.6 95% 53.1%;
     --ring: 24.6 95% 53.1%;
+    --sidebar-primary: 24.6 95% 53.1%;
+    --sidebar-accent-foreground: 24.6 95% 53.1%;
+    --sidebar-ring: 24.6 95% 53.1%;
   }
 }
 
@@ -142,6 +172,6 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground text-base;
   }
 }

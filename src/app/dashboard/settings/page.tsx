@@ -12,6 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 // Define the shape of our settings
 interface SettingsState {
@@ -60,11 +61,38 @@ const colorPalettes = [
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const pathname = usePathname();
 
   // State for the currently applied settings (saved state)
   const [savedSettings, setSavedSettings] = React.useState<SettingsState>(defaultSettings);
-  // State for the currently edited settings (dirty state)
+  // State for the currently edited settings (dirty/preview state)
   const [currentSettings, setCurrentSettings] = React.useState<SettingsState>(defaultSettings);
+  
+  // This effect runs on mount to set the initial saved state, and when we save new settings.
+  React.useEffect(() => {
+    // Here you would typically load saved settings from a database or localStorage
+    const loadedSettings = defaultSettings; // Placeholder
+    setSavedSettings(loadedSettings);
+    setCurrentSettings(loadedSettings);
+  }, [pathname]); // Rerunning on path change is a proxy for component mount in this case
+
+  // This effect handles applying the PREVIEW of the settings
+  React.useEffect(() => {
+    // Preview color palette
+    document.body.dataset.theme = currentSettings.colorPalette;
+    
+    // Preview font size (as a percentage of the base size)
+    document.documentElement.style.fontSize = `${62.5 * (currentSettings.textSize / 50)}%`;
+
+    // Preview dyslexia-friendly font
+    if (currentSettings.isDyslexiaFont) {
+        document.body.classList.add('font-dyslexic');
+    } else {
+        document.body.classList.remove('font-dyslexic');
+    }
+
+  }, [currentSettings]);
+
 
   const isDirty = React.useMemo(() => JSON.stringify(savedSettings) !== JSON.stringify(currentSettings), [savedSettings, currentSettings]);
 
@@ -74,15 +102,15 @@ export default function SettingsPage() {
 
   const handleApplyChanges = () => {
     setSavedSettings(currentSettings);
-    // Apply color palette change to the body
-    document.body.dataset.theme = currentSettings.colorPalette;
     toast({
       title: 'Settings Saved',
       description: 'Your changes have been applied.',
     });
+    // In a real app, you would save `currentSettings` to the database here.
   };
 
   const handleRevertChanges = () => {
+    // Revert the preview state to the last saved state
     setCurrentSettings(savedSettings);
     toast({
       title: 'Changes Reverted',
