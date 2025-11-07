@@ -155,7 +155,7 @@ export default function SettingsPage() {
                       <RadioGroup
                           value={settings.colorPalette}
                           onValueChange={(value) => updateSetting('colorPalette', value)}
-                          className="grid grid-cols-2 sm:grid-cols-5 gap-4 py-4"
+                          className="grid grid-cols-4 gap-4 py-4"
                           >
                           {colorPalettes.map((palette) => (
                               <div key={palette.name}>
