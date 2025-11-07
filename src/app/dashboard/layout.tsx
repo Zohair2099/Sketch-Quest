@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
 import {
   Home,
@@ -22,6 +23,7 @@ import {
   UserCircle,
   LogOut,
   Loader,
+  ChevronsLeft,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -36,7 +38,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
-import { useUser, useAuth } from "@/firebase"
+import { useUser, useAuth, useSidebar } from "@/firebase"
 import { SidebarInset } from "@/components/ui/sidebar"
 
 const navItems = [
@@ -44,6 +46,36 @@ const navItems = [
   { href: "/dashboard/quests", icon: Book, label: "Quests" },
   { href: "/dashboard/leaderboard", icon: BarChart2, label: "Leaderboard" },
 ]
+
+function SidebarToggleButton() {
+  const { state, toggleSidebar } = useSidebar();
+
+  if (state === 'collapsed') {
+    return (
+        <Button
+            variant="ghost"
+            size="icon"
+            className="w-full"
+            onClick={toggleSidebar}
+            aria-label="Expand sidebar"
+        >
+            <ChevronsLeft className="w-5 h-5 rotate-180" />
+        </Button>
+    )
+  }
+
+  return (
+    <Button
+        variant="ghost"
+        size="icon"
+        className="w-full"
+        onClick={toggleSidebar}
+        aria-label="Collapse sidebar"
+    >
+        <ChevronsLeft className="w-5 h-5" />
+    </Button>
+  )
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -73,7 +105,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar collapsible="icon">
         <SidebarHeader>
           <Logo />
         </SidebarHeader>
@@ -94,6 +126,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </SidebarMenu>
         </SidebarContent>
+        <SidebarFooter>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarToggleButton />
+                </SidebarMenuItem>
+            </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
