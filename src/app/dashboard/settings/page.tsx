@@ -381,17 +381,55 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="playtime-switch" className="flex items-center">
-                <Hourglass className="mr-2 h-5 w-5 text-rose-500" />
-                {t('limit_playtime')}
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                {t('limit_playtime_desc')}
-              </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="playtime-switch" className="flex items-center">
+                  <Hourglass className="mr-2 h-5 w-5 text-rose-500" />
+                  {t('limit_playtime')}
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  {t('limit_playtime_desc')}
+                </p>
+              </div>
+              <Switch id="playtime-switch" checked={settings.isPlaytimeLimited} onCheckedChange={(checked) => updateSetting('isPlaytimeLimited', checked)} />
             </div>
-            <Switch id="playtime-switch" checked={settings.isPlaytimeLimited} onCheckedChange={(checked) => updateSetting('isPlaytimeLimited', checked)} />
+            {settings.isPlaytimeLimited && (
+              <div className="grid grid-cols-2 gap-4 pl-8 pt-2">
+                <div className="space-y-2">
+                  <Label htmlFor="playtime-hours">{t('hours')}</Label>
+                  <Select
+                    value={String(settings.playtimeLimitHours)}
+                    onValueChange={(value) => updateSetting('playtimeLimitHours', parseInt(value))}
+                  >
+                    <SelectTrigger id="playtime-hours">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[...Array(13).keys()].map(i => (
+                        <SelectItem key={i} value={String(i)}>{i}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="playtime-minutes">{t('minutes')}</Label>
+                  <Select
+                    value={String(settings.playtimeLimitMinutes)}
+                    onValueChange={(value) => updateSetting('playtimeLimitMinutes', parseInt(value))}
+                  >
+                    <SelectTrigger id="playtime-minutes">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[0, 15, 30, 45].map(i => (
+                        <SelectItem key={i} value={String(i)}>{i}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <div>

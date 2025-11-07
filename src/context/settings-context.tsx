@@ -18,6 +18,8 @@ export interface SettingsState {
   isEventAnnouncements: boolean;
   isQuietHours: boolean;
   isPlaytimeLimited: boolean;
+  playtimeLimitHours: number;
+  playtimeLimitMinutes: number;
   isSocialRestricted: boolean;
   colorPalette: string;
 }
@@ -36,6 +38,8 @@ export const defaultSettings: SettingsState = {
   isEventAnnouncements: false,
   isQuietHours: false,
   isPlaytimeLimited: false,
+  playtimeLimitHours: 1,
+  playtimeLimitMinutes: 0,
   isSocialRestricted: false,
   colorPalette: 'default',
 };
