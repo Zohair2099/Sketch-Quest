@@ -41,7 +41,7 @@ export const defaultSettings: SettingsState = {
   playtimeLimitHours: 1,
   playtimeLimitMinutes: 0,
   isSocialRestricted: false,
-  colorPalette: 'default',
+  colorPalette: 'crimson',
 };
 
 // Define the context shape
@@ -150,3 +150,4 @@ export const useSettings = () => {
     
 
     
+
