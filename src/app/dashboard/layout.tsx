@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import * as React from "react"
@@ -25,6 +26,7 @@ import {
   LogOut,
   Loader,
   ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -44,7 +46,6 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { useSettings } from "@/context/settings-context"
 import { translations } from "@/lib/translations"
 import { TopSidebar } from "@/components/top-sidebar"
-import { BottomSidebar } from "@/components/bottom-sidebar"
 
 function DashboardNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -62,7 +63,7 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
     { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
   ]
   
-  const isHorizontalSidebar = settings.sidebarPosition === 'top' || settings.sidebarPosition === 'bottom';
+  const isHorizontalSidebar = settings.sidebarPosition === 'top';
   
   if (isUserLoading || !user || !settings) {
     return (
@@ -78,6 +79,7 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
         {settings.sidebarPosition === 'top' && <TopSidebar navItems={navItems} />}
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
            <div className="lg:hidden">
+              <SidebarTrigger />
             </div>
           <div className="flex-1">
             <h1 className="text-lg font-semibold capitalize">
@@ -87,7 +89,6 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
           <UserMenu />
         </header>
         <main className="flex-1 p-4 sm:p-6">{children}</main>
-        {settings.sidebarPosition === 'bottom' && <BottomSidebar navItems={navItems} />}
       </div>
     )
   }
@@ -227,27 +228,25 @@ function SidebarToggleButton() {
 
   if (state === 'collapsed') {
     return (
-        <Button
-            variant="ghost"
-            size="icon"
-            className="w-full"
-            onClick={toggleSidebar}
-            aria-label="Expand sidebar"
+        <SidebarMenuButton
+          onClick={toggleSidebar}
+          aria-label="Expand sidebar"
+          tooltip="Expand"
+          className="justify-center"
         >
-            <ChevronsLeft className="w-5 h-5 rotate-180" />
-        </Button>
+          <ChevronsRight className="w-5 h-5" />
+        </SidebarMenuButton>
     )
   }
 
   return (
-    <Button
-        variant="ghost"
-        size="icon"
-        className="w-full"
+    <SidebarMenuButton
         onClick={toggleSidebar}
         aria-label="Collapse sidebar"
+        tooltip="Collapse"
+        className="justify-center"
     >
         <ChevronsLeft className="w-5 h-5" />
-    </Button>
+    </SidebarMenuButton>
   )
 }
