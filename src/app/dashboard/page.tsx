@@ -1,7 +1,8 @@
 "use client";
 
-import { Award, BookOpen, Flame, Zap } from 'lucide-react';
+import { Award, BookOpen, Flame, Zap, Target, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useUser } from '@/firebase';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
 
 export default function DashboardPage() {
     const scienceQuestImage = PlaceHolderImages.find(img => img.id === 'quest-science');
@@ -17,16 +23,25 @@ export default function DashboardPage() {
     const stats = [
         { name: 'XP Points', value: '4,820', progress: 82, icon: <Zap className="w-5 h-5" />, color: 'text-yellow-500' },
         { name: 'Streak', value: '12 days', progress: 100 * (12/30), icon: <Flame className="w-5 h-5" />, color: 'text-orange-500' },
-        { name: 'Level', value: '5', progress: 40, icon: <Award className="w-5 h-5" />, color: 'text-green-500' },
+        { name: 'Quests Completed', value: '15', progress: 50, icon: <CheckCircle className="w-5 h-5" />, color: 'text-green-500' },
     ];
 
-    const badges = [
-        { name: 'Science Whiz' },
-        { name: 'Perfect Score' },
-        { name: '10-Day Streak' },
-        { name: 'Quest Master' },
-        { name: 'Early Bird' }
-    ];
+    const chartData = [
+      { day: "Mon", xp: 50 },
+      { day: "Tue", xp: 75 },
+      { day: "Wed", xp: 120 },
+      { day: "Thu", xp: 90 },
+      { day: "Fri", xp: 150 },
+      { day: "Sat", xp: 180 },
+      { day: "Sun", xp: 200 },
+    ]
+
+    const chartConfig = {
+      xp: {
+        label: "XP",
+        color: "hsl(var(--primary))",
+      },
+    }
 
     return (
         <div className="space-y-6">
@@ -46,14 +61,39 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{stat.value}</div>
-                            <Progress value={stat.progress} className="mt-2 h-2" />
+                            <p className="text-xs text-muted-foreground">
+                                {stat.name === 'XP Points' ? '+20% from last week' : stat.name === 'Streak' ? 'Keep it going!' : '50% of all quests'}
+                            </p>
                         </CardContent>
                     </Card>
                 ))}
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-5">
-                <Card className="lg:col-span-3">
+            <div className="grid gap-6 lg:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Weekly XP Trend</CardTitle>
+                        <CardDescription>Your XP gains over the last 7 days.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                            <BarChart accessibilityLayer data={chartData}>
+                                <CartesianGrid vertical={false} />
+                                <XAxis
+                                    dataKey="day"
+                                    tickLine={false}
+                                    tickMargin={10}
+                                    axisLine={false}
+                                />
+                                <YAxis hide />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Bar dataKey="xp" fill="var(--color-xp)" radius={8} />
+                            </BarChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+
+                <Card>
                     <CardHeader>
                         <CardTitle>Continue Your Quest</CardTitle>
                         <CardDescription>Jump back into your last lesson.</CardDescription>
@@ -63,8 +103,8 @@ export default function DashboardPage() {
                             <Image
                                 src={scienceQuestImage.imageUrl}
                                 alt={scienceQuestImage.description}
-                                width={150}
-                                height={100}
+                                width={120}
+                                height={80}
                                 className="rounded-lg object-cover"
                                 data-ai-hint={scienceQuestImage.imageHint}
                             />
@@ -72,30 +112,13 @@ export default function DashboardPage() {
                         <div className="flex-1">
                             <Badge variant="secondary" className="mb-2">Science</Badge>
                             <h3 className="text-lg font-semibold">The Solar System</h3>
-                            <p className="text-sm text-muted-foreground mt-1">Mission 3 of 5: The Gas Giants</p>
+                            <p className="text-sm text-muted-foreground mt-1">Mission 3 of 5</p>
                             <Progress value={60} className="mt-3 h-2" />
                         </div>
                         <Button className="mt-4 sm:mt-0">
                             <BookOpen className="mr-2 h-4 w-4" />
                             Continue
                         </Button>
-                    </CardContent>
-                </Card>
-
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>My Badges</CardTitle>
-                        <CardDescription>Your collection of achievements.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                            {badges.map(badge => (
-                                <Badge key={badge.name} variant="outline" className="text-sm py-1 px-3">
-                                    <Award className="mr-1.5 h-4 w-4 text-yellow-500" />
-                                    {badge.name}
-                                </Badge>
-                            ))}
-                       </div>
                     </CardContent>
                 </Card>
             </div>
