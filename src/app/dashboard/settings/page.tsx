@@ -51,11 +51,33 @@ const defaultSettings: SettingsState = {
 };
 
 const colorPalettes = [
-    { name: 'default', label: 'Default', color: 'hsl(262.1 83.3% 57.8%)' },
-    { name: 'forest', label: 'Forest', color: 'hsl(142.1 76.2% 36.3%)' },
-    { name: 'ocean', label: 'Ocean', color: 'hsl(221.2 83.2% 53.3%)' },
-    { name: 'sunset', label: 'Sunset', color: 'hsl(24.6 95% 53.1%)' },
-]
+    { name: 'default', label: 'Default', color: '#7c3aed' },
+    { name: 'emerald', label: 'Emerald', color: '#50C878' },
+    { name: 'crimson', label: 'Crimson', color: '#DC143C' },
+    { name: 'midnight', label: 'Midnight', color: '#191970' },
+    { name: 'sunset', label: 'Sunset', color: '#FF6F61' },
+    { name: 'sapphire', label: 'Sapphire', color: '#0F52BA' },
+    { name: 'amber', label: 'Amber', color: '#FFBF00' },
+    { name: 'ivory', label: 'Ivory', color: '#FFFFF0' },
+    { name: 'charcoal', label: 'Charcoal', color: '#36454F' },
+    { name: 'lavender', label: 'Lavender', color: '#E6E6FA' },
+    { name: 'coral', label: 'Coral', color: '#FF7F50' },
+    { name: 'mint', label: 'Mint', color: '#98FF98' },
+    { name: 'ruby', label: 'Ruby', color: '#E0115F' },
+    { name: 'cobalt', label: 'Cobalt', color: '#0047AB' },
+    { name: 'sandstone', label: 'Sandstone', color: '#C2B280' },
+    { name: 'onyx', label: 'Onyx', color: '#353839' },
+    { name: 'peach', label: 'Peach', color: '#FFDAB9' },
+    { name: 'turquoise', label: 'Turquoise', color: '#40E0D0' },
+    { name: 'plum', label: 'Plum', color: '#8E4585' },
+    { name: 'olive', label: 'Olive', color: '#808000' },
+    { name: 'rosewood', label: 'Rosewood', color: '#65000B' },
+    { name: 'sky', label: 'Sky', color: '#87CEEB' },
+    { name: 'graphite', label: 'Graphite', color: '#53565A' },
+    { name: 'teal', label: 'Teal', color: '#008080' },
+    { name: 'marigold', label: 'Marigold', color: '#EAA221' },
+    { name: 'frost', label: 'Frost', color: '#E0FFFF' },
+];
 
 
 export default function SettingsPage() {
@@ -189,7 +211,7 @@ export default function SettingsPage() {
             <RadioGroup
               value={currentSettings.colorPalette}
               onValueChange={(value) => handleSettingChange('colorPalette', value)}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2"
+              className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 pt-2"
             >
               {colorPalettes.map((palette) => (
                 <div key={palette.name}>
