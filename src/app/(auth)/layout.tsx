@@ -1,7 +1,13 @@
+'use client';
+
 import Link from 'next/link';
-import { Logo } from '@/components/logo';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useUser } from '@/firebase';
+import { Logo } from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AuthLayout({
   children,
@@ -9,6 +15,26 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   const mascotImage = PlaceHolderImages.find((img) => img.id === 'mascot-friendly');
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isUserLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, isUserLoading, router]);
+  
+  if (isUserLoading || user) {
+    return (
+       <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <Logo />
+            <Skeleton className="h-4 w-[250px]" />
+            <Skeleton className="h-4 w-[200px]" />
+          </div>
+       </div>
+    )
+  }
   
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import {
   Sidebar,
@@ -22,6 +22,7 @@ import {
   Settings,
   UserCircle,
   LogOut,
+  Loader,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -36,6 +37,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
+import { useUser, useAuth } from "@/firebase"
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -45,7 +47,29 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter();
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
   const avatarImage = PlaceHolderImages.find((img) => img.id === 'avatar-1');
+
+  React.useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [isUserLoading, user, router]);
+
+  const handleLogout = () => {
+    auth.signOut();
+    router.push('/');
+  }
+
+  if (isUserLoading || !user) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   return (
     <SidebarProvider>
@@ -83,17 +107,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  {avatarImage && <AvatarImage src={avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
-                  <AvatarFallback>A</AvatarFallback>
+                  {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
+                  <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Alex</p>
+                  <p className="text-sm font-medium leading-none">{user.displayName || 'Alex'}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    alex@example.com
+                    {user.email}
                   </p>
                 </div>
               </DropdownMenuLabel>
@@ -107,12 +131,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <Link href="/">
-                <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
-                </DropdownMenuItem>
-              </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

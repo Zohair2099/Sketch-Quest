@@ -1,3 +1,5 @@
+"use client";
+
 import { Award, BookOpen, Flame, Zap } from 'lucide-react';
 import Image from 'next/image';
 
@@ -6,9 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useUser } from '@/firebase';
 
 export default function DashboardPage() {
     const scienceQuestImage = PlaceHolderImages.find(img => img.id === 'quest-science');
+    const { user } = useUser();
     
     const stats = [
         { name: 'XP Points', value: '4,820', progress: 82, icon: <Zap className="w-5 h-5" />, color: 'text-yellow-500' },
@@ -28,7 +32,7 @@ export default function DashboardPage() {
         <div className="space-y-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Welcome back, Alex!</CardTitle>
+                    <CardTitle>Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
                     <CardDescription>You're doing great. Keep up the momentum!</CardDescription>
                 </CardHeader>
             </Card>
