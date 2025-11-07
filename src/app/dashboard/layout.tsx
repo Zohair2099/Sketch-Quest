@@ -45,7 +45,7 @@ import { translations } from "@/lib/translations"
 import { TopSidebar } from "@/components/top-sidebar"
 import { BottomSidebar } from "@/components/bottom-sidebar"
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+function DashboardNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter();
   const auth = useAuth();
@@ -90,8 +90,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex flex-col min-h-screen">
         {settings.sidebarPosition === 'top' && <TopSidebar navItems={navItems} />}
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
-           <div className="md:hidden">
-              {/* Maybe a mobile menu trigger here if needed for top/bottom */}
+           <div className="lg:hidden">
             </div>
           <div className="flex-1">
             <h1 className="text-lg font-semibold capitalize">
@@ -152,6 +151,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </SidebarInset>
     </SidebarProvider>
   )
+}
+
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+    return <DashboardNav>{children}</DashboardNav>;
 }
 
 function UserMenu() {
