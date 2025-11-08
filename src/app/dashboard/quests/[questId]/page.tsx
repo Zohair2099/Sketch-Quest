@@ -1,6 +1,7 @@
+
 'use client';
 
-import { ArrowLeft, BookOpen, CheckCircle, Flame, Star, Zap } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle, Flame, Star, Zap, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
 import { questsData, QuestTopic } from '@/app/dashboard/quests/page';
@@ -84,6 +85,26 @@ export default function QuestDetailPage() {
             </Link>
           </Card>
         ))}
+      </div>
+
+      <Separator />
+
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Additional Resources</h2>
+         <Card className="hover:border-primary/50 transition-colors">
+            <Link href={`/dashboard/quests/${questId}/resources`} className="block" target="_blank" rel="noopener noreferrer">
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+                  <Youtube className="h-6 w-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">Python for Beginners - Full Course</p>
+                  <p className="text-sm text-muted-foreground">A comprehensive video tutorial covering all the basics.</p>
+                </div>
+                <Button variant="secondary">Watch Video</Button>
+              </CardContent>
+            </Link>
+          </Card>
       </div>
     </div>
   );
