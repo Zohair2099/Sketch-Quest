@@ -25,13 +25,10 @@ export default function LoginPage() {
     
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // The redirect is handled by the layout component which observes auth state.
-      // We just show a success toast here.
       toast({
         title: "Login Successful",
         description: "Redirecting to your dashboard...",
       });
-      // We can still push here as a fallback
       router.push('/dashboard');
     } catch (error: any) {
       setIsLoading(false);
@@ -63,8 +60,13 @@ export default function LoginPage() {
           </div>
           <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} />
         </div>
-        <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Log In"}
+        <Button 
+          type="submit" 
+          className="w-full animate-bounce-slow shadow-lg hover:shadow-xl transform transition-all duration-300" 
+          size="lg" 
+          disabled={isLoading}
+        >
+          {isLoading ? "Logging in..." : "Student Login"}
         </Button>
       </form>
       <div className="mt-6 text-center text-sm">
