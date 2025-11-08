@@ -53,10 +53,10 @@ export function DashboardHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
        <div className="flex h-14 items-center">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Logo className="h-8" />
+          <Logo />
         </Link>
       </div>
 
@@ -84,7 +84,7 @@ export function DashboardHeader() {
               href="/"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <Logo className="h-5 w-5 transition-all group-hover:scale-110" />
+              <Logo />
               <span className="sr-only">SketchQuest</span>
             </Link>
             {navItems.map((item) => (
