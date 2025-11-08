@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Award, Crown, Share2, Filter, Globe, Building, Users, LocateFixed } from 'lucide-react';
+import { Award, Crown, Share2, Building, Users, LocateFixed } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
+import Confetti from 'react-confetti';
 
 const leaderboardData = [
   { rank: 1, name: 'Alex', xp: 4820, avatarId: 'avatar-1' },
@@ -31,14 +33,32 @@ export default function LeaderboardPage() {
   const getAvatar = (id: string) => PlaceHolderImages.find(img => img.id === id);
   const [isLoading, setIsLoading] = useState(true);
   const [isInstitutionView, setIsInstitutionView] = useState(false);
+  const [activeTab, setActiveTab] = useState('class');
+  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
     // Simulate data fetching
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
-    return () => clearTimeout(timer);
+    // Stop confetti after a few seconds
+    const confettiTimer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(confettiTimer);
+    }
   }, []);
+
+  useEffect(() => {
+    // Reset to the first available tab when the view mode changes
+    if (isInstitutionView) {
+        setActiveTab('class');
+    } else {
+        setActiveTab('state');
+    }
+  }, [isInstitutionView]);
 
   const handleShare = (name: string, rank: number) => {
     toast({
@@ -56,8 +76,22 @@ export default function LeaderboardPage() {
     });
   }
 
+  const institutionTabs = [
+    { value: 'class', label: 'Class' },
+    { value: 'school', label: 'School' },
+  ];
+
+  const individualTabs = [
+    { value: 'state', label: 'State' },
+    { value: 'country', label: 'Country' },
+    { value: 'global', label: 'Global' },
+  ];
+
+  const visibleTabs = isInstitutionView ? institutionTabs : individualTabs;
+
   return (
     <Card>
+      {showConfetti && <Confetti recycle={false} onConfettiComplete={() => setShowConfetti(false)} />}
       <CardHeader className="space-y-4">
         <CardTitle>Leaderboard</CardTitle>
         <CardDescription>See who's at the top of their game! Switch between individual and institutional rankings.</CardDescription>
@@ -103,83 +137,96 @@ export default function LeaderboardPage() {
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="class">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
-            <TabsTrigger value="class">Class</TabsTrigger>
-            <TabsTrigger value="school">School</TabsTrigger>
-            <TabsTrigger value="state">State</TabsTrigger>
-            <TabsTrigger value="country">Country</TabsTrigger>
-            <TabsTrigger value="global">Global</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3">
+             {visibleTabs.map(tab => (
+                <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
+             ))}
           </TabsList>
-          <TabsContent value="class" className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">Rank</TableHead>
-                  <TableHead>{isInstitutionView ? 'Institution' : 'Student'}</TableHead>
-                  <TableHead className="text-right">XP</TableHead>
-                  <TableHead className="w-[100px] text-center">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  Array.from({ length: 7 }).map((_, index) => (
-                    <TableRow key={index}>
-                      <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-4">
-                          <Skeleton className="h-10 w-10 rounded-full" />
-                          <Skeleton className="h-6 w-24" />
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right"><Skeleton className="h-6 w-16 ml-auto" /></TableCell>
-                      <TableCell className="text-center"><Skeleton className="h-8 w-8 mx-auto" /></TableCell>
+          
+          {visibleTabs.map(tab => (
+             <TabsContent key={tab.value} value={tab.value} className="mt-4">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead className="w-[80px]">Rank</TableHead>
+                    <TableHead>{isInstitutionView ? 'Institution' : 'Student'}</TableHead>
+                    <TableHead className="text-right">XP</TableHead>
+                    <TableHead className="w-[100px] text-center">Actions</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  leaderboardData.map((player) => {
-                    const avatar = getAvatar(player.avatarId);
-                    return (
-                      <TableRow key={player.rank} className={player.rank <= 3 ? "bg-accent/20" : player.name === 'You' ? 'bg-primary/10' : ''}>
-                        <TableCell className="font-medium text-lg">
-                          <div className="flex items-center justify-center w-8 h-8">
-                            {player.rank === 1 && <Crown className="w-6 h-6 text-yellow-500" />}
-                            {player.rank === 2 && <Award className="w-5 h-5 text-gray-400" />}
-                            {player.rank === 3 && <Award className="w-5 h-5 text-amber-700" />}
-                            {player.rank > 3 && player.rank}
-                          </div>
-                        </TableCell>
+                </TableHeader>
+                <TableBody>
+                    {isLoading ? (
+                    Array.from({ length: 7 }).map((_, index) => (
+                        <TableRow key={index}>
+                        <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-4">
-                            <Avatar>
-                              {avatar && <AvatarImage src={avatar.imageUrl} alt={player.name} />}
-                              <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{player.name}</span>
-                          </div>
+                            <div className="flex items-center gap-4">
+                            <Skeleton className="h-10 w-10 rounded-full" />
+                            <Skeleton className="h-6 w-24" />
+                            </div>
                         </TableCell>
-                        <TableCell className="text-right font-bold">{player.xp.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleShare(player.name, player.rank)}
-                            aria-label={`Share ${player.name}'s rank`}
-                          >
-                            <Share2 className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
-                )}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="school"><p className="text-muted-foreground p-8 text-center">School leaderboard coming soon!</p></TabsContent>
-          <TabsContent value="state"><p className="text-muted-foreground p-8 text-center">State leaderboard coming soon!</p></TabsContent>
-          <TabsContent value="country"><p className="text-muted-foreground p-8 text-center">Country leaderboard coming soon!</p></TabsContent>
-          <TabsContent value="global"><p className="text-muted-foreground p-8 text-center">Global leaderboard coming soon!</p></TabsContent>
+                        <TableCell className="text-right"><Skeleton className="h-6 w-16 ml-auto" /></TableCell>
+                        <TableCell className="text-center"><Skeleton className="h-8 w-8 mx-auto" /></TableCell>
+                        </TableRow>
+                    ))
+                    ) : (
+                    leaderboardData.map((player, index) => {
+                        const avatar = getAvatar(player.avatarId);
+                        return (
+                        <TableRow 
+                            key={player.rank} 
+                            className={cn(
+                                player.rank <= 3 ? "bg-accent/20" : player.name === 'You' ? 'bg-primary/10' : '',
+                                "opacity-0 animate-in fade-in-0"
+                            )}
+                            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
+                        >
+                            <TableCell className="font-medium text-lg">
+                            <div className="flex items-center justify-center w-8 h-8">
+                                {player.rank === 1 && <Crown className="w-6 h-6 text-yellow-500" />}
+                                {player.rank === 2 && <Award className="w-5 h-5 text-gray-400" />}
+                                {player.rank === 3 && <Award className="w-5 h-5 text-amber-700" />}
+                                {player.rank > 3 && player.rank}
+                            </div>
+                            </TableCell>
+                            <TableCell>
+                            <div className="flex items-center gap-4">
+                                <Avatar>
+                                {avatar && <AvatarImage src={avatar.imageUrl} alt={player.name} />}
+                                <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <span className="font-medium">{player.name}</span>
+                            </div>
+                            </TableCell>
+                            <TableCell className="text-right font-bold">{player.xp.toLocaleString()}</TableCell>
+                            <TableCell className="text-center">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleShare(player.name, player.rank)}
+                                aria-label={`Share ${player.name}'s rank`}
+                            >
+                                <Share2 className="h-4 w-4" />
+                            </Button>
+                            </TableCell>
+                        </TableRow>
+                        );
+                    })
+                    )}
+                </TableBody>
+                </Table>
+             </TabsContent>
+          ))}
+
+          {/* Placeholder content for tabs not currently visible */}
+          {(!isInstitutionView && <TabsContent value="class"><p className="text-muted-foreground p-8 text-center">Switch to Institution view to see Class leaderboards.</p></TabsContent>)}
+          {(!isInstitutionView && <TabsContent value="school"><p className="text-muted-foreground p-8 text-center">Switch to Institution view to see School leaderboards.</p></TabsContent>)}
+
+          {(isInstitutionView && <TabsContent value="state"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see State leaderboards.</p></TabsContent>)}
+          {(isInstitutionView && <TabsContent value="country"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see Country leaderboards.</p></TabsContent>)}
+          {(isInstitutionView && <TabsContent value="global"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see Global leaderboards.</p></TabsContent>)}
+
         </Tabs>
       </CardContent>
     </Card>
