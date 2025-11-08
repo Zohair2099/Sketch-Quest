@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SettingsProvider } from '@/context/settings-context';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export const metadata: Metadata = {
   title: 'SketchQuest',
@@ -31,7 +32,9 @@ export default function RootLayout({
         >
           <SettingsProvider>
             <FirebaseClientProvider>
-              {children}
+                <SidebarProvider>
+                    {children}
+                </SidebarProvider>
               <Toaster />
             </FirebaseClientProvider>
           </SettingsProvider>
@@ -40,5 +43,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-    

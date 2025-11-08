@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import * as React from "react"
@@ -13,7 +12,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
   SidebarTrigger,
   SidebarFooter,
 } from "@/components/ui/sidebar"
@@ -76,7 +74,7 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
   if (isHorizontalSidebar) {
     return (
       <div className="flex flex-col min-h-screen">
-        {settings.sidebarPosition === 'top' && <TopSidebar navItems={navItems} />}
+        <TopSidebar navItems={navItems} />
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
            <div className="lg:hidden">
               <SidebarTrigger />
@@ -159,7 +157,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )
     }
 
-    return <SidebarProvider><DashboardNav>{children}</DashboardNav></SidebarProvider>;
+    return <DashboardNav>{children}</DashboardNav>;
 }
 
 function UserMenu() {
