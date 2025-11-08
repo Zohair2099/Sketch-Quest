@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useUser } from '@/firebase';
+import { useUser, useFirestore, useDoc, useMemoFirebase, updateDocumentNonBlocking, setDocumentNonBlocking, increment } from '@/firebase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -12,15 +12,19 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { doc } from 'firebase/firestore';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import {
-  Activity, Award, BarChart3, Book, Bot, Calendar, Edit, FlaskConical, Flame, Goal, Mail, Shield, Star, Swords, Target, Trash2, Trophy, UserPlus, Users
+  Activity, Award, BarChart3, Book, Bot, Calendar, Edit, FlaskConical, Flame, Goal, Mail, Shield, Star, Swords, Target, Trash2, Trophy, UserPlus, Users, PlusCircle
 } from 'lucide-react';
 import Link from 'next/link';
+import { useSettings } from '@/context/settings-context';
+import { useToast } from '@/hooks/use-toast';
+import { defaultSettings } from '@/context/settings-context';
 
 const skillData = [
   { name: 'Python', level: 0, fill: "var(--color-python)" },
@@ -68,7 +72,52 @@ const recentActivities: any[] = []
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const { settings, updateSetting } = useSettings();
+  const { toast } = useToast();
+
+  const userDocRef = useMemoFirebase(() => {
+    if (!user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [user, firestore]);
+  
+  const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
+
   const avatarImage = PlaceHolderImages.find((img) => img.id === 'avatar-1');
+
+  const handleResetAccount = () => {
+      if (!userDocRef) return;
+      const resetData = {
+          xp: 0,
+          streak: 0,
+          badges: [],
+      };
+      setDocumentNonBlocking(userDocRef, resetData, { merge: true });
+      toast({
+          title: "Account Reset",
+          description: "Your points and progress have been reset to zero."
+      });
+  };
+
+  const handleToggleTestMode = () => {
+      const newTestModeState = !settings.isTestMode;
+      updateSetting('isTestMode', newTestModeState);
+      toast({
+          title: newTestModeState ? "Test Mode Enabled" : "Test Mode Disabled",
+          description: newTestModeState ? "The test mode banner is now visible." : "You have returned to normal mode."
+      });
+  };
+
+  const handleAddXp = () => {
+      if (!userDocRef) return;
+      updateDocumentNonBlocking(userDocRef, {
+          xp: increment(1000)
+      });
+      toast({
+          title: "XP Added!",
+          description: "You've been awarded 1,000 XP."
+      });
+  };
 
   if (isUserLoading || !user) {
     return (
@@ -138,13 +187,13 @@ export default function ProfilePage() {
               </div>
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">XP</p>
-                <p className="text-3xl font-bold">0</p>
+                <p className="text-3xl font-bold">{isUserDocLoading ? <Skeleton className="h-8 w-16 mx-auto" /> : (userData?.xp ?? 0).toLocaleString()}</p>
               </div>
                <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">Streak</p>
                 <div className="flex items-center text-3xl font-bold">
                     <Flame className="w-7 h-7 text-orange-500 mr-1" />
-                    0
+                    {isUserDocLoading ? <Skeleton className="h-8 w-8 mx-auto" /> : userData?.streak ?? 0}
                 </div>
               </div>
               <div className="flex flex-col items-center gap-2">
@@ -240,13 +289,17 @@ export default function ProfilePage() {
               <CardDescription>Handle with care. These actions are irreversible.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col sm:flex-row gap-4">
-              <Button variant="destructive">
+              <Button variant="destructive" onClick={handleResetAccount}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Reset Account
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleToggleTestMode}>
                 <FlaskConical className="mr-2 h-4 w-4" />
-                Enter Test Mode
+                {settings.isTestMode ? "Exit Test Mode" : "Enter Test Mode"}
+              </Button>
+              <Button variant="outline" onClick={handleAddXp}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add 1000 XP
               </Button>
             </CardContent>
           </Card>

@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Book, BarChart2, Home, Loader, Users, Bot } from 'lucide-react';
+import { Book, BarChart2, Home, Loader, Users, Bot, FlaskConical } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -52,6 +52,12 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen w-full flex-col">
+      {settings.isTestMode && (
+        <div className="bg-yellow-500 text-center py-1 text-sm font-semibold text-black flex items-center justify-center gap-2">
+            <FlaskConical className="h-4 w-4" />
+            You are in Test Mode
+        </div>
+      )}
       <DashboardHeader navItems={navItems} />
       <main className="flex-1 p-4 md:p-8 animate-in fade-in-50 pb-20 md:pb-8">
         {children}

@@ -23,6 +23,7 @@ export interface SettingsState {
   isSocialRestricted: boolean;
   colorPalette: string;
   viewMode: 'desktop' | 'mobile' | 'auto';
+  isTestMode: boolean;
 }
 
 // Define the default settings
@@ -44,6 +45,7 @@ export const defaultSettings: SettingsState = {
   isSocialRestricted: false,
   colorPalette: 'crimson',
   viewMode: 'auto',
+  isTestMode: false,
 };
 
 // Define the context shape
@@ -73,7 +75,7 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
     try {
       const storedSettings = localStorage.getItem('sketchQuestSettings');
       if (storedSettings) {
-        const loaded = JSON.parse(storedSettings);
+        const loaded = { ...defaultSettings, ...JSON.parse(storedSettings) };
         setSavedSettings(loaded);
         setCurrentSettings(loaded);
       } else {
