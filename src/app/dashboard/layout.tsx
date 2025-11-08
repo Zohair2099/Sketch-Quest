@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Book, BarChart2, Home, Loader, Users } from 'lucide-react';
+import { Book, BarChart2, Home, Loader, Users, Bot } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { useIsMobile } from '@/hooks/use-mobile';

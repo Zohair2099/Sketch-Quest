@@ -2,7 +2,7 @@
 'use client';
 
 import { Award, Crown, Share2, Building, Users, LocateFixed } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,150 +16,70 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-confetti';
-
-const leaderboardData = {
-  class: [
-    { rank: 1, name: 'Alex', xp: 0, avatarId: 'avatar-1' },
-    { rank: 2, name: 'Bella', xp: 0, avatarId: 'avatar-2' },
-    { rank: 3, name: 'Charlie', xp: 0, avatarId: 'avatar-3' },
-    { rank: 4, name: 'Diana', xp: 0, avatarId: 'avatar-1' },
-    { rank: 5, name: 'You', xp: 0, avatarId: 'avatar-1' },
-    { rank: 6, name: 'Ethan', xp: 0, avatarId: 'avatar-2' },
-    { rank: 7, name: 'Fiona', xp: 0, avatarId: 'avatar-3' },
-    { rank: 8, name: 'George', xp: 0, avatarId: 'avatar-1' },
-    { rank: 9, name: 'Hannah', xp: 0, avatarId: 'avatar-2' },
-    { rank: 10, name: 'Ian', xp: 0, avatarId: 'avatar-3' },
-    { rank: 11, name: 'Julia', xp: 0, avatarId: 'avatar-2' },
-    { rank: 12, name: 'Kevin', xp: 0, avatarId: 'avatar-1' },
-    { rank: 13, name: 'Laura', xp: 0, avatarId: 'avatar-3' },
-    { rank: 14, name: 'Mike', xp: 0, avatarId: 'avatar-1' },
-    { rank: 15, name: 'Nora', xp: 0, avatarId: 'avatar-2' },
-  ],
-  school: [
-    { rank: 1, name: 'Oakridge High', xp: 0, avatarId: 'quest-science' },
-    { rank: 2, name: 'Maplewood Secondary', xp: 0, avatarId: 'quest-coding' },
-    { rank: 3, name: 'Cedar Creek Academy', xp: 0, avatarId: 'quest-art' },
-    { rank: 4, name: 'Pine Ridge School', xp: 0, avatarId: 'quest-python' },
-    { rank: 5, name: 'Your School', xp: 0, avatarId: 'hero-illustration' },
-    { rank: 6, name: 'Riverdale Institute', xp: 0, avatarId: 'quest-science' },
-    { rank: 7, name: 'Mountain View Prep', xp: 0, avatarId: 'quest-coding' },
-    { rank: 8, name: 'Lakeside Grammar', xp: 0, avatarId: 'quest-art' },
-    { rank: 9, name: 'Valley Technical', xp: 0, avatarId: 'quest-python' },
-    { rank: 10, name: 'Northwood High', xp: 0, avatarId: 'hero-illustration' },
-  ],
-  state: [
-    { rank: 1, name: 'Olivia', xp: 0, avatarId: 'avatar-2' },
-    { rank: 2, name: 'Liam', xp: 0, avatarId: 'avatar-1' },
-    { rank: 3, name: 'Emma', xp: 0, avatarId: 'avatar-3' },
-    { rank: 4, name: 'Noah', xp: 0, avatarId: 'avatar-1' },
-    { rank: 5, name: 'Ava', xp: 0, avatarId: 'avatar-2' },
-    { rank: 6, name: 'Elijah', xp: 0, avatarId: 'avatar-1' },
-    { rank: 7, name: 'Sophia', xp: 0, avatarId: 'avatar-3' },
-    { rank: 8, name: 'James', xp: 0, avatarId: 'avatar-1' },
-    { rank: 9, name: 'Isabella', xp: 0, avatarId: 'avatar-2' },
-    { rank: 10, name: 'William', xp: 0, avatarId: 'avatar-1' },
-    { rank: 11, name: 'Mia', xp: 0, avatarId: 'avatar-3' },
-    { rank: 12, name: 'Benjamin', xp: 0, avatarId: 'avatar-1' },
-    { rank: 13, name: 'Charlotte', xp: 0, avatarId: 'avatar-2' },
-    { rank: 25, name: 'You', xp: 0, avatarId: 'avatar-1' },
-  ],
-  country: [
-    { rank: 1, name: 'Noah', xp: 0, avatarId: 'avatar-1' },
-    { rank: 2, name: 'Ava', xp: 0, avatarId: 'avatar-2' },
-    { rank: 3, name: 'Isabella', xp: 0, avatarId: 'avatar-3' },
-    { rank: 4, name: 'Lucas', xp: 0, avatarId: 'avatar-1' },
-    { rank: 5, name: 'Mia', xp: 0, avatarId: 'avatar-2' },
-    { rank: 6, name: 'Mason', xp: 0, avatarId: 'avatar-1' },
-    { rank: 7, name: 'Amelia', xp: 0, avatarId: 'avatar-3' },
-    { rank: 8, name: 'Logan', xp: 0, avatarId: 'avatar-1' },
-    { rank: 9, name: 'Harper', xp: 0, avatarId: 'avatar-2' },
-    { rank: 10, name: 'Ethan', xp: 0, avatarId: 'avatar-1' },
-    { rank: 11, name: 'Evelyn', xp: 0, avatarId: 'avatar-3' },
-    { rank: 12, name: 'Aiden', xp: 0, avatarId: 'avatar-1' },
-    { rank: 13, name: 'Abigail', xp: 0, avatarId: 'avatar-2' },
-    { rank: 150, name: 'You', xp: 0, avatarId: 'avatar-1' },
-  ],
-  global: [
-    { rank: 1, name: 'Kenji', xp: 0, avatarId: 'avatar-1' },
-    { rank: 2, name: 'Fatima', xp: 0, avatarId: 'avatar-2' },
-    { rank: 3, name: 'Lars', xp: 0, avatarId: 'avatar-3' },
-    { rank: 4, name: 'Priya', xp: 0, avatarId: 'avatar-2' },
-    { rank: 5, name: 'Mateo', xp: 0, avatarId: 'avatar-1' },
-    { rank: 6, name: 'Chloe', xp: 0, avatarId: 'avatar-3' },
-    { rank: 7, name: 'David', xp: 0, avatarId: 'avatar-1' },
-    { rank: 8, name: 'Zoe', xp: 0, avatarId: 'avatar-2' },
-    { rank: 9, name: 'Leo', xp: 0, avatarId: 'avatar-1' },
-    { rank: 10, 'name': 'Nkechi', 'xp': 0, 'avatarId': 'avatar-3' },
-    { rank: 11, 'name': 'Santiago', 'xp': 0, 'avatarId': 'avatar-1' },
-    { rank: 12, 'name': 'Freja', 'xp': 0, 'avatarId': 'avatar-2' },
-    { rank: 13, 'name': 'Adil', 'xp': 0, 'avatarId': 'avatar-3' },
-    { rank: 14, 'name': 'Yuki', 'xp': 0, 'avatarId': 'avatar-2' },
-    { rank: 4032, name: 'You', xp: 0, avatarId: 'avatar-1' },
-  ],
-};
-
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
 
 export default function LeaderboardPage() {
   const { toast } = useToast();
+  const { user: currentUser } = useUser();
+  const firestore = useFirestore();
   const getAvatar = (id: string) => PlaceHolderImages.find(img => img.id === id);
-  const [isLoading, setIsLoading] = useState(true);
   const [isInstitutionView, setIsInstitutionView] = useState(false);
-  const [activeTab, setActiveTab] = useState('class');
+  const [activeTab, setActiveTab] = useState('global');
   const [showConfetti, setShowConfetti] = useState(true);
 
-  useEffect(() => {
-    // Simulate data fetching
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    // Stop confetti after a few seconds
-    const confettiTimer = setTimeout(() => {
-      setShowConfetti(false);
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(confettiTimer);
-    }
-  }, []);
+  // Firestore query for users sorted by XP
+  const usersQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return query(collection(firestore, 'users'), orderBy('xp', 'desc'), limit(100));
+  }, [firestore]);
 
+  const { data: usersData, isLoading: isUsersLoading } = useCollection(usersQuery);
+
+  const leaderboardData = useMemo(() => {
+    if (!usersData) return [];
+    return usersData.map((user, index) => ({
+      rank: index + 1,
+      id: user.id,
+      name: user.id === currentUser?.uid ? 'You' : user.email?.split('@')[0] || `User #${index + 1}`,
+      xp: user.xp || 0,
+      avatarId: user.avatar || 'avatar-1',
+    }));
+  }, [usersData, currentUser]);
+  
   useEffect(() => {
-    // Reset to the first available tab when the view mode changes
-    if (isInstitutionView) {
-        setActiveTab('class');
-    } else {
-        setActiveTab('state');
-    }
-  }, [isInstitutionView]);
+    const confettiTimer = setTimeout(() => setShowConfetti(false), 5000);
+    return () => clearTimeout(confettiTimer);
+  }, []);
 
   const handleShare = (name: string, rank: number) => {
     toast({
       title: 'Share Your Achievement!',
       description: `You shared ${name}'s rank of #${rank}. Great job!`,
     });
-    // In a real app, this would open a share dialog
-    console.log(`Sharing rank for ${name}: #${rank}`);
   };
 
   const handleFindMe = () => {
-    toast({
+    const myRank = leaderboardData.find(u => u.id === currentUser?.uid);
+    if (myRank) {
+      toast({
         title: "Found you!",
-        description: "You are ranked #12 in your class."
-    });
-  }
+        description: `You are ranked #${myRank.rank} globally.`,
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Not on the leaderboard yet",
+        description: "Complete some quests to get ranked!",
+      });
+    }
+  };
 
-  const institutionTabs = [
-    { value: 'class', label: 'Class' },
-    { value: 'school', label: 'School' },
-  ];
-
-  const individualTabs = [
-    { value: 'state', label: 'State' },
-    { value: 'country', label: 'Country' },
+  const visibleTabs = [
     { value: 'global', label: 'Global' },
+    // Add other tabs here as data becomes available
   ];
-
-  const visibleTabs = isInstitutionView ? institutionTabs : individualTabs;
-  const currentData = leaderboardData[activeTab as keyof typeof leaderboardData] || [];
+  const currentData = leaderboardData;
 
   return (
     <Card>
@@ -176,6 +96,7 @@ export default function LeaderboardPage() {
                     id="view-mode-switch"
                     checked={isInstitutionView}
                     onCheckedChange={setIsInstitutionView}
+                    disabled // Disabled until institutional data is available
                 />
                 <Label htmlFor="view-mode-switch">Institution</Label>
                 <Building className="h-5 w-5 text-muted-foreground" />
@@ -210,7 +131,7 @@ export default function LeaderboardPage() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1">
              {visibleTabs.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
              ))}
@@ -222,13 +143,13 @@ export default function LeaderboardPage() {
                 <TableHeader>
                     <TableRow>
                     <TableHead className="w-[80px]">Rank</TableHead>
-                    <TableHead>{isInstitutionView ? 'Institution' : 'Student'}</TableHead>
+                    <TableHead>Student</TableHead>
                     <TableHead className="text-right">XP</TableHead>
                     <TableHead className="w-[100px] text-center">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {isLoading ? (
+                    {isUsersLoading ? (
                     Array.from({ length: 7 }).map((_, index) => (
                         <TableRow key={index}>
                         <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
@@ -247,9 +168,9 @@ export default function LeaderboardPage() {
                         const avatar = getAvatar(player.avatarId);
                         return (
                         <TableRow 
-                            key={player.rank} 
+                            key={player.id} 
                             className={cn(
-                                player.rank <= 3 ? "bg-accent/20" : player.name === 'You' || player.name === 'Your School' ? 'bg-primary/10' : '',
+                                player.rank <= 3 ? "bg-accent/20" : player.id === currentUser?.uid ? 'bg-primary/10' : '',
                                 "opacity-0 animate-in fade-in-0"
                             )}
                             style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}

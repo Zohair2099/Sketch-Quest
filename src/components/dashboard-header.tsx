@@ -9,6 +9,7 @@ import {
   LogOut,
   PanelLeft,
   LucideIcon,
+  Bot,
 } from 'lucide-react';
 
 import {
@@ -29,6 +30,7 @@ import { translations } from '@/lib/translations';
 import { Logo } from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface NavItem {
   href: string;
@@ -47,9 +49,16 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
   if (isMobile) {
     return (
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <Logo />
-        </Link>
+        <div className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+              <Logo />
+            </Link>
+             <Button variant="ghost" size="icon" asChild>
+                <Link href="/dashboard/chatbot">
+                    <Bot className="h-5 w-5" />
+                </Link>
+            </Button>
+        </div>
         <UserMenu />
       </header>
     );
@@ -61,9 +70,22 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Logo />
         </Link>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                     <Button variant="ghost" size="icon" className="ml-2" asChild>
+                        <Link href="/dashboard/chatbot">
+                            <Bot className="h-5 w-5" />
+                        </Link>
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>AI Assistant</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
       </div>
 
-      {/* Mobile Menu (remains for smaller screen sizes if needed, though hidden by main logic) */}
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
@@ -130,7 +152,6 @@ function UserMenu() {
 
   const handleLogout = () => {
     auth.signOut().then(() => {
-      // Force a full page reload to ensure all state is cleared.
       window.location.href = '/login';
     });
   };
@@ -159,7 +180,7 @@ function UserMenu() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user.displayName || 'Alex'}
+              {user.displayName || user.email?.split('@')[0]}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}

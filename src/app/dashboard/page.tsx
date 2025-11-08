@@ -3,6 +3,7 @@
 
 import { Award, BookOpen, Flame, Zap, Target, CheckCircle, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { doc } from 'firebase/firestore';
 import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
@@ -19,9 +20,11 @@ import {
 } from "@/components/ui/chart"
 import { AiRecommendations } from '@/components/ai-recommendations';
 import { Skeleton } from '@/components/ui/skeleton';
+import { questsData } from './quests/page';
 
 export default function DashboardPage() {
-    const scienceQuestImage = PlaceHolderImages.find(img => img.id === 'quest-science');
+    const pythonQuest = questsData.find(q => 'topicId' in q && q.topicId === 'python');
+    const pythonQuestImage = pythonQuest ? PlaceHolderImages.find(img => img.id === pythonQuest.imageUrlId) : null;
     const { user } = useUser();
     const firestore = useFirestore();
 
@@ -60,7 +63,7 @@ export default function DashboardPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Welcome back, {user?.displayName || userData?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
-                    <CardDescription>Ready to start your first quest?</CardDescription>
+                    <CardDescription>Ready to continue your learning adventure?</CardDescription>
                 </CardHeader>
             </Card>
 
@@ -85,8 +88,8 @@ export default function DashboardPage() {
                 ))}
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-5">
-                <Card className="lg:col-span-3">
+            <div className="grid gap-6 lg:grid-cols-3">
+                <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Weekly XP Trend</CardTitle>
                         <CardDescription>Your XP gains over the last 7 days.</CardDescription>
@@ -109,34 +112,36 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                 <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Start a Quest</CardTitle>
-                        <CardDescription>Choose a quest to begin your adventure.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-start gap-4">
-                        {scienceQuestImage && (
-                            <Image
-                                src={scienceQuestImage.imageUrl}
-                                alt={scienceQuestImage.description}
-                                width={400}
-                                height={200}
-                                className="rounded-lg object-cover w-full aspect-[16/9]"
-                                data-ai-hint={scienceQuestImage.imageHint}
-                            />
-                        )}
-                        <div className="flex-1 w-full">
-                            <h3 className="text-lg font-semibold">Explore a new topic!</h3>
-                            <p className="text-sm text-muted-foreground">There are many quests available. Find one that interests you.</p>
-                        </div>
-                        <Button className="w-full mt-2" asChild>
-                            <a href="/dashboard/quests">
-                                <BookOpen className="mr-2 h-4 w-4" />
-                                Browse Quests
-                            </a>
-                        </Button>
-                    </CardContent>
-                </Card>
+                {pythonQuest && 'topicId' in pythonQuest && (
+                     <Card className="lg:col-span-1">
+                        <CardHeader>
+                            <CardTitle>Start a Quest</CardTitle>
+                            <CardDescription>Begin your learning adventure.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col items-start gap-4">
+                            {pythonQuestImage && (
+                                <Image
+                                    src={pythonQuestImage.imageUrl}
+                                    alt={pythonQuestImage.description}
+                                    width={400}
+                                    height={200}
+                                    className="rounded-lg object-cover w-full aspect-video"
+                                    data-ai-hint={pythonQuestImage.imageHint}
+                                />
+                            )}
+                            <div className="flex-1 w-full">
+                                <h3 className="text-lg font-semibold">{pythonQuest.title}</h3>
+                                <p className="text-sm text-muted-foreground line-clamp-2">{pythonQuest.description}</p>
+                            </div>
+                            <Button className="w-full mt-auto" asChild>
+                                <Link href={`/dashboard/quests/${pythonQuest.topicId}`}>
+                                    <BookOpen className="mr-2 h-4 w-4" />
+                                    Start Quest
+                                </Link>
+                            </Button>
+                        </CardContent>
+                    </Card>
+                )}
             </div>
             <AiRecommendations />
         </div>
