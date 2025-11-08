@@ -92,7 +92,7 @@ export default function SettingsPage() {
             <RadioGroup
               value={theme}
               onValueChange={setTheme}
-              className="grid grid-cols-3 gap-4 pt-2"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2"
             >
               <div>
                 <RadioGroupItem value="light" id="light" className="peer sr-only" />
@@ -154,7 +154,7 @@ export default function SettingsPage() {
                     <RadioGroup
                         value={settings.colorPalette}
                         onValueChange={(value) => updateSetting('colorPalette', value)}
-                        className="grid grid-cols-2 sm:grid-cols-5 gap-4 py-4"
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 py-4"
                         >
                         {colorPalettes.map((palette) => (
                             <div key={palette.name}>
@@ -479,7 +479,7 @@ export default function SettingsPage() {
           <RadioGroup
               value={settings.viewMode}
               onValueChange={(value) => updateSetting('viewMode', value as 'desktop' | 'mobile' | 'auto')}
-              className="grid grid-cols-3 gap-4 pt-2"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2"
             >
               <div>
                 <RadioGroupItem value="desktop" id="desktop" className="peer sr-only" />
