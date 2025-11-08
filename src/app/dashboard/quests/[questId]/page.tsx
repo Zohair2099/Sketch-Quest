@@ -11,10 +11,24 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { doc } from 'firebase/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
+
 
 export default function QuestDetailPage() {
   const params = useParams();
   const questId = params.questId as string;
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userDocRef = useMemoFirebase(() => {
+    if (!user) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [user, firestore]);
+  const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
+  const completedLessons = userData?.completedLessons || [];
 
   const questTopic = questsData.find((q) => q.topicId === questId) as QuestTopic | undefined;
 
@@ -63,25 +77,34 @@ export default function QuestDetailPage() {
       
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Lessons</h2>
-        {questTopic.lessons.map((lesson, index) => (
-          <Card key={lesson.id} className="hover:border-primary/50 transition-colors">
-            <Link href={`/dashboard/quests/${questId}/${lesson.id}`} className="block">
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
-                  {lesson.level}
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold">{lesson.title}</p>
-                  <p className="text-sm text-muted-foreground line-clamp-1">{lesson.description}</p>
-                </div>
-                <div className="hidden sm:flex items-center gap-1 text-sm font-semibold text-primary">
-                  <Zap className="h-4 w-4" />
-                  <span>{lesson.xpReward} XP</span>
-                </div>
-              </CardContent>
-            </Link>
-          </Card>
-        ))}
+        {isUserDocLoading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+                <Card key={index}><CardContent className="p-4"><Skeleton className="h-10 w-full" /></CardContent></Card>
+            ))
+        ) : (
+            questTopic.lessons.map((lesson, index) => {
+              const isCompleted = completedLessons.includes(lesson.id);
+              return (
+              <Card key={lesson.id} className={cn("hover:border-primary/50 transition-colors", isCompleted && "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800")}>
+                <Link href={`/dashboard/quests/${questId}/${lesson.id}`} className="block">
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className={cn("flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground", isCompleted && "bg-green-600 text-white")}>
+                      {isCompleted ? <CheckCircle className="h-6 w-6" /> : lesson.level}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold">{lesson.title}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-1">{lesson.description}</p>
+                    </div>
+                    <div className="hidden sm:flex items-center gap-1 text-sm font-semibold text-primary">
+                      <Zap className="h-4 w-4" />
+                      <span>{lesson.xpReward} XP</span>
+                    </div>
+                  </CardContent>
+                </Link>
+              </Card>
+              )
+            })
+        )}
       </div>
 
       <Separator />

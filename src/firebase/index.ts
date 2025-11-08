@@ -4,7 +4,7 @@
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, increment } from 'firebase/firestore'
+import { getFirestore, increment, arrayUnion } from 'firebase/firestore'
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
@@ -41,7 +41,7 @@ export function getSdks(firebaseApp: FirebaseApp) {
   };
 }
 
-export { increment };
+export { increment, arrayUnion };
 export * from './provider';
 export * from './client-provider';
 export * from './firestore/use-collection';
@@ -51,4 +51,3 @@ export * from './non-blocking-login';
 // Errors and the emitter are exported, but use-collection and use-doc are the primary consumers.
 export { FirestorePermissionError } from './errors';
 export { errorEmitter } from './error-emitter';
-

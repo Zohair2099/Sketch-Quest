@@ -63,6 +63,7 @@ export default function SignupPage() {
           xp: 0,
           streak: 0,
           badges: [],
+          completedLessons: [],
           avatar: '',
           bio: `Welcome to my SketchQuest profile!`,
           institutionId: '',
@@ -131,5 +132,3 @@ export default function SignupPage() {
     </>
   );
 }
-
-    

@@ -39,6 +39,13 @@
             "type": "string"
           }
         },
+        "completedLessons": {
+          "type": "array",
+          "description": "Array of lesson identifiers that the user has completed.",
+          "items": {
+            "type": "string"
+          }
+        },
         "avatar": {
           "type": "string",
           "description": "URL or path to the user's avatar image.",
@@ -456,5 +463,3 @@
     "reasoning": "The Firestore data structure is designed to support a gamified education app with users, quests, questions, and progress tracking. It prioritizes authorization independence and follows structural segregation principles for enhanced security and scalability. User roles (Student, Teacher, Admin) are stored directly in the User document, adhering to the DBAC principle. Authorization independence is achieved by denormalizing relevant authorization data (e.g., `institutionId` in Users) where necessary, avoiding `get()` calls in security rules. Path-based ownership is used where appropriate to simply security rules, especially for user-owned data. The structure also supports the required QAPs by using segregation (e.g., separate collections for different types of content) and membership models (e.g., for class memberships).\n\nSpecifically, User profiles are stored under `/users/{userId}` with the user's role embedded directly in the document, making role-based access control simple. Quests are stored in a top-level `/quests` collection, while Questions are stored in a subcollection `/quests/{questId}/questions` to maintain a clear parent-child relationship. User progress is tracked in `/users/{userId}/progress/{progressId}`. Institution and Class data are stored in top-level collections `/institutions` and `/classes`, respectively.\n\nDenormalization Strategy:\n- The `User` document includes the `institutionId`, enabling security rules to be written to check if a user belongs to a specific institution without needing to perform a `get()` operation. This is crucial for authorization independence, especially when managing user access to institution-specific data or features.\n\nQAP Support:\n- Secure `list` operations are supported by segregating data based on access requirements. For example, quests intended for a particular institution are placed under that institution's document, making it easier to write rules that only allow listing quests for users within that institution.\n- Role-based access is facilitated by storing the `role` field directly in the `User` document. This enables security rules to quickly determine a user's role without additional lookups, ensuring efficient and secure access control."
   }
 }
-
-    

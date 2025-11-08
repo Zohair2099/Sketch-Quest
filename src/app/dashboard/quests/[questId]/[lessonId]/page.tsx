@@ -13,8 +13,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
-import { notFound, useParams } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { notFound, useParams, useRouter } from 'next/navigation';
+import { useState, useMemo, useEffect } from 'react';
+import Confetti from 'react-confetti';
 import { questsData, Lesson } from '@/app/dashboard/quests/page';
 import {
   Card,
@@ -29,6 +30,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
+import { useUser, useFirestore, updateDocumentNonBlocking, increment, arrayUnion } from '@/firebase';
+import { doc } from 'firebase/firestore';
 
 function InfoCard({
   icon,
@@ -59,7 +62,11 @@ function InfoCard({
 
 export default function LessonDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUser();
+  const firestore = useFirestore();
+
   const questId = params.questId as string;
   const lessonId = params.lessonId as string;
 
@@ -70,6 +77,7 @@ export default function LessonDetailPage() {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string | null>>({});
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const quizzes = useMemo(() => [
     {
@@ -126,6 +134,31 @@ export default function LessonDetailPage() {
             description: "That's not the right answer. Keep trying!",
         });
     }
+  };
+
+  const handleFinishLesson = () => {
+    if (!user || !firestore || !lesson) return;
+
+    // Update user profile in Firestore
+    const userDocRef = doc(firestore, 'users', user.uid);
+    updateDocumentNonBlocking(userDocRef, {
+        xp: increment(lesson.xpReward),
+        completedLessons: arrayUnion(lesson.id)
+    });
+
+    // Trigger confetti
+    setShowConfetti(true);
+
+    // Show toast
+    toast({
+        title: "Lesson Complete!",
+        description: `You've earned ${lesson.xpReward} XP!`,
+    });
+
+    // Redirect after confetti finishes
+    setTimeout(() => {
+        router.push(`/dashboard/quests/${questId}`);
+    }, 5000); // 5 seconds for confetti
   };
 
   const progressValue = (currentStep + 1) / steps.length * 100;
@@ -203,6 +236,7 @@ export default function LessonDetailPage() {
 
   return (
     <div className="space-y-6">
+      {showConfetti && <Confetti recycle={false} onConfettiComplete={() => setShowConfetti(false)} />}
       <header className="flex justify-between items-center">
         <Link
           href={`/dashboard/quests/${questId}`}
@@ -248,10 +282,8 @@ export default function LessonDetailPage() {
                 <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
         ) : (
-            <Button asChild>
-                <Link href={`/dashboard/quests/${questId}`}>
-                    Finish Lesson
-                </Link>
+            <Button onClick={handleFinishLesson} disabled={!canGoNext}>
+                Finish Lesson
             </Button>
         )}
       </div>
