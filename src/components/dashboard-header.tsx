@@ -129,8 +129,10 @@ function UserMenu() {
   };
 
   const handleLogout = () => {
-    auth.signOut();
-    router.push('/');
+    auth.signOut().then(() => {
+      // Force a full page reload to ensure all state is cleared.
+      window.location.href = '/';
+    });
   };
 
   if (!user) return null;

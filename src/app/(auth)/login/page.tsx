@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,30 +30,12 @@ export default function LoginPage() {
       });
       router.push('/dashboard');
     } catch (error: any) {
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          toast({
-            title: "Account Created & Logged In",
-            description: "Welcome! Redirecting to your dashboard...",
-          });
-          router.push('/dashboard');
-        } catch (signupError: any) {
-          setIsLoading(false);
-          toast({
-            variant: "destructive",
-            title: "Signup Failed",
-            description: signupError.message || "Could not create your account.",
-          });
-        }
-      } else {
-        setIsLoading(false);
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: error.message || "An unexpected error occurred.",
-        });
-      }
+      setIsLoading(false);
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again or sign up.",
+      });
     }
   };
 
