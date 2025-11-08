@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
     return usersData.map((user, index) => ({
       rank: index + 1,
       id: user.id,
-      name: user.id === currentUser?.uid ? 'You' : user.email?.split('@')[0] || `User #${index + 1}`,
+      name: user.id === currentUser?.uid ? 'You' : user.username || user.email?.split('@')[0] || `User #${index + 1}`,
       xp: user.xp || 0,
       avatarId: user.avatar || 'avatar-1',
     }));
