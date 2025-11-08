@@ -63,10 +63,10 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
         </Link>
       </div>
 
-       <nav className="hidden md:flex items-center space-x-6 ml-6">
+       <nav className="hidden md:flex items-center space-x-2 ml-6">
           {navItems.map(item => (
-             <Link key={item.href} href={item.href} className={cn("text-sm font-medium transition-colors hover:text-primary",
-                pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true) ? "text-primary" : "text-muted-foreground"
+             <Link key={item.href} href={item.href} className={cn("text-base font-medium transition-colors hover:text-primary px-4 py-2 rounded-lg",
+                pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true) ? "text-primary bg-primary/10" : "text-muted-foreground"
              )}>
                 {item.label}
              </Link>

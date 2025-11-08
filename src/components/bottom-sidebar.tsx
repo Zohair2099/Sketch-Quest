@@ -32,8 +32,8 @@ export function BottomSidebar({ navItems }: BottomSidebarProps) {
                 : 'text-muted-foreground'
             )}
           >
-            <item.icon className="h-6 w-6" />
-            <span className="text-xs">{item.label}</span>
+            <item.icon className="h-7 w-7" />
+            <span className="text-sm">{item.label}</span>
           </Link>
         ))}
       </div>
