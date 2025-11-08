@@ -60,19 +60,6 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          {heroImage && (
-            <div className="mt-12 lg:mt-16">
-              <Image
-                src={heroImage.imageUrl}
-                alt={heroImage.description}
-                width={1200}
-                height={800}
-                className="rounded-xl shadow-2xl"
-                data-ai-hint={heroImage.imageHint}
-                priority
-              />
-            </div>
-          )}
         </section>
 
         {/* Features Section */}
@@ -137,5 +124,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
