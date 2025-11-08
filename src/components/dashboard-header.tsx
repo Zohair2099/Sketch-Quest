@@ -53,11 +53,6 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
               <Logo />
             </Link>
-             <Button variant="ghost" size="icon" asChild>
-                <Link href="/dashboard/chatbot">
-                    <Bot className="h-6 w-6" style={{transform: 'scale(1.5)', color: 'gold'}} />
-                </Link>
-            </Button>
         </div>
         <UserMenu />
       </header>
@@ -121,7 +116,7 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
 
       <div className="ml-auto flex items-center gap-4">
         <nav className="hidden md:flex items-center space-x-2">
-           {navItems.map(item => (
+           {navItems.filter(item => item.href !== '/dashboard/chatbot').map(item => (
               <Link key={item.href} href={item.href} className={cn("text-base font-medium transition-colors hover:text-primary px-4 py-2 rounded-lg",
                  (pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard')) ? "text-primary bg-primary/10" : "text-muted-foreground"
               )}>
@@ -209,5 +204,3 @@ function UserMenu() {
     </DropdownMenu>
   );
 }
-
-    

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export function BottomSidebar({ navItems }: BottomSidebarProps) {
 
   return (
     <nav className="fixed bottom-0 z-40 w-full border-t bg-background md:hidden">
-      <div className="grid h-16 grid-cols-4 items-center px-4">
+      <div className="grid h-16 grid-cols-5 items-center px-4">
         {navItems.map((item) => (
           <Link
             key={item.href}

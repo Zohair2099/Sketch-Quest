@@ -34,6 +34,7 @@ export default function DashboardLayout({
     { href: '/dashboard/quests', icon: Book, label: t('quests') },
     { href: '/dashboard/leaderboard', icon: BarChart2, label: t('leaderboard') },
     { href: '/dashboard/social', icon: Users, label: 'Social' },
+    { href: '/dashboard/chatbot', icon: Bot, label: 'AI' },
   ];
 
   React.useEffect(() => {
