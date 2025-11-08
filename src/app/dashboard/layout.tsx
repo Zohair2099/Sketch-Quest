@@ -1,8 +1,9 @@
+
 'use client';
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Book, BarChart2, Home, Loader, User } from 'lucide-react';
+import { Book, BarChart2, Home, Loader, Users } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -32,7 +33,7 @@ export default function DashboardLayout({
     { href: '/dashboard', icon: Home, label: t('dashboard') },
     { href: '/dashboard/quests', icon: Book, label: t('quests') },
     { href: '/dashboard/leaderboard', icon: BarChart2, label: t('leaderboard') },
-    { href: '/dashboard/profile', icon: User, label: t('profile') },
+    { href: '/dashboard/social', icon: Users, label: 'Social' },
   ];
 
   React.useEffect(() => {
