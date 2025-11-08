@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Switch } from '@/components/ui/switch';
 
 export default function InstituteLoginPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function InstituteLoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTeacherAdmin, setIsTeacherAdmin] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,8 @@ export default function InstituteLoginPage() {
     
     // This would be replaced with SSO or institute-specific logic in a real app
     try {
+      // You can use the isTeacherAdmin state here to adjust login logic
+      console.log(`Logging in as ${isTeacherAdmin ? 'Teacher/Admin' : 'Student'}`);
       await signInWithEmailAndPassword(auth, email, password);
       toast({
         title: "Login Successful",
@@ -47,6 +51,21 @@ export default function InstituteLoginPage() {
         <h1 className="text-3xl font-bold font-headline">Educational Institute Login</h1>
         <p className="text-muted-foreground">Enter your institutional credentials to continue.</p>
       </div>
+
+      <div className="flex items-center justify-center space-x-4 my-6">
+        <Label htmlFor="role-switch" className={!isTeacherAdmin ? 'text-primary font-bold' : 'text-muted-foreground'}>
+          Student
+        </Label>
+        <Switch 
+          id="role-switch" 
+          checked={isTeacherAdmin}
+          onCheckedChange={setIsTeacherAdmin}
+        />
+        <Label htmlFor="role-switch" className={isTeacherAdmin ? 'text-primary font-bold' : 'text-muted-foreground'}>
+          Teacher/Admin
+        </Label>
+      </div>
+
       <form onSubmit={handleLogin} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="email">Institutional Email</Label>
