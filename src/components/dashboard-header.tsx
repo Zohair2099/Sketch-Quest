@@ -63,17 +63,7 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
         </Link>
       </div>
 
-       <nav className="hidden md:flex items-center space-x-2 ml-6">
-          {navItems.map(item => (
-             <Link key={item.href} href={item.href} className={cn("text-base font-medium transition-colors hover:text-primary px-4 py-2 rounded-lg",
-                pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true) ? "text-primary bg-primary/10" : "text-muted-foreground"
-             )}>
-                {item.label}
-             </Link>
-          ))}
-       </nav>
-
-      {/* Mobile Menu */}
+      {/* Mobile Menu (remains for smaller screen sizes if needed, though hidden by main logic) */}
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
@@ -108,6 +98,15 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
       </Sheet>
 
       <div className="ml-auto flex items-center gap-4">
+        <nav className="hidden md:flex items-center space-x-2">
+           {navItems.map(item => (
+              <Link key={item.href} href={item.href} className={cn("text-base font-medium transition-colors hover:text-primary px-4 py-2 rounded-lg",
+                 (pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard')) ? "text-primary bg-primary/10" : "text-muted-foreground"
+              )}>
+                 {item.label}
+              </Link>
+           ))}
+        </nav>
         <UserMenu />
       </div>
     </header>
