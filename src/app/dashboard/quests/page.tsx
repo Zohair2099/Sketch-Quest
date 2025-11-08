@@ -72,10 +72,94 @@ export const questsData: Quest[] = [
     dateAdded: '2024-08-01T12:00:00Z',
     trending: true,
     lessons: [
-      { id: 'py1', level: 1, title: '🐍 Your First Line of Code', learningGoals: ['Understand what Python is', 'Print output', 'Learn syntax basics'], miniLessons: [{ title: 'What is Python?', content: 'A high-level, interpreted programming language.' }, { title: 'Writing your first program', content: 'Use the print() function to display output.' }, { title: 'Comments in Python', content: 'Use the # symbol for single-line comments.' }, { title: 'The print() function', content: 'Outputs text or variables to the console.' }], miniQuests: [{ title: '🧩 “Hello, World!”', description: 'Print “Hello, SketchQuest!”' }, { title: '⚡ “Comment Quest”', description: 'Add a comment explaining your code' }, { title: '🎯 “Syntax Master”', description: 'Spot and fix errors in sample code' }], xpReward: 100, badge: 'Code Beginner', description: 'Start your coding journey.' },
-      { id: 'py2', level: 2, title: '💎 Treasure of Variables', learningGoals: ['Understand variables', 'Learn different data types', 'Type conversion'], miniLessons: [{ title: 'What is a variable?', content: 'A container for storing data values.' }, { title: 'Data types: int, float, str, bool', content: 'Learn about numbers, text, and true/false values.' }, { title: 'Type casting', content: 'How to convert between data types, e.g., int() or str().' }, { title: 'Checking types with type()', content: 'Use the type() function to find a variable\'s type.' }], miniQuests: [{ title: '🎯 “Treasure Chest”', description: 'Assign variables to store gold coins, player name' }, { title: '🧩 “Type Hunter”', description: 'Identify the correct type of given values' }, { title: '⚡ “Conversion Wizard”', description: 'Convert string to integer' }], xpReward: 150, badge: 'Variable Explorer', description: 'Learn to store and manage data.' },
-      { id: 'py3', level: 3, title: '⚙️ Math Magic', learningGoals: ['Use arithmetic & logical operators', 'Understand precedence', 'Build expressions'], miniLessons: [], miniQuests: [{ title: '🧩 “Calculator Quest”', description: 'Create a mini calculator' }, { title: '🎯 “True or False?”', description: 'Use logical operators' }, { title: '⚡ “Battle of Brackets”', description: 'Solve precedence puzzles' }], xpReward: 180, badge: 'Math Magician', description: 'Perform calculations and logic.' },
-      { id: 'py4', level: 4, title: '🧭 Path of Decisions', learningGoals: ['if, elif, else', 'Boolean logic', 'Nested conditions'], miniLessons: [], miniQuests: [{ title: '🎯 “Weather Wizard”', description: 'Write code to decide if you need an umbrella' }, { title: '🧩 “Pass or Fail”', description: 'Grade student marks' }, { title: '⚡ “Guess the Number”', description: 'Simple if-else game' }], xpReward: 200, badge: 'Logic Knight', description: 'Control your code\'s flow.' },
+      { 
+        id: 'py1', 
+        level: 1, 
+        title: '🐍 What is Python?', 
+        description: 'Begin your adventure into the world of Python.',
+        learningGoals: [
+          'Understand what Python is and why it\'s popular.',
+          'Learn the basic syntax for printing output.',
+          'Write and run your very first line of code.'
+        ], 
+        miniLessons: [
+          { title: 'What is Python?', content: 'Python is a high-level, interpreted, general-purpose programming language. It is designed for readability and ease of use, making it perfect for beginners.\n\nHigh-level: You don’t need to manage memory or hardware details.\nInterpreted: Python executes code line-by-line, so you can test quickly.\nOpen-source: Free to use and has a huge global community.' },
+          { title: 'Why Learn Python?', content: 'It has a simple syntax, like reading English. It\'s used everywhere: AI, Web Development, Data Science, and Automation.' },
+          { title: 'Your First Command: print()', content: 'The `print()` function is used to display output on the screen. Anything inside the parentheses and quotes will be printed. For example: `print("Welcome to SketchQuest!")`' }
+        ], 
+        miniQuests: [
+          { title: 'Print Your Name', description: 'Use the print() function to display your name on the screen.' }, 
+          { title: 'Print a Quote', description: 'Try printing a famous quote. Remember to handle quotation marks inside the string correctly, like this: `print("Someone said, \\"I love coding!\\"")`' }
+        ], 
+        xpReward: 50, 
+        badge: 'First Code Run' 
+      },
+      { 
+        id: 'py2', 
+        level: 2, 
+        title: '⚙️ Installing Python and Tools', 
+        description: 'Set up your coding environment to start building.',
+        learningGoals: [
+          'Install Python on your computer.',
+          'Verify that the installation was successful.',
+          'Understand what an IDE is and why it helps.'
+        ], 
+        miniLessons: [
+          { title: 'Installing Python', content: 'Go to python.org/downloads and download the latest version. During installation, make sure to check the box that says "Add Python to PATH".' }, 
+          { title: 'Checking Your Installation', content: 'Open your terminal (Command Prompt on Windows, Terminal on macOS/Linux) and type `python --version`. If you see a version number like "Python 3.12.1", you\'re all set!' },
+          { title: 'What is an IDE?', content: 'An Integrated Development Environment (IDE) is a software application that provides comprehensive facilities to computer programmers for software development. An IDE normally consists of at least a source code editor, build automation tools, and a debugger. VS Code, PyCharm, and Replit are popular choices.' }
+        ], 
+        miniQuests: [
+          { title: 'System Check', description: 'Open your terminal and run the `python --version` command.' }, 
+          { title: 'Create a Python File', description: 'Create a new file named `hello.py` on your computer.' }
+        ], 
+        xpReward: 70, 
+        badge: 'Setup Wizard' 
+      },
+      { 
+        id: 'py3', 
+        level: 3, 
+        title: '✍️ Your First Program', 
+        description: 'Write and run your first multi-line Python program.',
+        learningGoals: [
+          'Understand how a program is executed.',
+          'Write multiple lines of code in a single file.',
+          'Learn about common beginner syntax errors.'
+        ], 
+        miniLessons: [
+          { title: 'What is a Program?', content: 'A program is a set of instructions you give to the computer. Python executes these instructions one by one, from top to bottom.' },
+          { title: 'Strings and Numbers', content: 'Text inside quotes (like "Hello") is called a string. Numbers (like 5 or 3.14) can be used for calculations. `print("5 + 3")` will print the text "5 + 3", but `print(5 + 3)` will print the result, 8.' },
+          { title: 'Running a .py File', content: 'You can save your code in a file with a `.py` extension. To run it, navigate to the file\'s directory in your terminal and type `python your_file_name.py`.' }
+        ], 
+        miniQuests: [
+          { title: 'Create welcome.py', description: 'Create a file named welcome.py and write two print statements in it: one to say "Welcome to SketchQuest!" and another saying "Let\'s learn Python together!". Run it from your terminal.' },
+          { title: 'Number Challenge', description: 'Write a program that calculates and prints the result of `100 - 25`.' }
+        ], 
+        xpReward: 100, 
+        badge: 'Program Author' 
+      },
+      { 
+        id: 'py4', 
+        level: 4, 
+        title: '📝 Comments and Clean Code', 
+        description: 'Learn to write code that is easy for you and others to read.',
+        learningGoals: [
+          'Understand the purpose of comments in code.',
+          'Learn to write single-line and multi-line comments.',
+          'Follow best practices for writing clean and readable code.'
+        ], 
+        miniLessons: [
+          { title: 'Single-Line Comments', content: 'Use the hash symbol (`#`) to add a comment. Python will ignore everything on the line after the `#`. \nExample: `# This is a comment`' },
+          { title: 'Multi-Line Comments', content: 'Use triple quotes (`"""` or `\'\'\'`) to create a multi-line comment. This is often used for explaining the purpose of a file or a complex function.\nExample: `"""This program is for my first quest."""`' },
+          { title: 'Why Use Comments?', content: 'Comments make your code easier to understand for your future self and for others who might read it. They help explain *why* you did something, not just *what* the code does.' }
+        ], 
+        miniQuests: [
+          { title: 'Comment Your Code', description: 'Take the `welcome.py` program from the last lesson and add a single-line comment above each print statement explaining what it does.' }, 
+          { title: 'Add a Header', description: 'Add a multi-line comment at the top of your `welcome.py` file with your name, the date, and a short description of the program.' }
+        ], 
+        xpReward: 80, 
+        badge: 'Code Communicator' 
+      },
       { id: 'py5', level: 5, title: '🔄 Cycle of Codes', learningGoals: ['for loops, while loops', 'break and continue', 'Nested loops'], miniLessons: [], miniQuests: [{ title: '🎯 “Multiplication Matrix”', description: 'Generate 1–10 tables' }, { title: '⚡ “Countdown Quest”', description: 'Print countdown from 10' }, { title: '🧩 “Treasure Hunt”', description: 'Loop through list items' }], xpReward: 250, badge: 'Loop Master', description: 'Repeat actions with loops.' },
       { id: 'py6', level: 6, title: '🧮 Magic Spells (Functions)', learningGoals: ['Defining & calling functions', 'Parameters & return values', 'Scope of variables'], miniLessons: [], miniQuests: [{ title: '🧩 “Spell Creator”', description: 'Write a function to print a greeting' }, { title: '🎯 “Sum Wizard”', description: 'Add two numbers using function' }, { title: '⚡ “Mystery Function”', description: 'Debug a faulty function' }], xpReward: 300, badge: 'Function Magician', description: 'Create reusable blocks of code.' },
       { id: 'py7', level: 7, title: '📜 Scroll of Collections', learningGoals: ['List creation, indexing, slicing', 'Tuple immutability'], miniLessons: [], miniQuests: [{ title: '🎯 “Shopping Quest”', description: 'Store and print grocery items' }, { title: '⚡ “Slice the List”', description: 'Extract a portion of the list' }, { title: '🧩 “Count It”', description: 'Count elements in a list' }], xpReward: 350, badge: 'Collection Keeper', description: 'Organize data in lists and tuples.' },
@@ -221,5 +305,6 @@ export default function QuestsPage() {
     </div>
   );
 }
+
 
 
