@@ -1,23 +1,34 @@
+
 "use client"
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useAuth } from '@/firebase';
+import { useState, useEffect } from 'react';
+import { useAuth, useUser } from '@/firebase';
 import { initiateEmailSignUp } from '@/firebase/non-blocking-login';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function SignupPage() {
   const router = useRouter();
   const auth = useAuth();
+  const { user } = useUser();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // If user is logged in, redirect to dashboard
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,25 +41,25 @@ export default function SignupPage() {
       return;
     }
     setIsLoading(true);
-    try {
-      initiateEmailSignUp(auth, email, password);
-      toast({
-        title: "Account Created!",
-        description: "You are being redirected to the dashboard.",
+    
+    // We use the standard Firebase auth call here, which is non-blocking
+    // The onAuthStateChanged listener in our Firebase provider will handle the redirect.
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // This block executes on success, but redirect is handled globally.
+        toast({
+          title: "Account Created!",
+          description: "Redirecting you to the dashboard...",
+        });
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Signup Failed",
+          description: error.message || "Could not create your account. Please try again.",
+        });
       });
-      setTimeout(() => {
-        if(router) {
-            router.push('/dashboard');
-        }
-      }, 2000);
-    } catch (error: any) {
-      setIsLoading(false);
-      toast({
-        variant: "destructive",
-        title: "Signup Failed",
-        description: error.message || "Could not create your account.",
-      });
-    }
   };
 
   return (
@@ -64,11 +75,11 @@ export default function SignupPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading}/>
+          <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} disabled={isLoading} minLength={6}/>
         </div>
         <div className="space-y-2">
           <Label htmlFor="confirm-password">Confirm Password</Label>
-          <Input id="confirm-password" type="password" required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} disabled={isLoading}/>
+          <Input id="confirm-password" type="password" required value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} disabled={isLoading} minLength={6}/>
         </div>
         <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
           {isLoading ? 'Creating Account...' : 'Create Account'}

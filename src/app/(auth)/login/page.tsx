@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from 'next/link';
@@ -24,17 +25,20 @@ export default function LoginPage() {
     
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // The redirect is handled by the layout component which observes auth state.
+      // We just show a success toast here.
       toast({
         title: "Login Successful",
         description: "Redirecting to your dashboard...",
       });
+      // We can still push here as a fallback
       router.push('/dashboard');
     } catch (error: any) {
       setIsLoading(false);
       toast({
         variant: "destructive",
         title: "Login Failed",
-        description: "Invalid email or password. Please try again or sign up.",
+        description: "Invalid email or password. Please try again.",
       });
     }
   };

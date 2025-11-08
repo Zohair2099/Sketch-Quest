@@ -131,7 +131,7 @@ function UserMenu() {
   const handleLogout = () => {
     auth.signOut().then(() => {
       // Force a full page reload to ensure all state is cleared.
-      window.location.href = '/';
+      window.location.href = '/login';
     });
   };
 

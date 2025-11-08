@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -266,6 +267,52 @@
         "id",
         "name"
       ]
+    },
+    "StorageObject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Storage Object",
+      "type": "object",
+      "description": "Represents metadata for a file uploaded to Firebase Storage.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the storage object metadata."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who uploaded the file."
+        },
+        "storagePath": {
+          "type": "string",
+          "description": "The full path to the file in Firebase Storage."
+        },
+        "fileName": {
+          "type": "string",
+          "description": "The original name of the uploaded file."
+        },
+        "fileType": {
+          "type": "string",
+          "description": "The MIME type of the file (e.g., 'image/png')."
+        },
+        "fileSize": {
+          "type": "number",
+          "description": "The size of the file in bytes."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the file was uploaded."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "storagePath",
+        "fileName",
+        "fileType",
+        "fileSize",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -344,6 +391,26 @@
             {
               "name": "progressId",
               "description": "The unique identifier for the progress entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/uploads/{uploadId}",
+        "definition": {
+          "entityName": "StorageObject",
+          "schema": {
+            "$ref": "#/backend/entities/StorageObject"
+          },
+          "description": "Stores metadata for files uploaded by a user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "uploadId",
+              "description": "The unique identifier for the uploaded file metadata."
             }
           ]
         }
