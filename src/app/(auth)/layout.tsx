@@ -41,7 +41,7 @@ export default function AuthLayout({
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12 bg-card">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <Link href="/" aria-label="Back to homepage">
+            <Link href="/dashboard" aria-label="Back to dashboard">
               <Logo />
             </Link>
           </div>

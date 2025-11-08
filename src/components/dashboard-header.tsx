@@ -56,7 +56,7 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
        <div className="flex h-14 items-center">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Logo />
         </Link>
       </div>
@@ -82,7 +82,7 @@ export function DashboardHeader() {
         <SheetContent side="left" className="sm:max-w-xs">
           <nav className="grid gap-6 text-lg font-medium">
             <Link
-              href="/"
+              href="/dashboard"
               className="group flex shrink-0 items-center justify-center gap-2 rounded-full text-lg font-semibold text-primary-foreground md:text-base"
             >
               <Logo />

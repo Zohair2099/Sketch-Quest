@@ -115,7 +115,9 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 bg-card border-t">
         <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
-          <Logo />
+          <Link href="/dashboard">
+            <Logo />
+          </Link>
           <p className="text-sm text-muted-foreground mt-4 sm:mt-0">
             © {new Date().getFullYear()} SketchQuest. {t('footer_rights')}
           </p>
