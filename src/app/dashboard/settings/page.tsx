@@ -146,7 +146,7 @@ export default function SettingsPage() {
                         {t('select_color_palette')}
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-4xl max-h-[80vh]">
+                <DialogContent className="sm:max-w-4xl">
                     <DialogHeader>
                         <DialogTitle>{t('color_palette')}</DialogTitle>
                         <DialogDescription>{t('color_palette_desc')}</DialogDescription>
@@ -184,8 +184,8 @@ export default function SettingsPage() {
             </p>
             <RadioGroup
               value={settings.sidebarPosition}
-              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right' | 'top')}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2"
+              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right')}
+              className="grid grid-cols-2 gap-4 pt-2"
             >
               <div>
                 <RadioGroupItem value="left" id="pos-left" className="peer sr-only" />
@@ -197,12 +197,6 @@ export default function SettingsPage() {
                 <RadioGroupItem value="right" id="pos-right" className="peer sr-only" />
                 <Label htmlFor="pos-right" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
                   <ArrowRightToLine className="h-6 w-6" /> {t('right')}
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="top" id="pos-top" className="peer sr-only" />
-                <Label htmlFor="pos-top" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
-                  <ArrowUpToLine className="h-6 w-6" /> {t('top')}
                 </Label>
               </div>
             </RadioGroup>

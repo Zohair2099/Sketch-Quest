@@ -43,7 +43,6 @@ import { useUser, useAuth, useSidebar } from "@/firebase"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { useSettings } from "@/context/settings-context"
 import { translations } from "@/lib/translations"
-import { TopSidebar } from "@/components/top-sidebar"
 
 function DashboardNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -61,32 +60,10 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
     { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
   ]
   
-  const isHorizontalSidebar = settings.sidebarPosition === 'top';
-  
   if (isUserLoading || !user || !settings) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    )
-  }
-
-  if (isHorizontalSidebar) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <TopSidebar navItems={navItems} />
-        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
-           <div className="lg:hidden">
-              <SidebarTrigger />
-            </div>
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold capitalize">
-                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
-            </h1>
-          </div>
-          <UserMenu />
-        </header>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
     )
   }
