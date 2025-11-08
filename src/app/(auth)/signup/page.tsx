@@ -4,17 +4,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useAuth, useUser } from '@/firebase';
-import { initiateEmailSignUp } from '@/firebase/non-blocking-login';
+import { useAuth, useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc } from 'firebase/firestore';
 
 export default function SignupPage() {
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user } = useUser();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
@@ -46,7 +47,26 @@ export default function SignupPage() {
     // The onAuthStateChanged listener in our Firebase provider will handle the redirect.
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // This block executes on success, but redirect is handled globally.
+        // This block executes on success.
+        // Create a user document in Firestore.
+        const userRef = doc(firestore, 'users', userCredential.user.uid);
+        const newUserProfile = {
+          id: userCredential.user.uid,
+          email: userCredential.user.email,
+          role: 'Student',
+          xp: 0,
+          streak: 0,
+          badges: [],
+          avatar: '',
+          bio: '',
+          institutionId: '',
+          gradeYear: '',
+          preferredLanguage: 'en',
+          darkMode: false,
+        };
+        // Use a non-blocking write to create the user profile.
+        setDocumentNonBlocking(userRef, newUserProfile, { merge: false });
+        
         toast({
           title: "Account Created!",
           description: "Redirecting you to the dashboard...",

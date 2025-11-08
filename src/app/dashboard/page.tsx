@@ -3,27 +3,37 @@
 import { Award, BookOpen, Flame, Zap, Target, CheckCircle, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { doc } from 'firebase/firestore';
+import { useFirestore, useUser, useDoc, useMemoFirebase } from '@/firebase';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useUser } from '@/firebase';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { AiRecommendations } from '@/components/ai-recommendations';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
     const scienceQuestImage = PlaceHolderImages.find(img => img.id === 'quest-science');
     const { user } = useUser();
+    const firestore = useFirestore();
+
+    const userDocRef = useMemoFirebase(() => {
+        if (!user) return null;
+        return doc(firestore, 'users', user.uid);
+    }, [user, firestore]);
     
+    const { data: userData, isLoading: isUserDocLoading } = useDoc(userDocRef);
+
     const stats = [
-        { name: 'XP Points', value: '4,820', progress: 82, icon: <Zap className="w-5 h-5" />, color: 'text-yellow-500' },
-        { name: 'Streak', value: '12 days', progress: 100 * (12/30), icon: <Flame className="w-5 h-5" />, color: 'text-orange-500' },
+        { name: 'XP Points', value: userData?.xp ?? 0, progress: ((userData?.xp ?? 0) / 10000) * 100, icon: <Zap className="w-5 h-5" />, color: 'text-yellow-500' },
+        { name: 'Streak', value: `${userData?.streak ?? 0} days`, progress: ((userData?.streak ?? 0)/30) * 100, icon: <Flame className="w-5 h-5" />, color: 'text-orange-500' },
         { name: 'Quests Completed', value: '15', progress: 50, icon: <CheckCircle className="w-5 h-5" />, color: 'text-green-500' },
     ];
 
@@ -48,7 +58,7 @@ export default function DashboardPage() {
         <div className="space-y-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Welcome back, {user?.displayName || user?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
+                    <CardTitle>Welcome back, {user?.displayName || userData?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
                     <CardDescription>You're doing great. Keep up the momentum!</CardDescription>
                 </CardHeader>
             </Card>
@@ -61,7 +71,11 @@ export default function DashboardPage() {
                             <span className={stat.color}>{stat.icon}</span>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stat.value}</div>
+                            {isUserDocLoading ? (
+                                <Skeleton className="h-8 w-24" />
+                            ) : (
+                                <div className="text-2xl font-bold">{stat.value}</div>
+                            )}
                             <p className="text-xs text-muted-foreground">
                                 {stat.name === 'XP Points' ? '+20% from last week' : stat.name === 'Streak' ? 'Keep it going!' : '50% of all quests'}
                             </p>
