@@ -4,13 +4,11 @@
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
-  Home,
-  Book,
-  BarChart2,
   Settings,
   UserCircle,
   LogOut,
   PanelLeft,
+  LucideIcon,
 } from 'lucide-react';
 
 import {
@@ -30,31 +28,35 @@ import { useSettings } from '@/context/settings-context';
 import { translations } from '@/lib/translations';
 import { Logo } from '@/components/logo';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-export function DashboardHeader() {
-  const { settings } = useSettings();
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+interface DashboardHeaderProps {
+  navItems: NavItem[];
+}
+
+export function DashboardHeader({ navItems }: DashboardHeaderProps) {
   const pathname = usePathname();
-
-  const t = (key: keyof (typeof translations)['en']) => {
-    if (!settings) return translations['en'][key];
+  const isMobile = useIsMobile();
+  
+  if (isMobile) {
     return (
-      translations[settings.language as keyof typeof translations]?.[key] ||
-      translations['en'][key]
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
+        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+          <Logo />
+        </Link>
+        <UserMenu />
+      </header>
     );
-  };
-
-  const navItems = [
-    { href: '/dashboard', icon: Home, label: t('dashboard') },
-    { href: '/dashboard/quests', icon: Book, label: t('quests') },
-    {
-      href: '/dashboard/leaderboard',
-      icon: BarChart2,
-      label: t('leaderboard'),
-    },
-  ];
+  }
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 hidden h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:flex">
        <div className="flex h-14 items-center">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Logo />
@@ -64,7 +66,7 @@ export function DashboardHeader() {
        <nav className="hidden md:flex items-center space-x-6 ml-6">
           {navItems.map(item => (
              <Link key={item.href} href={item.href} className={cn("text-sm font-medium transition-colors hover:text-primary",
-                pathname === item.href ? "text-primary" : "text-muted-foreground"
+                pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true) ? "text-primary" : "text-muted-foreground"
              )}>
                 {item.label}
              </Link>
