@@ -47,7 +47,8 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 sm:py-24 lg:py-32 text-center">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto flex flex-col items-center">
+            <Logo className="mb-8 animate-in fade-in slide-in-from-top-8 duration-1000" />
             <h1 className="text-4xl md:text-6xl font-bold font-headline tracking-tight text-foreground">
               {t('hero_title')}
             </h1>
