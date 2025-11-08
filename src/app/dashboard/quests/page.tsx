@@ -150,8 +150,12 @@ export default function QuestsPage() {
         return (b.trending ? 1 : 0) - (a.trending ? 1 : 0);
       case 'newest':
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      case 'xp':
+      case 'oldest':
+        return new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime();
+      case 'xp-low-high':
         return getQuestXp(a) - getQuestXp(b);
+      case 'xp-high-low':
+        return getQuestXp(b) - getQuestXp(a);
       default:
         return 0;
     }
@@ -185,7 +189,9 @@ export default function QuestsPage() {
                 <SelectItem value="default">Default</SelectItem>
                 <SelectItem value="trending">Trending</SelectItem>
                 <SelectItem value="newest">Newest</SelectItem>
-                <SelectItem value="xp">XP: Low to High</SelectItem>
+                <SelectItem value="oldest">Oldest</SelectItem>
+                <SelectItem value="xp-low-high">XP: Low to High</SelectItem>
+                <SelectItem value="xp-high-low">XP: High to Low</SelectItem>
               </SelectContent>
             </Select>
         </div>
@@ -223,3 +229,5 @@ export default function QuestsPage() {
 }
 
   
+
+    
