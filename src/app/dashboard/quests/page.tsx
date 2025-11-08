@@ -194,7 +194,7 @@ export default function QuestsPage() {
       </div>
 
       {viewMode === 'grid' ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {isLoading ? (
             Array.from({ length: 4 }).map((_, index) => <QuestCardSkeleton key={index} />)
             ) : filteredQuests.length > 0 ? (
@@ -221,4 +221,5 @@ export default function QuestsPage() {
     </div>
   );
 }
+
 
