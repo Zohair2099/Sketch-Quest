@@ -2,9 +2,16 @@
 "use client"
 
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ArrowUpDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { QuestCard } from '@/components/quest-card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export interface MiniLesson {
   title: string;
@@ -35,15 +42,32 @@ export interface QuestTopic {
   imageUrlId: string;
   description: string;
   lessons: Lesson[];
+  dateAdded: string;
+  trending: boolean;
 }
 
-export const questsData: (QuestTopic | { id: string; title: string; topic: string; level: number; xpReward: number; imageUrlId?: string; description: string; })[] = [
+export type Quest = QuestTopic | {
+  id: string;
+  title: string;
+  topic: string;
+  level: number;
+  xpReward: number;
+  imageUrlId?: string;
+  description: string;
+  dateAdded: string;
+  trending: boolean;
+};
+
+
+export const questsData: Quest[] = [
   {
     topicId: 'python',
     topic: 'Python',
     title: 'The Path of the Python',
     imageUrlId: 'quest-python',
     description: 'A comprehensive journey to master the Python programming language, from basic syntax to advanced concepts like object-oriented programming.',
+    dateAdded: '2024-08-01T12:00:00Z',
+    trending: true,
     lessons: [
       { id: 'py1', level: 1, title: '🐍 Your First Line of Code', learningGoals: ['Understand what Python is', 'Print output', 'Learn syntax basics'], miniLessons: [{ title: 'What is Python?', content: 'A high-level, interpreted programming language.' }, { title: 'Writing your first program', content: 'Use the print() function to display output.' }, { title: 'Comments in Python', content: 'Use the # symbol for single-line comments.' }, { title: 'The print() function', content: 'Outputs text or variables to the console.' }], miniQuests: [{ title: '🧩 “Hello, World!”', description: 'Print “Hello, SketchQuest!”' }, { title: '⚡ “Comment Quest”', description: 'Add a comment explaining your code' }, { title: '🎯 “Syntax Master”', description: 'Spot and fix errors in sample code' }], xpReward: 100, badge: 'Code Beginner', description: 'Start your coding journey.' },
       { id: 'py2', level: 2, title: '💎 Treasure of Variables', learningGoals: ['Understand variables', 'Learn different data types', 'Type conversion'], miniLessons: [{ title: 'What is a variable?', content: 'A container for storing data values.' }, { title: 'Data types: int, float, str, bool', content: 'Learn about numbers, text, and true/false values.' }, { title: 'Type casting', content: 'How to convert between data types, e.g., int() or str().' }, { title: 'Checking types with type()', content: 'Use the type() function to find a variable\'s type.' }], miniQuests: [{ title: '🎯 “Treasure Chest”', description: 'Assign variables to store gold coins, player name' }, { title: '🧩 “Type Hunter”', description: 'Identify the correct type of given values' }, { title: '⚡ “Conversion Wizard”', description: 'Convert string to integer' }], xpReward: 150, badge: 'Variable Explorer', description: 'Learn to store and manage data.' },
@@ -68,7 +92,9 @@ export const questsData: (QuestTopic | { id: string; title: string; topic: strin
     level: 2,
     xpReward: 150,
     imageUrlId: 'quest-science',
-    description: 'Explore the vastness of our solar system, from the scorching sun to the icy outer planets.'
+    description: 'Explore the vastness of our solar system, from the scorching sun to the icy outer planets.',
+    dateAdded: '2024-07-20T10:00:00Z',
+    trending: true,
   },
   {
     id: '2',
@@ -77,7 +103,9 @@ export const questsData: (QuestTopic | { id: string; title: string; topic: strin
     level: 1,
     xpReward: 100,
     imageUrlId: 'quest-coding',
-    description: 'Learn the fundamentals of JavaScript, the language of the web. No prior experience needed!'
+    description: 'Learn the fundamentals of JavaScript, the language of the web. No prior experience needed!',
+    dateAdded: '2024-07-15T09:00:00Z',
+    trending: false,
   },
   {
     id: '3',
@@ -86,7 +114,9 @@ export const questsData: (QuestTopic | { id: string; title: string; topic: strin
     level: 3,
     xpReward: 200,
     imageUrlId: 'quest-art',
-    description: 'Discover the masterpieces of Leonardo, Michelangelo, and Raphael.'
+    description: 'Discover the masterpieces of Leonardo, Michelangelo, and Raphael.',
+    dateAdded: '2024-08-05T11:00:00Z',
+    trending: false,
   },
   {
     id: '4',
@@ -94,7 +124,9 @@ export const questsData: (QuestTopic | { id: string; title: string; topic: strin
     topic: 'Math',
     level: 1,
     xpReward: 100,
-    description: 'Build a strong foundation in algebraic concepts, solving equations and inequalities.'
+    description: 'Build a strong foundation in algebraic concepts, solving equations and inequalities.',
+    dateAdded: '2024-06-30T15:00:00Z',
+    trending: true,
   },
 ];
 
@@ -103,8 +135,29 @@ const subjects = ['All', 'Python', 'Science', 'Coding', 'Art', 'Math', 'History'
 export default function QuestsPage() {
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOption, setSortOption] = useState('default');
 
-  const filteredQuests = questsData.filter(quest => {
+  const getQuestXp = (quest: Quest) => {
+    if ('lessons' in quest) {
+      return quest.lessons.reduce((total, lesson) => total + lesson.xpReward, 0);
+    }
+    return quest.xpReward;
+  };
+
+  const sortedQuests = [...questsData].sort((a, b) => {
+    switch (sortOption) {
+      case 'trending':
+        return (b.trending ? 1 : 0) - (a.trending ? 1 : 0);
+      case 'newest':
+        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+      case 'xp':
+        return getQuestXp(a) - getQuestXp(b);
+      default:
+        return 0;
+    }
+  });
+
+  const filteredQuests = sortedQuests.filter(quest => {
     return (selectedSubject === 'All' || quest.topic === selectedSubject) &&
            quest.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
@@ -113,14 +166,28 @@ export default function QuestsPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <h1 className="text-3xl font-bold font-headline">Explore Quests</h1>
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input 
-            placeholder="Search quests..." 
-            className="pl-10"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex w-full md:w-auto items-center gap-2">
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input 
+                placeholder="Search quests..." 
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+             <Select value={sortOption} onValueChange={setSortOption}>
+              <SelectTrigger className="w-full md:w-[180px]">
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">Default</SelectItem>
+                <SelectItem value="trending">Trending</SelectItem>
+                <SelectItem value="newest">Newest</SelectItem>
+                <SelectItem value="xp">XP: Low to High</SelectItem>
+              </SelectContent>
+            </Select>
         </div>
       </div>
 
@@ -154,3 +221,5 @@ export default function QuestsPage() {
     </div>
   );
 }
+
+  
