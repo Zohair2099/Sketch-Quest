@@ -4,9 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader } from 'lucide-react';
 import { useUser } from '@/firebase';
-import { Sidebar } from '@/components/sidebar';
 import { DashboardHeader } from '@/components/dashboard-header';
-import { SidebarProvider } from '@/context/sidebar-context';
 
 export default function DashboardLayout({
   children,
@@ -31,14 +29,9 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <Sidebar />
-        <div className="flex flex-1 flex-col">
-          <DashboardHeader />
-          <main className="flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
-        </div>
-      </div>
-    </SidebarProvider>
+    <div className="flex min-h-screen w-full flex-col">
+      <DashboardHeader />
+      <main className="flex-1 p-4 md:p-8">{children}</main>
+    </div>
   );
 }
