@@ -78,9 +78,6 @@ export default function QuestDetailPage() {
                   <Zap className="h-4 w-4" />
                   <span>{lesson.xpReward} XP</span>
                 </div>
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-green-100 dark:bg-green-900">
-                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                </div>
               </CardContent>
             </Link>
           </Card>

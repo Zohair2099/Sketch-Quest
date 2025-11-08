@@ -23,11 +23,11 @@ import {
 import Link from 'next/link';
 
 const skillData = [
-  { name: 'Python', level: 80, fill: "var(--color-python)" },
-  { name: 'JS', level: 60, fill: "var(--color-js)" },
-  { name: 'Art', level: 45, fill: "var(--color-art)" },
-  { name: 'Math', level: 75, fill: "var(--color-math)" },
-  { name: 'Science', level: 85, fill: "var(--color-science)" },
+  { name: 'Python', level: 0, fill: "var(--color-python)" },
+  { name: 'JS', level: 0, fill: "var(--color-js)" },
+  { name: 'Art', level: 0, fill: "var(--color-art)" },
+  { name: 'Math', level: 0, fill: "var(--color-math)" },
+  { name: 'Science', level: 0, fill: "var(--color-science)" },
 ];
 
 const chartConfig = {
@@ -64,12 +64,7 @@ const badges = [
   { name: 'Streak Starter', icon: <Flame className="w-4 h-4" />, description: 'Maintained a 3-day streak.' },
 ];
 
-const recentActivities = [
-    { icon: <CheckCircle className="w-4 h-4 text-green-500" />, text: 'Completed quest: "The Path of the Python"', time: '2h ago' },
-    { icon: <Trophy className="w-4 h-4 text-yellow-500" />, text: 'Earned badge: "Code Beginner"', time: '3h ago' },
-    { icon: <Flame className="w-4 h-4 text-orange-500" />, text: 'Reached a 3-day streak!', time: '1d ago' },
-    { icon: <Book className="w-4 h-4 text-blue-500" />, text: 'Started quest: "The Wonders of the Cosmos"', time: '2d ago' },
-]
+const recentActivities: any[] = []
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
@@ -106,7 +101,7 @@ export default function ProfilePage() {
           </Avatar>
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-3xl font-bold font-headline">{user.displayName || 'Alex Ryder'}</h1>
-            <p className="text-muted-foreground text-lg">“Python Ninja & Bug Slayer”</p>
+            <p className="text-muted-foreground text-lg">“Future Tech Leader”</p>
             <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
@@ -139,22 +134,22 @@ export default function ProfilePage() {
             <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-center">
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">Rank</p>
-                <p className="text-3xl font-bold">#12</p>
+                <p className="text-3xl font-bold">#0</p>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">XP</p>
-                <p className="text-3xl font-bold">4,820</p>
+                <p className="text-3xl font-bold">0</p>
               </div>
                <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">Streak</p>
                 <div className="flex items-center text-3xl font-bold">
                     <Flame className="w-7 h-7 text-orange-500 mr-1" />
-                    12
+                    0
                 </div>
               </div>
               <div className="flex flex-col items-center gap-2">
                 <p className="text-sm text-muted-foreground">Quests Done</p>
-                <p className="text-3xl font-bold">15</p>
+                <p className="text-3xl font-bold">0</p>
               </div>
             </CardContent>
              <CardContent>
@@ -164,7 +159,7 @@ export default function ProfilePage() {
                     {badges.map(badge => (
                         <Tooltip key={badge.name}>
                         <TooltipTrigger asChild>
-                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-accent text-accent-foreground cursor-pointer">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-accent text-accent-foreground cursor-pointer opacity-50">
                             {badge.icon}
                             </div>
                         </TooltipTrigger>
@@ -211,15 +206,19 @@ export default function ProfilePage() {
                 <Separator />
                 <div>
                      <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
-                     <ul className="space-y-4">
-                        {recentActivities.map((activity, index) => (
-                            <li key={index} className="flex items-center gap-4 text-sm">
-                                {activity.icon}
-                                <span className="flex-1 text-muted-foreground">{activity.text}</span>
-                                <span className="text-xs text-muted-foreground">{activity.time}</span>
-                            </li>
-                        ))}
-                     </ul>
+                     {recentActivities.length > 0 ? (
+                        <ul className="space-y-4">
+                            {recentActivities.map((activity, index) => (
+                                <li key={index} className="flex items-center gap-4 text-sm">
+                                    {activity.icon}
+                                    <span className="flex-1 text-muted-foreground">{activity.text}</span>
+                                    <span className="text-xs text-muted-foreground">{activity.time}</span>
+                                </li>
+                            ))}
+                        </ul>
+                     ) : (
+                        <p className="text-sm text-muted-foreground text-center py-4">No recent activity. Complete a quest to get started!</p>
+                     )}
                 </div>
             </CardContent>
           </Card>
@@ -230,20 +229,7 @@ export default function ProfilePage() {
                 <CardTitle>Goals & Motivation</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                        <p className="font-semibold flex items-center gap-2"><Goal className="w-5 h-5 text-primary" /> Master React by Nov 30</p>
-                        <span className="text-sm font-medium text-primary">75%</span>
-                    </div>
-                    <Progress value={75} className="h-2" />
-                </div>
-                 <div className="p-4 border rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                        <p className="font-semibold flex items-center gap-2"><Swords className="w-5 h-5 text-primary" /> Win the Weekly Coding Challenge</p>
-                        <span className="text-sm font-medium text-primary">In Progress</span>
-                    </div>
-                     <p className="text-sm text-muted-foreground">Next challenge starts in 2 days.</p>
-                </div>
+                <p className="text-sm text-muted-foreground text-center py-4">No goals set yet. Set a goal to start your journey!</p>
             </CardContent>
           </Card>
 
@@ -275,25 +261,17 @@ export default function ProfilePage() {
                 <CardContent className="space-y-4">
                     <div className="flex justify-around text-center">
                         <div>
-                            <p className="text-2xl font-bold">128</p>
+                            <p className="text-2xl font-bold">0</p>
                             <p className="text-sm text-muted-foreground">Followers</p>
                         </div>
                         <div>
-                            <p className="text-2xl font-bold">72</p>
+                            <p className="text-2xl font-bold">0</p>
                             <p className="text-sm text-muted-foreground">Following</p>
                         </div>
                     </div>
                     <Separator />
                     <h4 className="font-semibold">Team Info</h4>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-100 text-indigo-600 font-bold">
-                            A
-                        </div>
-                        <div>
-                            <p className="font-semibold">The Avengers</p>
-                            <p className="text-sm text-muted-foreground">#2 in Team Leaderboard</p>
-                        </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground text-center py-4">You are not part of a team yet.</p>
                 </CardContent>
             </Card>
 

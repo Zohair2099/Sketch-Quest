@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Award, BookOpen, Flame, Zap, Target, CheckCircle, Lightbulb } from 'lucide-react';
@@ -34,17 +35,17 @@ export default function DashboardPage() {
     const stats = [
         { name: 'XP Points', value: userData?.xp ?? 0, progress: ((userData?.xp ?? 0) / 10000) * 100, icon: <Zap className="w-5 h-5" />, color: 'text-yellow-500' },
         { name: 'Streak', value: `${userData?.streak ?? 0} days`, progress: ((userData?.streak ?? 0)/30) * 100, icon: <Flame className="w-5 h-5" />, color: 'text-orange-500' },
-        { name: 'Quests Completed', value: '15', progress: 50, icon: <CheckCircle className="w-5 h-5" />, color: 'text-green-500' },
+        { name: 'Quests Completed', value: '0', progress: 0, icon: <CheckCircle className="w-5 h-5" />, color: 'text-green-500' },
     ];
 
     const chartData = [
-      { day: "Mon", xp: 50 },
-      { day: "Tue", xp: 75 },
-      { day: "Wed", xp: 120 },
-      { day: "Thu", xp: 90 },
-      { day: "Fri", xp: 150 },
-      { day: "Sat", xp: 180 },
-      { day: "Sun", xp: 200 },
+      { day: "Mon", xp: 0 },
+      { day: "Tue", xp: 0 },
+      { day: "Wed", xp: 0 },
+      { day: "Thu", xp: 0 },
+      { day: "Fri", xp: 0 },
+      { day: "Sat", xp: 0 },
+      { day: "Sun", xp: 0 },
     ]
 
     const chartConfig = {
@@ -59,7 +60,7 @@ export default function DashboardPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Welcome back, {user?.displayName || userData?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
-                    <CardDescription>You're doing great. Keep up the momentum!</CardDescription>
+                    <CardDescription>Ready to start your first quest?</CardDescription>
                 </CardHeader>
             </Card>
 
@@ -77,7 +78,7 @@ export default function DashboardPage() {
                                 <div className="text-2xl font-bold">{stat.value}</div>
                             )}
                             <p className="text-xs text-muted-foreground">
-                                {stat.name === 'XP Points' ? '+20% from last week' : stat.name === 'Streak' ? 'Keep it going!' : '50% of all quests'}
+                                {stat.name === 'XP Points' ? 'Start a quest to earn XP' : stat.name === 'Streak' ? 'Start a lesson to build your streak' : 'No quests completed yet'}
                             </p>
                         </CardContent>
                     </Card>
@@ -108,10 +109,10 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                <Card className="lg:col-span-2">
+                 <Card className="lg:col-span-2">
                     <CardHeader>
-                        <CardTitle>Continue Your Quest</CardTitle>
-                        <CardDescription>Jump back into your last lesson.</CardDescription>
+                        <CardTitle>Start a Quest</CardTitle>
+                        <CardDescription>Choose a quest to begin your adventure.</CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col items-start gap-4">
                         {scienceQuestImage && (
@@ -125,16 +126,14 @@ export default function DashboardPage() {
                             />
                         )}
                         <div className="flex-1 w-full">
-                            <div className="flex justify-between items-center">
-                                <Badge variant="secondary" className="mb-2">Science</Badge>
-                                <p className="text-sm text-muted-foreground mt-1">Mission 3 of 5</p>
-                            </div>
-                            <h3 className="text-lg font-semibold">The Solar System</h3>
-                            <Progress value={60} className="mt-3 h-2" />
+                            <h3 className="text-lg font-semibold">Explore a new topic!</h3>
+                            <p className="text-sm text-muted-foreground">There are many quests available. Find one that interests you.</p>
                         </div>
-                        <Button className="w-full mt-2">
-                            <BookOpen className="mr-2 h-4 w-4" />
-                            Continue
+                        <Button className="w-full mt-2" asChild>
+                            <a href="/dashboard/quests">
+                                <BookOpen className="mr-2 h-4 w-4" />
+                                Browse Quests
+                            </a>
                         </Button>
                     </CardContent>
                 </Card>
