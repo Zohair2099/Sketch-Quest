@@ -154,7 +154,6 @@ export const translations = {
         sidebar_position_desc: 'Change the location of the main navigation sidebar.',
         left: 'Left',
         right: 'Right',
-        top: 'Top',
     },
     es: {
         settings: 'Configuración',
@@ -280,7 +279,6 @@ export const translations = {
         sidebar_position_desc: 'Cambia la ubicación de la barra lateral de navegación principal.',
         left: 'Izquierda',
         right: 'Derecha',
-        top: 'Arriba',
     },
     fr: {
         settings: 'Paramètres',
@@ -406,7 +404,6 @@ export const translations = {
         sidebar_position_desc: 'Modifiez l\'emplacement de la barre latérale de navigation principale.',
         left: 'Gauche',
         right: 'Droite',
-        top: 'Haut',
     },
     de: {
         settings: 'Einstellungen',
@@ -532,7 +529,6 @@ export const translations = {
         sidebar_position_desc: 'Ändern Sie die Position der Hauptnavigations-Seitenleiste.',
         left: 'Links',
         right: 'Rechts',
-        top: 'Oben',
     },
     hi: {
         settings: 'सेटिंग्स',
@@ -658,7 +654,6 @@ export const translations = {
         sidebar_position_desc: 'मुख्य नेविगेशन साइडबार का स्थान बदलें।',
         left: 'बायाँ',
         right: 'दायाँ',
-        top: 'ऊपर',
     },
     ur: {
         settings: 'ترتیبات',
@@ -784,6 +779,5 @@ export const translations = {
         sidebar_position_desc: 'مرکزی نیویگیشن سائڈبار کا مقام تبدیل کریں۔',
         left: 'بائیں',
         right: 'دائیں',
-        top: 'اوپر',
     },
 };

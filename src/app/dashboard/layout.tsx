@@ -43,101 +43,23 @@ import { PlaceHolderImages } from "@/lib/placeholder-images"
 import { useUser, useAuth, useSidebar } from "@/firebase"
 import { useSettings } from "@/context/settings-context"
 import { translations } from "@/lib/translations"
-import { TopSidebar } from "@/components/top-sidebar"
-
-function DashboardNav({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const { user, isUserLoading } = useUser();
-  const { settings } = useSettings();
-
-  const t = (key: keyof typeof translations['en']) => {
-    if (!settings) return translations['en'][key];
-    return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
-  };
-
-  const navItems = [
-    { href: "/dashboard", icon: Home, label: t('dashboard') },
-    { href: "/dashboard/quests", icon: Book, label: t('quests') },
-    { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
-  ]
-  
-  if (isUserLoading || !user || !settings) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    )
-  }
-
-  if (settings.sidebarPosition === 'top') {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <TopSidebar navItems={navItems} />
-        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30 md:hidden">
-          <SidebarTrigger />
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold capitalize">
-                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
-            </h1>
-          </div>
-          <UserMenu />
-        </header>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
-      </div>
-    )
-  }
-
-  return (
-    <>
-      <Sidebar collapsible="icon" side={settings.sidebarPosition as 'left' | 'right'}>
-        <SidebarHeader>
-          <Logo />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <Link href={item.href}>
-                  <SidebarMenuButton
-                    isActive={pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true)}
-                    tooltip={item.label}
-                  >
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarToggleButton />
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
-          <SidebarTrigger className="md:hidden" />
-          <div className="flex-1">
-            <h1 className="text-lg font-semibold capitalize">
-                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
-            </h1>
-          </div>
-          <UserMenu />
-        </header>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
-      </SidebarInset>
-    </>
-  )
-}
-
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const { user, isUserLoading } = useUser();
+    const { settings } = useSettings();
+    const pathname = usePathname()
+
+    const t = (key: keyof typeof translations['en']) => {
+        if (!settings) return translations['en'][key];
+        return translations[settings.language as keyof typeof translations]?.[key] || translations['en'][key];
+    };
+
+    const navItems = [
+        { href: "/dashboard", icon: Home, label: t('dashboard') },
+        { href: "/dashboard/quests", icon: Book, label: t('quests') },
+        { href: "/dashboard/leaderboard", icon: BarChart2, label: t('leaderboard') },
+    ]
     
     React.useEffect(() => {
         if (!isUserLoading && !user) {
@@ -145,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
     }, [isUserLoading, user, router]);
 
-    if (isUserLoading || !user) {
+    if (isUserLoading || !user || !settings) {
         return (
           <div className="flex h-screen items-center justify-center">
             <Loader className="h-8 w-8 animate-spin text-primary" />
@@ -153,7 +75,51 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )
     }
 
-    return <DashboardNav>{children}</DashboardNav>;
+    return (
+        <>
+            <Sidebar collapsible="icon" side={settings.sidebarPosition as 'left' | 'right'}>
+                <SidebarHeader>
+                <Logo />
+                </SidebarHeader>
+                <SidebarContent>
+                <SidebarMenu>
+                    {navItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                        <Link href={item.href}>
+                        <SidebarMenuButton
+                            isActive={pathname.startsWith(item.href) && (item.href === '/dashboard' ? pathname === item.href : true)}
+                            tooltip={item.label}
+                        >
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+                </SidebarContent>
+                <SidebarFooter>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarToggleButton />
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarFooter>
+            </Sidebar>
+            <SidebarInset>
+                <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30">
+                    <SidebarTrigger className="md:hidden" />
+                    <div className="flex-1">
+                        <h1 className="text-lg font-semibold capitalize">
+                            {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
+                        </h1>
+                    </div>
+                    <UserMenu />
+                </header>
+                <main className="flex-1 p-4 sm:p-6">{children}</main>
+            </SidebarInset>
+        </>
+    )
 }
 
 function UserMenu() {
