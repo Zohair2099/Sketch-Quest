@@ -70,8 +70,8 @@ export default function DashboardPage() {
                 ))}
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-                <Card>
+            <div className="grid gap-6 lg:grid-cols-5">
+                <Card className="lg:col-span-3">
                     <CardHeader>
                         <CardTitle>Weekly XP Trend</CardTitle>
                         <CardDescription>Your XP gains over the last 7 days.</CardDescription>
@@ -94,29 +94,31 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Continue Your Quest</CardTitle>
                         <CardDescription>Jump back into your last lesson.</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <CardContent className="flex flex-col items-start gap-4">
                         {scienceQuestImage && (
                             <Image
                                 src={scienceQuestImage.imageUrl}
                                 alt={scienceQuestImage.description}
-                                width={120}
-                                height={80}
-                                className="rounded-lg object-cover"
+                                width={400}
+                                height={200}
+                                className="rounded-lg object-cover w-full aspect-[16/9]"
                                 data-ai-hint={scienceQuestImage.imageHint}
                             />
                         )}
-                        <div className="flex-1">
-                            <Badge variant="secondary" className="mb-2">Science</Badge>
+                        <div className="flex-1 w-full">
+                            <div className="flex justify-between items-center">
+                                <Badge variant="secondary" className="mb-2">Science</Badge>
+                                <p className="text-sm text-muted-foreground mt-1">Mission 3 of 5</p>
+                            </div>
                             <h3 className="text-lg font-semibold">The Solar System</h3>
-                            <p className="text-sm text-muted-foreground mt-1">Mission 3 of 5</p>
                             <Progress value={60} className="mt-3 h-2" />
                         </div>
-                        <Button className="mt-4 sm:mt-0">
+                        <Button className="w-full mt-2">
                             <BookOpen className="mr-2 h-4 w-4" />
                             Continue
                         </Button>

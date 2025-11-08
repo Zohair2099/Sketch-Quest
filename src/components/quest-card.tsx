@@ -41,8 +41,8 @@ export function QuestCard({ quest }: QuestCardProps) {
             src={questImage.imageUrl}
             alt={questImage.description}
             width={400}
-            height={200}
-            className="rounded-lg object-cover aspect-[2/1]"
+            height={400}
+            className="rounded-lg object-cover aspect-square"
             data-ai-hint={questImage.imageHint}
           />
         ) : (
@@ -50,8 +50,8 @@ export function QuestCard({ quest }: QuestCardProps) {
             src={fallbackImage.imageUrl}
             alt={fallbackImage.description}
             width={400}
-            height={200}
-            className="rounded-lg object-cover aspect-[2/1]"
+            height={400}
+            className="rounded-lg object-cover aspect-square"
             data-ai-hint={fallbackImage.imageHint}
           />
         )}
@@ -98,7 +98,7 @@ export function QuestCardSkeleton() {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        <Skeleton className="h-[200px] w-full rounded-lg" />
+        <Skeleton className="h-auto w-full aspect-square rounded-lg" />
         <div className="flex items-center justify-between pt-4">
           <Skeleton className="h-6 w-20" />
           <Skeleton className="h-5 w-24" />

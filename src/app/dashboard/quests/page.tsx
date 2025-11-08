@@ -170,18 +170,18 @@ export default function QuestsPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <h1 className="text-3xl font-bold font-headline">Explore Quests</h1>
-        <div className="flex w-full md:w-auto items-center gap-2">
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <div className="flex w-full md:w-auto items-center gap-4">
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
                 placeholder="Search quests..." 
-                className="pl-10"
+                className="pl-12 h-12"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
              <Select value={sortOption} onValueChange={setSortOption}>
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="w-full md:w-[240px] h-12">
                 <ArrowUpDown className="mr-2 h-4 w-4" />
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -227,7 +227,3 @@ export default function QuestsPage() {
     </div>
   );
 }
-
-  
-
-    

@@ -38,7 +38,7 @@ export default function QuestDetailPage() {
                     alt={topicImage.description}
                     width={150}
                     height={150}
-                    className="rounded-lg object-cover w-full md:w-[150px] aspect-video md:aspect-square"
+                    className="rounded-lg object-cover w-full md:w-[150px] aspect-square"
                     data-ai-hint={topicImage.imageHint}
                 />
             )}
