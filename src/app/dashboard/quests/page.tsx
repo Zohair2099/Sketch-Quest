@@ -1,10 +1,10 @@
 
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, ArrowUpDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { QuestCard } from '@/components/quest-card';
+import { QuestCard, QuestCardSkeleton } from '@/components/quest-card';
 import {
   Select,
   SelectContent,
@@ -136,6 +136,15 @@ export default function QuestsPage() {
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('default');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const getQuestXp = (quest: Quest) => {
     if ('lessons' in quest) {
@@ -216,7 +225,9 @@ export default function QuestsPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredQuests.length > 0 ? (
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => <QuestCardSkeleton key={index} />)
+        ) : filteredQuests.length > 0 ? (
           filteredQuests.map(quest => <QuestCard key={'topicId' in quest ? quest.topicId : quest.id} quest={quest} />)
         ) : (
           <p className="text-muted-foreground md:col-span-2 lg:col-span-3 xl:col-span-4 text-center">

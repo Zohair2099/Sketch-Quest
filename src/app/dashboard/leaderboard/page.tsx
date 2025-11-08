@@ -2,7 +2,7 @@
 'use client';
 
 import { Award, Crown, Share2 } from 'lucide-react';
-
+import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const leaderboardData = [
   { rank: 1, name: 'Alex', xp: 4820, avatarId: 'avatar-1' },
@@ -24,6 +25,15 @@ const leaderboardData = [
 export default function LeaderboardPage() {
   const { toast } = useToast();
   const getAvatar = (id: string) => PlaceHolderImages.find(img => img.id === id);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleShare = (name: string, rank: number) => {
     toast({
@@ -58,41 +68,57 @@ export default function LeaderboardPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {leaderboardData.map((player) => {
-                  const avatar = getAvatar(player.avatarId);
-                  return (
-                    <TableRow key={player.rank} className={player.rank <= 3 ? "bg-accent/20" : ""}>
-                      <TableCell className="font-medium text-lg">
-                        <div className="flex items-center justify-center w-8 h-8">
-                          {player.rank === 1 && <Crown className="w-6 h-6 text-yellow-500" />}
-                          {player.rank === 2 && <Award className="w-5 h-5 text-gray-400" />}
-                          {player.rank === 3 && <Award className="w-5 h-5 text-amber-700" />}
-                          {player.rank > 3 && player.rank}
-                        </div>
-                      </TableCell>
+                {isLoading ? (
+                  Array.from({ length: 7 }).map((_, index) => (
+                    <TableRow key={index}>
+                      <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
                       <TableCell>
                         <div className="flex items-center gap-4">
-                          <Avatar>
-                            {avatar && <AvatarImage src={avatar.imageUrl} alt={player.name} />}
-                            <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <span className="font-medium">{player.name}</span>
+                          <Skeleton className="h-10 w-10 rounded-full" />
+                          <Skeleton className="h-6 w-24" />
                         </div>
                       </TableCell>
-                      <TableCell className="text-right font-bold">{player.xp.toLocaleString()}</TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleShare(player.name, player.rank)}
-                          aria-label={`Share ${player.name}'s rank`}
-                        >
-                          <Share2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+                      <TableCell className="text-right"><Skeleton className="h-6 w-16 ml-auto" /></TableCell>
+                      <TableCell className="text-center"><Skeleton className="h-8 w-8 mx-auto" /></TableCell>
                     </TableRow>
-                  );
-                })}
+                  ))
+                ) : (
+                  leaderboardData.map((player) => {
+                    const avatar = getAvatar(player.avatarId);
+                    return (
+                      <TableRow key={player.rank} className={player.rank <= 3 ? "bg-accent/20" : ""}>
+                        <TableCell className="font-medium text-lg">
+                          <div className="flex items-center justify-center w-8 h-8">
+                            {player.rank === 1 && <Crown className="w-6 h-6 text-yellow-500" />}
+                            {player.rank === 2 && <Award className="w-5 h-5 text-gray-400" />}
+                            {player.rank === 3 && <Award className="w-5 h-5 text-amber-700" />}
+                            {player.rank > 3 && player.rank}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-4">
+                            <Avatar>
+                              {avatar && <AvatarImage src={avatar.imageUrl} alt={player.name} />}
+                              <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{player.name}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-bold">{player.xp.toLocaleString()}</TableCell>
+                        <TableCell className="text-center">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleShare(player.name, player.rank)}
+                            aria-label={`Share ${player.name}'s rank`}
+                          >
+                            <Share2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </TabsContent>
