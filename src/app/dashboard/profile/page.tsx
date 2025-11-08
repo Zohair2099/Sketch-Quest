@@ -98,7 +98,7 @@ export default function ProfilePage() {
   return (
     <div className="space-y-8">
       {/* Header section */}
-      <Card>
+      <Card className="animate-in fade-in-50">
         <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
           <Avatar className="h-24 w-24 border-4 border-primary">
             {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
@@ -132,7 +132,7 @@ export default function ProfilePage() {
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-8">
            {/* Gamification & Progress */}
-          <Card>
+          <Card className="animate-in fade-in-50 delay-150">
             <CardHeader>
               <CardTitle>Gamification & Progress</CardTitle>
             </CardHeader>
@@ -180,7 +180,7 @@ export default function ProfilePage() {
           </Card>
           
           {/* Skill Insights */}
-          <Card>
+          <Card className="animate-in fade-in-50 delay-300">
             <CardHeader>
               <CardTitle>Skill & Activity Insights</CardTitle>
             </CardHeader>
@@ -225,7 +225,7 @@ export default function ProfilePage() {
           </Card>
 
           {/* Goals & Motivation */}
-          <Card>
+          <Card className="animate-in fade-in-50 delay-450">
             <CardHeader>
                 <CardTitle>Goals & Motivation</CardTitle>
             </CardHeader>
@@ -248,7 +248,7 @@ export default function ProfilePage() {
           </Card>
 
           {/* Advanced Settings */}
-          <Card>
+          <Card className="animate-in fade-in-50 delay-500">
             <CardHeader>
               <CardTitle>Advanced Settings</CardTitle>
               <CardDescription>Handle with care. These actions are irreversible.</CardDescription>
@@ -268,7 +268,7 @@ export default function ProfilePage() {
         
         {/* Right Sidebar */}
         <div className="space-y-8">
-            <Card>
+            <Card className="animate-in fade-in-50 delay-150">
                 <CardHeader>
                     <CardTitle>Social & Community</CardTitle>
                 </CardHeader>
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card className="animate-in fade-in-50 delay-300">
                 <CardHeader>
                     <CardTitle>Settings & Customization</CardTitle>
                 </CardHeader>

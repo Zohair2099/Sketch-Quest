@@ -44,7 +44,7 @@ function InfoCard({
   return (
     <div
       className={cn(
-        'rounded-xl border bg-card text-card-foreground shadow p-6 animate-in fade-in-50',
+        'rounded-xl border bg-card text-card-foreground shadow p-6',
         className
       )}
     >
@@ -151,7 +151,7 @@ export default function LessonDetailPage() {
         const selectedOption = selectedAnswers[index];
 
         return (
-            <Card className="animate-in fade-in-50">
+            <Card>
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="text-primary"><BrainCircuit size={24} /></div>
@@ -226,7 +226,7 @@ export default function LessonDetailPage() {
         <Progress value={progressValue} />
       </div>
 
-      <div className="min-h-[400px] flex items-center justify-center">
+      <div className="min-h-[400px] flex items-center justify-center animate-in fade-in-50" key={currentStep}>
         {renderStepContent()}
       </div>
       
