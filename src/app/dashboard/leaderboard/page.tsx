@@ -17,16 +17,43 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-confetti';
 
-const leaderboardData = [
-  { rank: 1, name: 'Alex', xp: 4820, avatarId: 'avatar-1' },
-  { rank: 2, name: 'Bella', xp: 4510, avatarId: 'avatar-2' },
-  { rank: 3, name: 'Charlie', xp: 4200, avatarId: 'avatar-3' },
-  { rank: 4, name: 'Diana', xp: 3980, avatarId: 'avatar-1' },
-  { rank: 5, name: 'Ethan', xp: 3750, avatarId: 'avatar-2' },
-  { rank: 6, name: 'Fiona', xp: 3500, avatarId: 'avatar-3' },
-  { rank: 7, name: 'George', xp: 3200, avatarId: 'avatar-1' },
-  { rank: 12, name: 'You', xp: 2800, avatarId: 'avatar-1' },
-];
+const leaderboardData = {
+  class: [
+    { rank: 1, name: 'Alex', xp: 4820, avatarId: 'avatar-1' },
+    { rank: 2, name: 'Bella', xp: 4510, avatarId: 'avatar-2' },
+    { rank: 3, name: 'Charlie', xp: 4200, avatarId: 'avatar-3' },
+    { rank: 4, name: 'Diana', xp: 3980, avatarId: 'avatar-1' },
+    { rank: 5, name: 'You', xp: 3850, avatarId: 'avatar-1' },
+    { rank: 6, name: 'Ethan', xp: 3750, avatarId: 'avatar-2' },
+    { rank: 7, name: 'Fiona', xp: 3500, avatarId: 'avatar-3' },
+  ],
+  school: [
+    { rank: 1, name: 'Oakridge High', xp: 258000, avatarId: 'quest-science' },
+    { rank: 2, name: 'Maplewood Secondary', xp: 241000, avatarId: 'quest-coding' },
+    { rank: 3, name: 'Cedar Creek Academy', xp: 235000, avatarId: 'quest-art' },
+    { rank: 4, name: 'Pine Ridge School', xp: 220000, avatarId: 'quest-python' },
+    { rank: 5, name: 'Your School', xp: 215000, avatarId: 'hero-illustration' },
+  ],
+  state: [
+    { rank: 1, name: 'Olivia', xp: 9850, avatarId: 'avatar-2' },
+    { rank: 2, name: 'Liam', xp: 9700, avatarId: 'avatar-1' },
+    { rank: 3, name: 'Emma', xp: 9600, avatarId: 'avatar-3' },
+    { rank: 25, name: 'You', xp: 3850, avatarId: 'avatar-1' },
+  ],
+  country: [
+    { rank: 1, name: 'Noah', xp: 15200, avatarId: 'avatar-1' },
+    { rank: 2, name: 'Ava', xp: 14900, avatarId: 'avatar-2' },
+    { rank: 3, name: 'Isabella', xp: 14850, avatarId: 'avatar-3' },
+    { rank: 150, name: 'You', xp: 3850, avatarId: 'avatar-1' },
+  ],
+  global: [
+    { rank: 1, name: 'Kenji', xp: 52300, avatarId: 'avatar-1' },
+    { rank: 2, name: 'Fatima', xp: 51900, avatarId: 'avatar-2' },
+    { rank: 3, name: 'Lars', xp: 51800, avatarId: 'avatar-3' },
+    { rank: 4032, name: 'You', xp: 3850, avatarId: 'avatar-1' },
+  ],
+};
+
 
 export default function LeaderboardPage() {
   const { toast } = useToast();
@@ -88,6 +115,7 @@ export default function LeaderboardPage() {
   ];
 
   const visibleTabs = isInstitutionView ? institutionTabs : individualTabs;
+  const currentData = leaderboardData[activeTab as keyof typeof leaderboardData] || [];
 
   return (
     <Card>
@@ -171,13 +199,13 @@ export default function LeaderboardPage() {
                         </TableRow>
                     ))
                     ) : (
-                    leaderboardData.map((player, index) => {
+                    currentData.map((player, index) => {
                         const avatar = getAvatar(player.avatarId);
                         return (
                         <TableRow 
                             key={player.rank} 
                             className={cn(
-                                player.rank <= 3 ? "bg-accent/20" : player.name === 'You' ? 'bg-primary/10' : '',
+                                player.rank <= 3 ? "bg-accent/20" : player.name === 'You' || player.name === 'Your School' ? 'bg-primary/10' : '',
                                 "opacity-0 animate-in fade-in-0"
                             )}
                             style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
@@ -218,15 +246,6 @@ export default function LeaderboardPage() {
                 </Table>
              </TabsContent>
           ))}
-
-          {/* Placeholder content for tabs not currently visible */}
-          {(!isInstitutionView && <TabsContent value="class"><p className="text-muted-foreground p-8 text-center">Switch to Institution view to see Class leaderboards.</p></TabsContent>)}
-          {(!isInstitutionView && <TabsContent value="school"><p className="text-muted-foreground p-8 text-center">Switch to Institution view to see School leaderboards.</p></TabsContent>)}
-
-          {(isInstitutionView && <TabsContent value="state"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see State leaderboards.</p></TabsContent>)}
-          {(isInstitutionView && <TabsContent value="country"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see Country leaderboards.</p></TabsContent>)}
-          {(isInstitutionView && <TabsContent value="global"><p className="text-muted-foreground p-8 text-center">Switch to Individual view to see Global leaderboards.</p></TabsContent>)}
-
         </Tabs>
       </CardContent>
     </Card>
