@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useUser } from '@/firebase';
@@ -5,6 +6,70 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import {
+  Activity, Award, BarChart3, Book, Bot, Calendar, Edit, Flame, Goal, Mail, Shield, Star, Swords, Target, Trophy, UserPlus, Users
+} from 'lucide-react';
+import Link from 'next/link';
+
+const skillData = [
+  { name: 'Python', level: 80, fill: "var(--color-python)" },
+  { name: 'JS', level: 60, fill: "var(--color-js)" },
+  { name: 'Art', level: 45, fill: "var(--color-art)" },
+  { name: 'Math', level: 75, fill: "var(--color-math)" },
+  { name: 'Science', level: 85, fill: "var(--color-science)" },
+];
+
+const chartConfig = {
+  level: {
+    label: "Level",
+  },
+  python: {
+    label: "Python",
+    color: "hsl(var(--chart-1))",
+  },
+  js: {
+    label: "JavaScript",
+    color: "hsl(var(--chart-2))",
+  },
+  art: {
+    label: "Art",
+    color: "hsl(var(--chart-3))",
+  },
+  math: {
+    label: "Math",
+    color: "hsl(var(--chart-4))",
+  },
+  science: {
+    label: "Science",
+    color: "hsl(var(--chart-5))",
+  },
+}
+
+const badges = [
+  { name: 'Code Beginner', icon: <Star className="w-4 h-4" />, description: 'Completed your first coding quest.' },
+  { name: 'Variable Explorer', icon: <Award className="w-4 h-4" />, description: 'Mastered the art of variables.' },
+  { name: 'Logic Knight', icon: <Shield className="w-4 h-4" />, description: 'Conquered complex conditional logic.' },
+  { name: 'Pythonista', icon: <Bot className="w-4 h-4" />, description: 'Achieved Level 10 in Python.' },
+  { name: 'Streak Starter', icon: <Flame className="w-4 h-4" />, description: 'Maintained a 3-day streak.' },
+];
+
+const recentActivities = [
+    { icon: <CheckCircle className="w-4 h-4 text-green-500" />, text: 'Completed quest: "The Path of the Python"', time: '2h ago' },
+    { icon: <Trophy className="w-4 h-4 text-yellow-500" />, text: 'Earned badge: "Code Beginner"', time: '3h ago' },
+    { icon: <Flame className="w-4 h-4 text-orange-500" />, text: 'Reached a 3-day streak!', time: '1d ago' },
+    { icon: <Book className="w-4 h-4 text-blue-500" />, text: 'Started quest: "The Wonders of the Cosmos"', time: '2d ago' },
+]
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
@@ -13,51 +78,243 @@ export default function ProfilePage() {
   if (isUserLoading || !user) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold font-headline">Profile</h1>
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="h-8 w-48" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="h-4 w-64" />
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <Skeleton className="h-24 w-24 rounded-full" />
-             <Skeleton className="h-4 w-1/2" />
-             <Skeleton className="h-4 w-1/3" />
-          </CardContent>
-        </Card>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-24 w-24 rounded-full" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+        </div>
+        <Skeleton className="h-64 w-full" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold font-headline">Profile</h1>
+    <div className="space-y-8">
+      {/* Header section */}
       <Card>
-        <CardHeader>
-          <CardTitle>{user.displayName || 'Anonymous User'}</CardTitle>
-          <CardDescription>
-            This is your personal profile page.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-            <Avatar className="h-24 w-24">
-                {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
-                <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
-            </Avatar>
-            <div>
-                <p className="font-semibold">Email</p>
-                <p className="text-muted-foreground">{user.email}</p>
+        <CardContent className="p-6 flex flex-col md:flex-row items-center gap-6">
+          <Avatar className="h-24 w-24 border-4 border-primary">
+            {avatarImage && <AvatarImage src={user.photoURL || avatarImage.imageUrl} alt="User Avatar" data-ai-hint="student avatar" />}
+            <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-3xl font-bold font-headline">{user.displayName || 'Alex Ryder'}</h1>
+            <p className="text-muted-foreground text-lg">“Python Ninja & Bug Slayer”</p>
+            <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    <span>SketchQuest University</span>
+                </div>
+                 <div className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>Joined August 2024</span>
+                </div>
             </div>
-             <div>
-                <p className="font-semibold">UID</p>
-                <p className="text-muted-foreground text-xs">{user.uid}</p>
-            </div>
+          </div>
+          <div className="flex gap-2">
+             <Button>
+                <UserPlus className="mr-2 h-4 w-4" /> Follow
+             </Button>
+             <Button variant="outline">
+                <Mail className="mr-2 h-4 w-4" /> Message
+             </Button>
+          </div>
         </CardContent>
       </Card>
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-8">
+           {/* Gamification & Progress */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Gamification & Progress</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-center">
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-sm text-muted-foreground">Rank</p>
+                <p className="text-3xl font-bold">#12</p>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-sm text-muted-foreground">XP</p>
+                <p className="text-3xl font-bold">4,820</p>
+              </div>
+               <div className="flex flex-col items-center gap-2">
+                <p className="text-sm text-muted-foreground">Streak</p>
+                <div className="flex items-center text-3xl font-bold">
+                    <Flame className="w-7 h-7 text-orange-500 mr-1" />
+                    12
+                </div>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-sm text-muted-foreground">Quests Done</p>
+                <p className="text-3xl font-bold">15</p>
+              </div>
+            </CardContent>
+             <CardContent>
+                <p className="text-sm font-medium mb-3 text-center">Badges Earned</p>
+                 <TooltipProvider>
+                    <div className="flex justify-center gap-4">
+                    {badges.map(badge => (
+                        <Tooltip key={badge.name}>
+                        <TooltipTrigger asChild>
+                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-accent text-accent-foreground cursor-pointer">
+                            {badge.icon}
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p className="font-semibold">{badge.name}</p>
+                            <p className="text-sm text-muted-foreground">{badge.description}</p>
+                        </TooltipContent>
+                        </Tooltip>
+                    ))}
+                    </div>
+                </TooltipProvider>
+            </CardContent>
+          </Card>
+          
+          {/* Skill Insights */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Skill & Activity Insights</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+                <div>
+                    <h3 className="text-lg font-semibold mb-4">Skill Graph</h3>
+                     <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                        <BarChart data={skillData} layout="vertical" margin={{ left: 10, right: 30 }}>
+                            <CartesianGrid horizontal={false} />
+                            <YAxis 
+                                dataKey="name" 
+                                type="category" 
+                                tickLine={false} 
+                                axisLine={false} 
+                                tickMargin={10}
+                                className="text-sm"
+                            />
+                            <XAxis dataKey="level" type="number" hide />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                            <Bar dataKey="level" radius={8}>
+                                {skillData.map((entry, index) => (
+                                    <div key={`cell-${index}`} fill={entry.fill} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ChartContainer>
+                </div>
+                <Separator />
+                <div>
+                     <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+                     <ul className="space-y-4">
+                        {recentActivities.map((activity, index) => (
+                            <li key={index} className="flex items-center gap-4 text-sm">
+                                {activity.icon}
+                                <span className="flex-1 text-muted-foreground">{activity.text}</span>
+                                <span className="text-xs text-muted-foreground">{activity.time}</span>
+                            </li>
+                        ))}
+                     </ul>
+                </div>
+            </CardContent>
+          </Card>
+
+          {/* Goals & Motivation */}
+          <Card>
+            <CardHeader>
+                <CardTitle>Goals & Motivation</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                        <p className="font-semibold flex items-center gap-2"><Goal className="w-5 h-5 text-primary" /> Master React by Nov 30</p>
+                        <span className="text-sm font-medium text-primary">75%</span>
+                    </div>
+                    <Progress value={75} className="h-2" />
+                </div>
+                 <div className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                        <p className="font-semibold flex items-center gap-2"><Swords className="w-5 h-5 text-primary" /> Win the Weekly Coding Challenge</p>
+                        <span className="text-sm font-medium text-primary">In Progress</span>
+                    </div>
+                     <p className="text-sm text-muted-foreground">Next challenge starts in 2 days.</p>
+                </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Right Sidebar */}
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Social & Community</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex justify-around text-center">
+                        <div>
+                            <p className="text-2xl font-bold">128</p>
+                            <p className="text-sm text-muted-foreground">Followers</p>
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold">72</p>
+                            <p className="text-sm text-muted-foreground">Following</p>
+                        </div>
+                    </div>
+                    <Separator />
+                    <h4 className="font-semibold">Team Info</h4>
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-100 text-indigo-600 font-bold">
+                            A
+                        </div>
+                        <div>
+                            <p className="font-semibold">The Avengers</p>
+                            <p className="text-sm text-muted-foreground">#2 in Team Leaderboard</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Settings & Customization</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col space-y-2">
+                    <Button variant="ghost" className="justify-start" asChild>
+                        <Link href="/dashboard/profile">
+                            <Edit className="mr-2 h-4 w-4" /> Edit Profile
+                        </Link>
+                    </Button>
+                     <Button variant="ghost" className="justify-start" asChild>
+                        <Link href="/dashboard/settings">
+                            <Shield className="mr-2 h-4 w-4" /> Privacy Controls
+                        </Link>
+                    </Button>
+                     <Button variant="ghost" className="justify-start" asChild>
+                        <Link href="/dashboard/settings">
+                            <Bot className="mr-2 h-4 w-4" /> Avatar Customization
+                        </Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
+      </div>
     </div>
   );
 }
+
+// A placeholder icon component
+function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  );
+}
+
+    
