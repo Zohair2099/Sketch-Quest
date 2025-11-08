@@ -72,93 +72,162 @@ export const questsData: Quest[] = [
     dateAdded: '2024-08-01T12:00:00Z',
     trending: true,
     lessons: [
-      { 
-        id: 'py1', 
-        level: 1, 
-        title: '🐍 What is Python?', 
+      {
+        id: 'py1',
+        level: 1,
+        title: '🐍 What is Python?',
         description: 'Begin your adventure into the world of Python.',
         learningGoals: [
-          'Understand what Python is and why it\'s popular.',
+          "Understand what Python is and why it's popular.",
           'Learn the basic syntax for printing output.',
-          'Write and run your very first line of code.'
-        ], 
+          'Write and run your very first line of code.',
+        ],
         miniLessons: [
-          { title: 'What is Python?', content: 'Python is a high-level, interpreted, general-purpose programming language. It is designed for readability and ease of use, making it perfect for beginners.\n\nHigh-level: You don’t need to manage memory or hardware details.\nInterpreted: Python executes code line-by-line, so you can test quickly.\nOpen-source: Free to use and has a huge global community.' },
-          { title: 'Why Learn Python?', content: 'It has a simple syntax, like reading English. It\'s used everywhere: AI, Web Development, Data Science, and Automation.' },
-          { title: 'Your First Command: print()', content: 'The `print()` function is used to display output on the screen. Anything inside the parentheses and quotes will be printed. For example: `print("Welcome to SketchQuest!")`' }
-        ], 
+          {
+            title: 'What is Python?',
+            content: 'Python is a high-level, interpreted, general-purpose programming language. It is designed for readability and simplicity, making it perfect for beginners. Let\'s break down what that means:\n\n- **High-level**: You can write code that is closer to human language without worrying about complex details of the computer\'s hardware (like memory management).\n- **Interpreted**: Python code is executed line by line by an interpreter. This is different from "compiled" languages that need to be fully converted to machine code before they can run. Interpretation makes testing and debugging much faster.\n- **General-purpose**: You can use Python for almost anything! From building websites and analyzing data to creating AI and making games.\n- **Open-source**: It\'s completely free to use, and a massive global community of developers contributes to its improvement.',
+          },
+          {
+            title: 'A Fun Fact About the Name',
+            content: 'Python was created by Guido van Rossum and first released in 1991. Contrary to popular belief, it wasn\'t named after the snake! Guido was a fan of the British comedy group Monty Python, and he named the language after their show, "Monty Python\'s Flying Circus".',
+          },
+          {
+            title: 'Why is Python So Popular?',
+            content: 'Python\'s popularity has exploded for a few key reasons:\n\n- **Easy to Learn**: Its syntax is clean and intuitive, often described as being like "executable pseudocode."\n- **Versatile**: It\'s a Swiss Army knife for programmers, used in web development (Django, Flask), data science (Pandas, NumPy), machine learning (TensorFlow, PyTorch), automation, and more.\n- **Huge Ecosystem**: Python has a vast collection of "libraries" and "frameworks"—pre-written code that you can use to perform complex tasks without starting from scratch.',
+          },
+          {
+            title: 'Your First Command: print()',
+            content: 'The most basic and often first command you\'ll learn in any language is how to display output. In Python, this is done with the `print()` function.\n\nA "function" is a reusable block of code that performs a specific action. The `print()` function\'s action is to show whatever you put inside its parentheses on the screen.\n\nText that you want to print is called a "string," and it must be enclosed in either single quotes (\'\') or double quotes ("").\n\n**Example:**\n`print("Welcome to SketchQuest!")`',
+          },
+        ],
         miniQuests: [
-          { title: 'Print Your Name', description: 'Use the print() function to display your name on the screen.' }, 
-          { title: 'Print a Quote', description: 'Try printing a famous quote. Remember to handle quotation marks inside the string correctly, like this: `print("Someone said, \\"I love coding!\\"")`' }
-        ], 
-        xpReward: 50, 
-        badge: 'First Code Run' 
+          {
+            title: 'Print Your Name',
+            description: 'Use the print() function to display your name on the screen.',
+          },
+          {
+            title: 'Print a Quote',
+            description: 'Try printing a famous quote. Remember to handle quotation marks inside the string correctly, like this: `print("Someone said, \\"I love coding!\\"")`',
+          },
+        ],
+        xpReward: 50,
+        badge: 'First Code Run',
       },
-      { 
-        id: 'py2', 
-        level: 2, 
-        title: '⚙️ Installing Python and Tools', 
+      {
+        id: 'py2',
+        level: 2,
+        title: '⚙️ Installing Python and Tools',
         description: 'Set up your coding environment to start building.',
         learningGoals: [
           'Install Python on your computer.',
           'Verify that the installation was successful.',
-          'Understand what an IDE is and why it helps.'
-        ], 
+          'Understand what an IDE is and why it helps.',
+        ],
         miniLessons: [
-          { title: 'Installing Python', content: 'Go to python.org/downloads and download the latest version. During installation, make sure to check the box that says "Add Python to PATH".' }, 
-          { title: 'Checking Your Installation', content: 'Open your terminal (Command Prompt on Windows, Terminal on macOS/Linux) and type `python --version`. If you see a version number like "Python 3.12.1", you\'re all set!' },
-          { title: 'What is an IDE?', content: 'An Integrated Development Environment (IDE) is a software application that provides comprehensive facilities to computer programmers for software development. An IDE normally consists of at least a source code editor, build automation tools, and a debugger. VS Code, PyCharm, and Replit are popular choices.' }
-        ], 
+          {
+            title: 'Getting Python on Your Machine',
+            content: 'To start coding in Python on your own computer, you first need to install it. The official Python website is the best place to get it.\n\n1.  **Visit python.org/downloads**.\n2.  The site will automatically detect your operating system (Windows, macOS) and suggest the best version to download.\n3.  Click the download button for the latest version.\n4.  **Crucial Step for Windows Users**: When the installer runs, make sure to check the box that says **"Add Python to PATH"** or **"Add python.exe to PATH"**. This allows you to run Python from any folder on your computer.',
+          },
+          {
+            title: 'Verifying Your Installation',
+            content: 'Once the installation is complete, you need to verify that it worked. You can do this using your computer\'s command line interface (CLI).\n\n- **On Windows**: Open Command Prompt, PowerShell, or Windows Terminal.\n- **On macOS**: Open the Terminal app.\n\nOnce opened, type the following command and press Enter:\n`python --version`\n\nIf the installation was successful, you should see something like `Python 3.12.4`. The exact numbers may differ, but as long as it shows a version, you are ready to go!',
+          },
+          {
+            title: 'What is an IDE?',
+            content: 'An Integrated Development Environment (IDE) is a software application that makes programming much easier. Think of it as a super-powered text editor designed specifically for writing code. Most IDEs include:\n\n- **Code Editor**: With syntax highlighting to make code readable.\n- **Debugger**: A tool to help you find and fix errors in your code.\n- **Terminal Integration**: To run your code directly within the application.\n- **Extensions**: To add new features and tools.\n\nPopular IDEs for Python include **VS Code** (highly recommended for beginners), **PyCharm**, and the simple **IDLE** which comes bundled with Python. For online coding without any installation, tools like **Replit** are fantastic.',
+          },
+        ],
         miniQuests: [
-          { title: 'System Check', description: 'Open your terminal and run the `python --version` command.' }, 
-          { title: 'Create a Python File', description: 'Create a new file named `hello.py` on your computer.' }
-        ], 
-        xpReward: 70, 
-        badge: 'Setup Wizard' 
+          { title: 'System Check', description: 'Open your terminal and run the `python --version` command.' },
+          {
+            title: 'Create a Python File',
+            description: 'Create a new file named `hello.py` on your computer.',
+          },
+        ],
+        xpReward: 70,
+        badge: 'Setup Wizard',
       },
-      { 
-        id: 'py3', 
-        level: 3, 
-        title: '✍️ Your First Program', 
+      {
+        id: 'py3',
+        level: 3,
+        title: '✍️ Your First Program',
         description: 'Write and run your first multi-line Python program.',
         learningGoals: [
           'Understand how a program is executed.',
           'Write multiple lines of code in a single file.',
-          'Learn about common beginner syntax errors.'
-        ], 
+          'Learn about common beginner syntax errors.',
+        ],
         miniLessons: [
-          { title: 'What is a Program?', content: 'A program is a set of instructions you give to the computer. Python executes these instructions one by one, from top to bottom.' },
-          { title: 'Strings and Numbers', content: 'Text inside quotes (like "Hello") is called a string. Numbers (like 5 or 3.14) can be used for calculations. `print("5 + 3")` will print the text "5 + 3", but `print(5 + 3)` will print the result, 8.' },
-          { title: 'Running a .py File', content: 'You can save your code in a file with a `.py` extension. To run it, navigate to the file\'s directory in your terminal and type `python your_file_name.py`.' }
-        ], 
+          {
+            title: 'What is a Program?',
+            content: 'A program is simply a sequence of instructions that a computer can execute. When you run a Python script, the Python interpreter reads your file from top to bottom, executing each instruction one by one. This sequential execution is a fundamental concept in programming.',
+          },
+          {
+            title: 'Running Your Code',
+            content: 'There are two primary ways to run Python code:\n\n1.  **Interactive Mode**: You can open your terminal and type `python`. This starts an interactive session where you can type commands one at a time and see the results instantly. It\'s great for quick tests.\n\n2.  **Script Mode**: This is the most common way. You save your code in a file with a `.py` extension (e.g., `my_program.py`). Then, you navigate to that file\'s directory in your terminal and run it using the command: `python my_program.py`.',
+          },
+          {
+            title: 'Strings vs. Numbers',
+            content: 'Python treats data differently based on its type. Text values are called **strings** and must be wrapped in quotes (e.g., `"Hello"`). Numbers can be integers (e.g., `10`) or decimals (e.g., `3.14`) and are not wrapped in quotes. The `print()` function can handle both, but the output changes:\n\n- `print("5 + 3")` will print the literal text `5 + 3`.\n- `print(5 + 3)` will first perform the addition and then print the result, `8`.',
+          },
+          {
+            title: 'Common Beginner Errors',
+            content: 'When you\'re starting, you\'ll encounter errors—and that\'s perfectly normal! Here are a few common ones:\n\n- **SyntaxError**: This happens when your code violates Python\'s grammar rules, like forgetting a closing parenthesis or quotation mark. The error message will often point you to the line where the mistake is.\n- **NameError**: This occurs if you try to use a variable or function that hasn\'t been defined yet.\n- **IndentationError**: Python uses whitespace (spaces and tabs) to structure code. If your lines aren\'t indented correctly, Python will raise this error. We\'ll cover this more in future lessons!',
+          },
+        ],
         miniQuests: [
-          { title: 'Create welcome.py', description: 'Create a file named welcome.py and write two print statements in it: one to say "Welcome to SketchQuest!" and another saying "Let\'s learn Python together!". Run it from your terminal.' },
-          { title: 'Number Challenge', description: 'Write a program that calculates and prints the result of `100 - 25`.' }
-        ], 
-        xpReward: 100, 
-        badge: 'Program Author' 
+          {
+            title: 'Create welcome.py',
+            description: 'Create a file named welcome.py and write two print statements in it: one to say "Welcome to SketchQuest!" and another saying "Let\'s learn Python together!". Run it from your terminal.',
+          },
+          {
+            title: 'Number Challenge',
+            description: 'Write a program that calculates and prints the result of `100 - 25`.',
+          },
+        ],
+        xpReward: 100,
+        badge: 'Program Author',
       },
-      { 
-        id: 'py4', 
-        level: 4, 
-        title: '📝 Comments and Clean Code', 
+      {
+        id: 'py4',
+        level: 4,
+        title: '📝 Comments and Clean Code',
         description: 'Learn to write code that is easy for you and others to read.',
         learningGoals: [
           'Understand the purpose of comments in code.',
           'Learn to write single-line and multi-line comments.',
-          'Follow best practices for writing clean and readable code.'
-        ], 
+          'Follow best practices for writing clean and readable code.',
+        ],
         miniLessons: [
-          { title: 'Single-Line Comments', content: 'Use the hash symbol (`#`) to add a comment. Python will ignore everything on the line after the `#`. \nExample: `# This is a comment`' },
-          { title: 'Multi-Line Comments', content: 'Use triple quotes (`"""` or `\'\'\'`) to create a multi-line comment. This is often used for explaining the purpose of a file or a complex function.\nExample: `"""This program is for my first quest."""`' },
-          { title: 'Why Use Comments?', content: 'Comments make your code easier to understand for your future self and for others who might read it. They help explain *why* you did something, not just *what* the code does.' }
-        ], 
+          {
+            title: 'What Are Comments?',
+            content: 'Comments are explanatory notes within your code. They are completely ignored by the Python interpreter, meaning they do not affect how your program runs. Their sole purpose is to make the code more understandable for humans.',
+          },
+          {
+            title: 'Types of Comments in Python',
+            content: 'Python has two main ways to create comments:\n\n1.  **Single-Line Comments**: These start with a hash symbol (`#`) and extend to the end of the line. They are perfect for brief notes.\n    *Example*: `# This line calculates the total score.`\n\n2.  **Multi-Line Comments**: While Python doesn\'t have an official syntax for multi-line comments, you can use triple-quoted strings (`"""` or `\'\'\'`) to achieve a similar effect. These are often used at the beginning of a file or function to provide a detailed description (this is called a "docstring").\n    *Example*:\n    ```\n    """\n    This program is a simple calculator.\n    Author: Alex\n    Date: 2024-08-15\n    """\n    ```',
+          },
+          {
+            title: 'Why Writing Comments is a Superpower',
+            content: 'Good code explains *what* it does. Good comments explain *why* it does it. Commenting is crucial because:\n\n- **It helps your future self**: When you look at your code months later, you\'ll be glad you left notes explaining your logic.\n- **It improves teamwork**: It allows other developers to understand your code quickly without having to decipher every line.\n- **It aids in debugging**: You can temporarily "comment out" lines of code to disable them and help isolate a problem.',
+          },
+          {
+            title: 'Best Practices for Clean Code',
+            content: 'Clean code is more than just comments. It\'s about writing code that is readable and maintainable.\n\n- **Use descriptive names**: Name your variables and functions in a way that describes their purpose (e.g., `user_name` is better than `un`).\n- **Be consistent**: Stick to a consistent style for naming and formatting.\n- **Don\'t over-comment**: Avoid stating the obvious. For example, `x = x + 1 # Add one to x` is a redundant comment.',
+          },
+        ],
         miniQuests: [
-          { title: 'Comment Your Code', description: 'Take the `welcome.py` program from the last lesson and add a single-line comment above each print statement explaining what it does.' }, 
-          { title: 'Add a Header', description: 'Add a multi-line comment at the top of your `welcome.py` file with your name, the date, and a short description of the program.' }
-        ], 
-        xpReward: 80, 
-        badge: 'Code Communicator' 
+          {
+            title: 'Comment Your Code',
+            description: 'Take the `welcome.py` program from the last lesson and add a single-line comment above each print statement explaining what it does.',
+          },
+          {
+            title: 'Add a Header',
+            description: 'Add a multi-line comment at the top of your `welcome.py` file with your name, the date, and a short description of the program.',
+          },
+        ],
+        xpReward: 80,
+        badge: 'Code Communicator',
       },
       { id: 'py5', level: 5, title: '🔄 Cycle of Codes', learningGoals: ['for loops, while loops', 'break and continue', 'Nested loops'], miniLessons: [], miniQuests: [{ title: '🎯 “Multiplication Matrix”', description: 'Generate 1–10 tables' }, { title: '⚡ “Countdown Quest”', description: 'Print countdown from 10' }, { title: '🧩 “Treasure Hunt”', description: 'Loop through list items' }], xpReward: 250, badge: 'Loop Master', description: 'Repeat actions with loops.' },
       { id: 'py6', level: 6, title: '🧮 Magic Spells (Functions)', learningGoals: ['Defining & calling functions', 'Parameters & return values', 'Scope of variables'], miniLessons: [], miniQuests: [{ title: '🧩 “Spell Creator”', description: 'Write a function to print a greeting' }, { title: '🎯 “Sum Wizard”', description: 'Add two numbers using function' }, { title: '⚡ “Mystery Function”', description: 'Debug a faulty function' }], xpReward: 300, badge: 'Function Magician', description: 'Create reusable blocks of code.' },
@@ -305,6 +374,7 @@ export default function QuestsPage() {
     </div>
   );
 }
+
 
 
 
