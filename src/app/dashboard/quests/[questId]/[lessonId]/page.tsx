@@ -1,19 +1,20 @@
+
 'use client';
 
 import {
   ArrowLeft,
-  Check,
-  CheckCircle,
-  X,
+  ArrowRight,
+  CheckCircle2,
+  XCircle,
   BookText,
-  BrainCircuit,
   Swords,
+  BrainCircuit,
   Lightbulb,
   Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { questsData, Lesson } from '@/app/dashboard/quests/page';
 import {
   Card,
@@ -24,10 +25,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { Progress } from '@/components/ui/progress';
 
 function InfoCard({
   icon,
@@ -43,7 +44,7 @@ function InfoCard({
   return (
     <div
       className={cn(
-        'rounded-xl border bg-card text-card-foreground shadow p-6',
+        'rounded-xl border bg-card text-card-foreground shadow p-6 animate-in fade-in-50',
         className
       )}
     >
@@ -67,14 +68,10 @@ export default function LessonDetailPage() {
     (l) => l.id === lessonId
   ) as Lesson | undefined;
 
+  const [currentStep, setCurrentStep] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string | null>>({});
-  const [submitted, setSubmitted] = useState(false);
 
-  if (!questTopic || !lesson) {
-    notFound();
-  }
-
-  const quizzes = [
+  const quizzes = useMemo(() => [
     {
       question: 'Who created Python?',
       options: ['James Gosling', 'Guido van Rossum', 'Bjarne Stroustrup', 'Dennis Ritchie'],
@@ -95,153 +92,170 @@ export default function LessonDetailPage() {
         options: ['Python Rocks', 'Python+Rocks', 'PythonRocks', 'Error'],
         answer: 'PythonRocks',
     }
-  ];
+  ], []);
+
+  const steps = useMemo(() => {
+    if (!lesson) return [];
+    const studySteps = lesson.miniLessons.map(ml => ({ type: 'study', ...ml }));
+    const taskSteps = lesson.miniQuests.map(mq => ({ type: 'task', ...mq }));
+    const quizSteps = quizzes.map((quiz, index) => ({ type: 'quiz', quiz, index }));
+    return [...studySteps, ...taskSteps, ...quizSteps];
+  }, [lesson, quizzes]);
+
+  if (!questTopic || !lesson) {
+    notFound();
+  }
 
   const handleSelectAnswer = (questionIndex: number, option: string) => {
-    if (submitted) return;
+    if (selectedAnswers[questionIndex]) return; // Already answered
+    
     setSelectedAnswers((prev) => ({
       ...prev,
       [questionIndex]: option,
     }));
+
+    if (quizzes[questionIndex].answer === option) {
+        toast({
+            title: "Correct!",
+            description: "Great job! You've earned some XP.",
+        });
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Not quite!",
+            description: "That's not the right answer. Keep trying!",
+        });
+    }
   };
 
-  const handleSubmitQuiz = () => {
-    setSubmitted(true);
-    let score = 0;
-    quizzes.forEach((quiz, index) => {
-      if (selectedAnswers[index] === quiz.answer) {
-        score++;
-      }
-    });
-    toast({
-        title: "Quiz Submitted!",
-        description: `You scored ${score} out of ${quizzes.length}. Keep up the great work!`,
-    })
-  };
+  const progressValue = (currentStep + 1) / steps.length * 100;
+  const currentStepData = steps[currentStep];
 
-  return (
-    <div className="space-y-8">
-      <Link
-        href={`/dashboard/quests/${questId}`}
-        className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to {questTopic.title}
-      </Link>
-
-      <header>
-        <Badge variant="secondary" className="mb-2">
-          {questTopic.topic}
-        </Badge>
-        <h1 className="font-headline text-4xl font-bold tracking-tight">
-          {lesson.title}
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Level {lesson.level} &middot; {lesson.description}
-        </p>
-      </header>
-
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-8">
-          {/* Study Material */}
-          <InfoCard icon={<BookText size={24} />} title="Study Material">
-            {lesson.miniLessons.map((ml, i) => (
-              <div key={i}>
-                <h4 className="font-semibold text-lg text-foreground">{ml.title}</h4>
-                <p className="whitespace-pre-wrap">{ml.content}</p>
-              </div>
-            ))}
+  const renderStepContent = () => {
+    switch (currentStepData.type) {
+      case 'study':
+        return (
+          <InfoCard icon={<BookText size={24} />} title={currentStepData.title}>
+            <p className="whitespace-pre-wrap text-base">{currentStepData.content}</p>
           </InfoCard>
-
-          {/* Practice Tasks */}
-          <InfoCard icon={<Swords size={24} />} title="Practice Tasks">
-             <ul className="list-disc list-outside pl-5 space-y-2">
-                {lesson.miniQuests.map((mq, i) => (
-                    <li key={i}>
-                        <span className="font-semibold text-foreground">{mq.title}: </span>
-                        <span>{mq.description}</span>
-                    </li>
-                ))}
-            </ul>
+        );
+      case 'task':
+        return (
+          <InfoCard icon={<Swords size={24} />} title="Practice Task">
+            <h4 className="font-semibold text-lg text-foreground">{currentStepData.title}</h4>
+            <p className="whitespace-pre-wrap">{currentStepData.description}</p>
           </InfoCard>
+        );
+      case 'quiz':
+        const { quiz, index } = currentStepData;
+        const selectedOption = selectedAnswers[index];
 
-          {/* Quiz Section */}
-          <Card>
+        return (
+            <Card className="animate-in fade-in-50">
             <CardHeader>
                 <div className="flex items-center gap-4">
                     <div className="text-primary"><BrainCircuit size={24} /></div>
                     <CardTitle className="font-headline">Test Your Knowledge</CardTitle>
                 </div>
-                <CardDescription>Complete the quiz to earn XP and test your understanding.</CardDescription>
+                <CardDescription>Question {index + 1} of {quizzes.length}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                {quizzes.map((quiz, index) => (
-                    <div key={index}>
-                        <p className="font-semibold mb-3">{index + 1}. {quiz.question}</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {quiz.options.map((option) => {
-                                const isSelected = selectedAnswers[index] === option;
-                                const isCorrect = quiz.answer === option;
-                                return (
-                                    <Button
-                                        key={option}
-                                        variant="outline"
-                                        className={cn(
-                                            "h-auto justify-start text-left whitespace-normal py-3",
-                                            submitted && isCorrect && "bg-green-100 border-green-300 text-green-900 hover:bg-green-200 dark:bg-green-900/50 dark:border-green-700 dark:text-green-200",
-                                            submitted && !isCorrect && isSelected && "bg-red-100 border-red-300 text-red-900 hover:bg-red-200 dark:bg-red-900/50 dark:border-red-700 dark:text-red-200",
-                                            !submitted && isSelected && "bg-accent border-primary"
-                                        )}
-                                        onClick={() => handleSelectAnswer(index, option)}
-                                        disabled={submitted}
-                                    >
-                                        <div className="flex-1">{option}</div>
-                                        {submitted && isCorrect && <CheckCircle className="h-5 w-5 text-green-600" />}
-                                        {submitted && !isCorrect && isSelected && <X className="h-5 w-5 text-red-600" />}
-                                    </Button>
-                                )
-                            })}
-                        </div>
+                <div>
+                    <p className="font-semibold mb-4 text-lg">{quiz.question}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {quiz.options.map((option) => {
+                            const isSelected = selectedOption === option;
+                            const isCorrect = quiz.answer === option;
+                            const hasBeenAnswered = selectedOption != null;
+
+                            return (
+                                <Button
+                                    key={option}
+                                    variant="outline"
+                                    className={cn(
+                                        "h-auto justify-start text-left whitespace-normal py-3 transition-all duration-300",
+                                        hasBeenAnswered && isCorrect && "bg-green-100 border-green-400 text-green-900 hover:bg-green-200 dark:bg-green-900/50 dark:border-green-700 dark:text-green-200",
+                                        hasBeenAnswered && !isCorrect && isSelected && "bg-red-100 border-red-400 text-red-900 hover:bg-red-200 dark:bg-red-900/50 dark:border-red-700 dark:text-red-200",
+                                        !hasBeenAnswered && isSelected && "bg-accent border-primary"
+                                    )}
+                                    onClick={() => handleSelectAnswer(index, option)}
+                                    disabled={hasBeenAnswered}
+                                >
+                                    <div className="flex-1">{option}</div>
+                                    {hasBeenAnswered && isCorrect && <CheckCircle2 className="h-5 w-5 text-green-600" />}
+                                    {hasBeenAnswered && !isCorrect && isSelected && <XCircle className="h-5 w-5 text-red-600" />}
+                                </Button>
+                            )
+                        })}
                     </div>
-                ))}
+                </div>
             </CardContent>
-            <CardFooter className="border-t pt-6">
-                <Button onClick={handleSubmitQuiz} disabled={submitted || Object.keys(selectedAnswers).length < quizzes.length} className="w-full sm:w-auto">
-                    {submitted ? 'Quiz Completed' : 'Submit Answers'}
-                </Button>
-            </CardFooter>
           </Card>
-        </div>
+        );
+      default:
+        return null;
+    }
+  };
+  
+  const isQuizStep = currentStepData.type === 'quiz';
+  const isQuizAnswered = isQuizStep && selectedAnswers[currentStepData.index] != null;
+  const canGoNext = !isQuizStep || isQuizAnswered;
 
-        {/* Right Sidebar */}
-        <div className="space-y-8">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Lesson Info</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">XP Reward</span>
-                        <div className="font-bold text-primary flex items-center gap-1">
-                            <Sparkles className="h-5 w-5" />
-                            <span>{lesson.xpReward} XP</span>
-                        </div>
-                    </div>
-                     <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Badge</span>
-                        <Badge variant="outline">{lesson.badge}</Badge>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <InfoCard icon={<Lightbulb size={24} />} title="Gamification Tips" className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-                <ul className="list-disc list-outside pl-5 space-y-2">
-                    <li>Give the learner a "First Code Run" badge 🎖️ when they print their first line.</li>
-                    <li>Add a talking mascot (like a snake or robot) that says the printed message out loud.</li>
-                </ul>
-            </InfoCard>
+  return (
+    <div className="space-y-6">
+      <header className="flex justify-between items-center">
+        <Link
+          href={`/dashboard/quests/${questId}`}
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to {questTopic.title}
+        </Link>
+        <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-yellow-500" />
+            <span className="font-bold text-primary">{lesson.xpReward} XP</span>
+            <Badge variant="outline" className="ml-4">{lesson.badge}</Badge>
         </div>
+      </header>
+      
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm text-muted-foreground">
+            <span>Lesson Progress</span>
+            <span>Step {currentStep + 1} of {steps.length}</span>
+        </div>
+        <Progress value={progressValue} />
       </div>
+
+      <div className="min-h-[400px] flex items-center justify-center">
+        {renderStepContent()}
+      </div>
+      
+      <div className="flex justify-between items-center">
+        <Button 
+            variant="outline"
+            onClick={() => setCurrentStep(s => Math.max(0, s - 1))}
+            disabled={currentStep === 0}
+        >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Previous
+        </Button>
+        {currentStep < steps.length - 1 ? (
+             <Button 
+                onClick={() => setCurrentStep(s => Math.min(steps.length - 1, s + 1))}
+                disabled={!canGoNext}
+            >
+                Next
+                <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+        ) : (
+            <Button asChild>
+                <Link href={`/dashboard/quests/${questId}`}>
+                    Finish Lesson
+                </Link>
+            </Button>
+        )}
+      </div>
+
     </div>
   );
 }
