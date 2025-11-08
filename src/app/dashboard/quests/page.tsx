@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { Search, ArrowUpDown } from 'lucide-react';
+import { Search, ArrowUpDown, LayoutGrid, List } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { QuestCard, QuestCardSkeleton } from '@/components/quest-card';
 import {
@@ -12,6 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Button } from '@/components/ui/button';
+import { QuestListItem, QuestListItemSkeleton } from '@/components/quest-list-item';
+import { cn } from '@/lib/utils';
 
 export interface MiniLesson {
   title: string;
@@ -94,6 +97,7 @@ export default function QuestsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('default');
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
     // Simulate data fetching
@@ -136,7 +140,7 @@ export default function QuestsPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <h1 className="text-3xl font-bold font-headline">Explore Quests</h1>
-        <div className="flex w-full md:w-auto items-center gap-4">
+        <div className="flex w-full md:w-auto items-center gap-2">
             <div className="relative w-full md:w-80">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input 
@@ -160,6 +164,14 @@ export default function QuestsPage() {
                 <SelectItem value="xp-high-low">XP: High to Low</SelectItem>
               </SelectContent>
             </Select>
+            <div className="flex items-center gap-1">
+                <Button variant={viewMode === 'grid' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('grid')}>
+                    <LayoutGrid className="h-5 w-5" />
+                </Button>
+                <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('list')}>
+                    <List className="h-5 w-5" />
+                </Button>
+            </div>
         </div>
       </div>
 
@@ -169,7 +181,7 @@ export default function QuestsPage() {
           <button 
             key={subject}
             onClick={() => setSelectedSubject(subject)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
               selectedSubject === subject 
                 ? 'bg-primary text-primary-foreground' 
                 : 'bg-card hover:bg-muted'
@@ -181,17 +193,32 @@ export default function QuestsPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {isLoading ? (
-          Array.from({ length: 4 }).map((_, index) => <QuestCardSkeleton key={index} />)
-        ) : filteredQuests.length > 0 ? (
-          filteredQuests.map(quest => <QuestCard key={'topicId' in quest ? quest.topicId : quest.id} quest={quest} />)
-        ) : (
-          <p className="text-muted-foreground md:col-span-2 lg:col-span-3 xl:col-span-4 text-center">
-            No quests found. Try a different search or filter.
-          </p>
-        )}
-      </div>
+      {viewMode === 'grid' ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {isLoading ? (
+            Array.from({ length: 4 }).map((_, index) => <QuestCardSkeleton key={index} />)
+            ) : filteredQuests.length > 0 ? (
+            filteredQuests.map(quest => <QuestCard key={'topicId' in quest ? quest.topicId : quest.id} quest={quest} />)
+            ) : (
+            <p className="text-muted-foreground md:col-span-2 lg:col-span-3 xl:col-span-4 text-center">
+                No quests found. Try a different search or filter.
+            </p>
+            )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+            {isLoading ? (
+                Array.from({ length: 4 }).map((_, index) => <QuestListItemSkeleton key={index} />)
+            ) : filteredQuests.length > 0 ? (
+                filteredQuests.map(quest => <QuestListItem key={'topicId' in quest ? quest.topicId : quest.id} quest={quest} />)
+            ) : (
+                 <p className="text-muted-foreground text-center pt-8">
+                    No quests found. Try a different search or filter.
+                </p>
+            )}
+        </div>
+      )}
     </div>
   );
 }
+
