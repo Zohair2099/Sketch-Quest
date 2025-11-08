@@ -26,7 +26,7 @@ export function TopSidebar({ navItems }: TopSidebarProps) {
       <div className="container mx-auto flex h-14 items-center px-4 md:px-6">
         <div className="mr-6 flex items-center">
             <SidebarTrigger className="sm:hidden" />
-            <Link href="/dashboard" className="hidden sm:flex items-center">
+            <Link href="/dashboard" className="flex items-center">
                 <Logo />
             </Link>
         </div>

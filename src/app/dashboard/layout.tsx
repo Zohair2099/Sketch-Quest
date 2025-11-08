@@ -14,6 +14,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
   SidebarFooter,
+  SidebarInset,
 } from "@/components/ui/sidebar"
 import {
   Home,
@@ -40,9 +41,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Logo } from "@/components/logo"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
 import { useUser, useAuth, useSidebar } from "@/firebase"
-import { SidebarInset } from "@/components/ui/sidebar"
 import { useSettings } from "@/context/settings-context"
 import { translations } from "@/lib/translations"
+import { TopSidebar } from "@/components/top-sidebar"
 
 function DashboardNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -64,6 +65,24 @@ function DashboardNav({ children }: { children: React.ReactNode }) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (settings.sidebarPosition === 'top') {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <TopSidebar navItems={navItems} />
+        <header className="flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 sticky top-0 z-30 md:hidden">
+          <SidebarTrigger />
+          <div className="flex-1">
+            <h1 className="text-lg font-semibold capitalize">
+                {pathname.split('/').pop()?.replace('-', ' ') || 'Dashboard'}
+            </h1>
+          </div>
+          <UserMenu />
+        </header>
+        <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
     )
   }
@@ -201,13 +220,15 @@ function UserMenu() {
 function SidebarToggleButton() {
   const { state, toggleSidebar } = useSidebar();
 
+  const buttonClass = "justify-center w-full bg-sidebar-accent text-sidebar-accent-foreground hover:bg-sidebar-accent/90";
+
   if (state === 'collapsed') {
     return (
         <SidebarMenuButton
           onClick={toggleSidebar}
           aria-label="Expand sidebar"
           tooltip="Expand"
-          className="justify-center"
+          className={buttonClass}
         >
           <ChevronsRight className="w-5 h-5" />
         </SidebarMenuButton>
@@ -219,7 +240,7 @@ function SidebarToggleButton() {
         onClick={toggleSidebar}
         aria-label="Collapse sidebar"
         tooltip="Collapse"
-        className="justify-center"
+        className={buttonClass}
     >
         <ChevronsLeft className="w-5 h-5" />
     </SidebarMenuButton>
