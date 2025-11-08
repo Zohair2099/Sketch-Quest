@@ -303,7 +303,7 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-2">
                     <Button variant="ghost" className="justify-start" asChild>
-                        <Link href="/dashboard/profile">
+                        <Link href={`/dashboard/user/${user.uid}`}>
                             <Edit className="mr-2 h-4 w-4" /> Edit Profile
                         </Link>
                     </Button>

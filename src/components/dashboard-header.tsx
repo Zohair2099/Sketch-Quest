@@ -168,7 +168,7 @@ function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/profile">
+          <Link href={`/dashboard/user/${user.uid}`}>
             <UserCircle className="mr-2 h-4 w-4" />
             <span>{t('profile')}</span>
           </Link>
