@@ -177,30 +177,6 @@ export default function SettingsPage() {
                 </DialogContent>
             </Dialog>
           </div>
-           <div className="space-y-2">
-            <Label>{t('sidebar_position')}</Label>
-            <p className="text-sm text-muted-foreground">
-              {t('sidebar_position_desc')}
-            </p>
-            <RadioGroup
-              value={settings.sidebarPosition}
-              onValueChange={(value) => updateSetting('sidebarPosition', value as 'left' | 'right')}
-              className="grid grid-cols-2 gap-4 pt-2"
-            >
-              <div>
-                <RadioGroupItem value="left" id="pos-left" className="peer sr-only" />
-                <Label htmlFor="pos-left" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
-                  <ArrowLeftToLine className="h-6 w-6" /> {t('left')}
-                </Label>
-              </div>
-              <div>
-                <RadioGroupItem value="right" id="pos-right" className="peer sr-only" />
-                <Label htmlFor="pos-right" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
-                  <ArrowRightToLine className="h-6 w-6" /> {t('right')}
-                </Label>
-              </div>
-            </RadioGroup>
-          </div>
         </CardContent>
       </Card>
       

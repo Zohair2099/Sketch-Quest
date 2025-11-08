@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '@/firebase';
-import { initiateEmailSignIn } from '@/firebase/non-blocking-login';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,8 +14,8 @@ export default function LoginPage() {
   const router = useRouter();
   const auth = useAuth();
   const { toast } = useToast();
-  const [email, setEmail] = useState('gdg@demo.com');
-  const [password, setPassword] = useState('12345678');
+  const [email, setEmail] = useState('demo@example.com');
+  const [password, setPassword] = useState('password');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -32,12 +31,11 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (error: any) {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-        // If user not found, try to create a new user
         try {
           await createUserWithEmailAndPassword(auth, email, password);
           toast({
             title: "Account Created & Logged In",
-            description: "Redirecting to your dashboard...",
+            description: "Welcome! Redirecting to your dashboard...",
           });
           router.push('/dashboard');
         } catch (signupError: any) {

@@ -174,6 +174,3 @@ export const useUser = (): UserHookResult => { // Renamed from useAuthUser
   const { user, isUserLoading, userError } = useFirebase(); // Leverages the main hook
   return { user, isUserLoading, userError };
 };
-
-// Re-export useSidebar to be available from the main firebase index
-export { useSidebar } from '@/components/ui/sidebar';
