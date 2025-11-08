@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Award, Crown, Share2 } from 'lucide-react';
+import { Award, Crown, Share2, Filter, Globe, Building, Users, LocateFixed } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 const leaderboardData = [
   { rank: 1, name: 'Alex', xp: 4820, avatarId: 'avatar-1' },
@@ -20,12 +23,14 @@ const leaderboardData = [
   { rank: 5, name: 'Ethan', xp: 3750, avatarId: 'avatar-2' },
   { rank: 6, name: 'Fiona', xp: 3500, avatarId: 'avatar-3' },
   { rank: 7, name: 'George', xp: 3200, avatarId: 'avatar-1' },
+  { rank: 12, name: 'You', xp: 2800, avatarId: 'avatar-1' },
 ];
 
 export default function LeaderboardPage() {
   const { toast } = useToast();
   const getAvatar = (id: string) => PlaceHolderImages.find(img => img.id === id);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInstitutionView, setIsInstitutionView] = useState(false);
 
   useEffect(() => {
     // Simulate data fetching
@@ -44,17 +49,66 @@ export default function LeaderboardPage() {
     console.log(`Sharing rank for ${name}: #${rank}`);
   };
 
+  const handleFindMe = () => {
+    toast({
+        title: "Found you!",
+        description: "You are ranked #12 in your class."
+    });
+  }
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="space-y-4">
         <CardTitle>Leaderboard</CardTitle>
-        <CardDescription>See who's at the top of their game!</CardDescription>
+        <CardDescription>See who's at the top of their game! Switch between individual and institutional rankings.</CardDescription>
+        
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center space-x-2">
+                <Users className="h-5 w-5 text-muted-foreground" />
+                <Label htmlFor="view-mode-switch">Individual</Label>
+                <Switch 
+                    id="view-mode-switch"
+                    checked={isInstitutionView}
+                    onCheckedChange={setIsInstitutionView}
+                />
+                <Label htmlFor="view-mode-switch">Institution</Label>
+                <Building className="h-5 w-5 text-muted-foreground" />
+            </div>
+
+            <div className="flex w-full md:w-auto items-center gap-2">
+                <Select defaultValue="all-time">
+                    <SelectTrigger className="w-full md:w-[150px]">
+                        <SelectValue placeholder="Time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all-time">All Time</SelectItem>
+                        <SelectItem value="this-week">This Week</SelectItem>
+                        <SelectItem value="this-month">This Month</SelectItem>
+                    </SelectContent>
+                </Select>
+                 <Select defaultValue="xp">
+                    <SelectTrigger className="w-full md:w-[150px]">
+                        <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="xp">Performance (XP)</SelectItem>
+                        <SelectItem value="streak">Streak</SelectItem>
+                    </SelectContent>
+                </Select>
+                <Button variant="outline" onClick={handleFindMe}>
+                    <LocateFixed className="mr-2 h-4 w-4" />
+                    My Level
+                </Button>
+            </div>
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="class">
-          <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-flex">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
             <TabsTrigger value="class">Class</TabsTrigger>
             <TabsTrigger value="school">School</TabsTrigger>
+            <TabsTrigger value="state">State</TabsTrigger>
+            <TabsTrigger value="country">Country</TabsTrigger>
             <TabsTrigger value="global">Global</TabsTrigger>
           </TabsList>
           <TabsContent value="class" className="mt-4">
@@ -62,7 +116,7 @@ export default function LeaderboardPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px]">Rank</TableHead>
-                  <TableHead>Student</TableHead>
+                  <TableHead>{isInstitutionView ? 'Institution' : 'Student'}</TableHead>
                   <TableHead className="text-right">XP</TableHead>
                   <TableHead className="w-[100px] text-center">Actions</TableHead>
                 </TableRow>
@@ -86,7 +140,7 @@ export default function LeaderboardPage() {
                   leaderboardData.map((player) => {
                     const avatar = getAvatar(player.avatarId);
                     return (
-                      <TableRow key={player.rank} className={player.rank <= 3 ? "bg-accent/20" : ""}>
+                      <TableRow key={player.rank} className={player.rank <= 3 ? "bg-accent/20" : player.name === 'You' ? 'bg-primary/10' : ''}>
                         <TableCell className="font-medium text-lg">
                           <div className="flex items-center justify-center w-8 h-8">
                             {player.rank === 1 && <Crown className="w-6 h-6 text-yellow-500" />}
@@ -123,6 +177,8 @@ export default function LeaderboardPage() {
             </Table>
           </TabsContent>
           <TabsContent value="school"><p className="text-muted-foreground p-8 text-center">School leaderboard coming soon!</p></TabsContent>
+          <TabsContent value="state"><p className="text-muted-foreground p-8 text-center">State leaderboard coming soon!</p></TabsContent>
+          <TabsContent value="country"><p className="text-muted-foreground p-8 text-center">Country leaderboard coming soon!</p></TabsContent>
           <TabsContent value="global"><p className="text-muted-foreground p-8 text-center">Global leaderboard coming soon!</p></TabsContent>
         </Tabs>
       </CardContent>
