@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from 'react';
@@ -6,6 +7,132 @@ import { Input } from '@/components/ui/input';
 import { QuestCard, QuestCardSkeleton } from '@/components/quest-card';
 
 const questsData = [
+  {
+    id: 'py1',
+    title: '🐍 Your First Line of Code',
+    topic: 'Python',
+    level: 1,
+    xpReward: 100,
+    imageUrlId: 'quest-python',
+    description: 'Understand what Python is, print output, and learn syntax basics.'
+  },
+  {
+    id: 'py2',
+    title: '💎 Treasure of Variables',
+    topic: 'Python',
+    level: 2,
+    xpReward: 150,
+    imageUrlId: 'quest-python',
+    description: 'Understand variables, learn different data types, and perform type conversion.'
+  },
+  {
+    id: 'py3',
+    title: '⚙️ Math Magic',
+    topic: 'Python',
+    level: 3,
+    xpReward: 180,
+    imageUrlId: 'quest-python',
+    description: 'Use arithmetic & logical operators, understand precedence, and build expressions.'
+  },
+  {
+    id: 'py4',
+    title: '🧭 Path of Decisions',
+    topic: 'Python',
+    level: 4,
+    xpReward: 200,
+    imageUrlId: 'quest-python',
+    description: 'Learn to use if, elif, else statements, boolean logic, and nested conditions.'
+  },
+  {
+    id: 'py5',
+    title: '🔄 Cycle of Codes',
+    topic: 'Python',
+    level: 5,
+    xpReward: 250,
+    imageUrlId: 'quest-python',
+    description: 'Master for loops, while loops, and control statements like break and continue.'
+  },
+  {
+    id: 'py6',
+    title: '🧮 Magic Spells (Functions)',
+    topic: 'Python',
+    level: 6,
+    xpReward: 300,
+    imageUrlId: 'quest-python',
+    description: 'Define and call functions, understand parameters, return values, and variable scope.'
+  },
+  {
+    id: 'py7',
+    title: '📜 Scroll of Collections',
+    topic: 'Python',
+    level: 7,
+    xpReward: 350,
+    imageUrlId: 'quest-python',
+    description: 'Learn list creation, indexing, slicing, and the immutability of tuples.'
+  },
+  {
+    id: 'py8',
+    title: '🗝️ Map of Keys',
+    topic: 'Python',
+    level: 8,
+    xpReward: 400,
+    imageUrlId: 'quest-python',
+    description: 'Create dictionaries, modify them, and perform set operations to handle unique items.'
+  },
+  {
+    id: 'py9',
+    title: '✨ String Sorcery',
+    topic: 'Python',
+    level: 9,
+    xpReward: 450,
+    imageUrlId: 'quest-python',
+    description: 'Master string concatenation, slicing, formatting, and common string methods.'
+  },
+  {
+    id: 'py10',
+    title: '📁 Keeper of Files',
+    topic: 'Python',
+    level: 10,
+    xpReward: 500,
+    imageUrlId: 'quest-python',
+    description: 'Learn to read from and write to files using with open(), and handle different file modes.'
+  },
+  {
+    id: 'py11',
+    title: '⚠️ Guardian of Errors',
+    topic: 'Python',
+    level: 11,
+    xpReward: 550,
+    imageUrlId: 'quest-python',
+    description: 'Handle exceptions gracefully using try, except, and finally blocks.'
+  },
+  {
+    id: 'py12',
+    title: '🧰 Library Explorer',
+    topic: 'Python',
+    level: 12,
+    xpReward: 600,
+    imageUrlId: 'quest-python',
+    description: 'Learn to import and use powerful Python modules like math, random, and datetime.'
+  },
+  {
+    id: 'py13',
+    title: '🏰 Class of Heroes',
+    topic: 'Python',
+    level: 13,
+    xpReward: 650,
+    imageUrlId: 'quest-python',
+    description: 'Dive into Object-Oriented Programming by defining classes, objects, and using inheritance.'
+  },
+  {
+    id: 'py14',
+    title: '🏆 Python Master’s Challenge',
+    topic: 'Python',
+    level: 14,
+    xpReward: 1000,
+    imageUrlId: 'quest-python',
+    description: 'Combine everything you\'ve learned into one creative mini-project to prove your mastery.'
+  },
   {
     id: '1',
     title: 'The Wonders of the Cosmos',
@@ -44,7 +171,7 @@ const questsData = [
   },
 ];
 
-const subjects = ['All', 'Science', 'Coding', 'Art', 'Math', 'History'];
+const subjects = ['All', 'Python', 'Science', 'Coding', 'Art', 'Math', 'History'];
 
 export default function QuestsPage() {
   const [selectedSubject, setSelectedSubject] = useState('All');
