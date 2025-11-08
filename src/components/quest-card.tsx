@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
+import { QuestTopic } from '@/app/dashboard/quests/page';
 
 type Quest = {
   id: string;
@@ -18,18 +19,22 @@ type Quest = {
   xpReward: number;
   imageUrlId?: string;
   description: string;
-};
+} | QuestTopic;
 
 interface QuestCardProps {
   quest: Quest;
 }
 
 export function QuestCard({ quest }: QuestCardProps) {
+  const isTopic = 'topicId' in quest;
   const questImage = quest.imageUrlId ? PlaceHolderImages.find(img => img.id === quest.imageUrlId) : null;
   const fallbackImage = PlaceHolderImages.find(img => img.id === 'hero-illustration');
 
+  const href = isTopic ? `/dashboard/quests/${quest.topicId}` : `/dashboard/quests/${quest.id}`;
+
   return (
     <Card className="flex flex-col">
+       <Link href={href} className="flex flex-col flex-grow">
       <CardHeader>
         {questImage ? (
           <Image
@@ -54,7 +59,10 @@ export function QuestCard({ quest }: QuestCardProps) {
           <Badge variant="secondary">{quest.topic}</Badge>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <Star className="w-4 h-4 text-yellow-500" />
-            <span>Level {quest.level}</span>
+            {isTopic ? 
+                <span>{quest.lessons.length} Lessons</span> :
+                <span>Level {quest.level}</span>
+            }
           </div>
         </div>
         <CardTitle className="pt-2">{quest.title}</CardTitle>
@@ -63,17 +71,25 @@ export function QuestCard({ quest }: QuestCardProps) {
         <CardDescription>{quest.description}</CardDescription>
       </CardContent>
       <CardFooter className="flex-col items-start gap-4">
-        <div className="flex items-center font-semibold text-primary">
-          <Zap className="w-5 h-5 mr-2" />
-          <span>{quest.xpReward} XP Reward</span>
-        </div>
+        {isTopic ? (
+             <div className="flex items-center font-semibold text-primary">
+                <Zap className="w-5 h-5 mr-2" />
+                <span>Up to {quest.lessons.reduce((sum, l) => sum + l.xpReward, 0).toLocaleString()} XP</span>
+             </div>
+        ) : (
+            <div className="flex items-center font-semibold text-primary">
+                <Zap className="w-5 h-5 mr-2" />
+                <span>{quest.xpReward} XP Reward</span>
+            </div>
+        )}
         <Button asChild className="w-full">
-          <Link href={`/dashboard/quests/${quest.id}`}>
+          <div className='w-full'>
             <BookOpen className="mr-2 h-4 w-4" />
-            Start Quest
-          </Link>
+            {isTopic ? 'View Quest Path' : 'Start Quest'}
+          </div>
         </Button>
       </CardFooter>
+      </Link>
     </Card>
   );
 }

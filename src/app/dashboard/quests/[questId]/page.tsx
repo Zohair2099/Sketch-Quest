@@ -1,85 +1,27 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { notFound } from 'next/navigation';
-import { ArrowLeft, Check, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle, Flame, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
-
-import { SketchPad } from '@/components/sketch-pad';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { analyzeSketch } from '@/ai/flows/sketch-recognition-flow';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { notFound, useParams } from 'next/navigation';
+import { questsData, QuestTopic } from '@/app/dashboard/quests/page';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
-// Mock data, to be replaced with data fetching
-const questsData = [
-  {
-    id: '1',
-    title: 'Design Quest: Simple Circuit',
-    topic: 'Science',
-    level: 2,
-    xpReward: 150,
-    description: 'A simple circuit consists of a power source, two wires, and a light bulb. When the circuit is complete, the bulb lights up.',
-    task: 'Draw a simple circuit with a battery and a lit light bulb.',
-  },
-];
+export default function QuestDetailPage() {
+  const params = useParams();
+  const questId = params.questId as string;
 
-type AnalysisResult = {
-  isCorrect: boolean;
-  feedback: string;
-};
+  const questTopic = questsData.find((q) => q.topicId === questId) as QuestTopic | undefined;
 
-export default function QuestPage({ params }: { params: { questId: string } }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [sketchData, setSketchData] = useState<string | null>(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 700, height: 400 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const quest = questsData.find((q) => q.id === params.questId);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setCanvasSize({ width: width, height: width * (4 / 7) }); // Maintain aspect ratio
-      }
-    };
-
-    handleResize(); // Set initial size
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  if (!quest) {
+  if (!questTopic) {
     notFound();
   }
 
-  const handleAnalyzeSketch = async () => {
-    if (!sketchData) {
-      alert('Please draw something first!');
-      return;
-    }
-    setIsLoading(true);
-    setAnalysisResult(null);
-    try {
-      const result = await analyzeSketch({
-        prompt: quest.task,
-        sketchDataUri: sketchData,
-      });
-      setAnalysisResult(result);
-    } catch (error) {
-      console.error('Failed to analyze sketch:', error);
-      setAnalysisResult({
-        isCorrect: false,
-        feedback: 'Sorry, I was unable to analyze your sketch. Please try again.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const topicImage = PlaceHolderImages.find((img) => img.id === questTopic.imageUrlId);
 
   return (
     <div className="space-y-6">
@@ -89,55 +31,60 @@ export default function QuestPage({ params }: { params: { questId: string } }) {
       </Link>
 
       <Card>
-        <CardHeader>
-          <div className="flex justify-between items-start">
-            <div>
-              <Badge variant="secondary" className="mb-2">{quest.topic}</Badge>
-              <CardTitle className="font-headline">{quest.title}</CardTitle>
-            </div>
-            <div className="font-semibold text-primary text-lg flex items-center">
-              <Sparkles className="w-5 h-5 mr-2" />
-              <span>{quest.xpReward} XP</span>
-            </div>
-          </div>
-          <CardDescription className="pt-2">{quest.description}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4" ref={containerRef}>
-          <div>
-            <h3 className="font-semibold">Your Mission:</h3>
-            <p className="text-muted-foreground">{quest.task}</p>
-          </div>
-          <SketchPad width={canvasSize.width} height={canvasSize.height} onSketchChange={setSketchData} />
-        </CardContent>
-        <CardFooter className="flex flex-col items-start gap-4">
-          <Button onClick={handleAnalyzeSketch} disabled={isLoading || !sketchData}>
-            {isLoading ? (
-              'Analyzing...'
-            ) : (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Submit Sketch
-              </>
+        <CardHeader className="flex flex-col md:flex-row gap-6">
+            {topicImage && (
+                <Image 
+                    src={topicImage.imageUrl}
+                    alt={topicImage.description}
+                    width={150}
+                    height={150}
+                    className="rounded-lg object-cover w-full md:w-[150px] aspect-video md:aspect-square"
+                    data-ai-hint={topicImage.imageHint}
+                />
             )}
-          </Button>
-
-          {isLoading && (
-            <div className="w-full space-y-2">
-                <Skeleton className="h-8 w-1/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
+            <div className='flex-1'>
+                <Badge variant="secondary">{questTopic.topic}</Badge>
+                <CardTitle className="mt-2 text-3xl font-headline">{questTopic.title}</CardTitle>
+                <CardDescription className="mt-2">{questTopic.description}</CardDescription>
+                <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                        <BookOpen className="h-4 w-4"/>
+                        <span>{questTopic.lessons.length} Lessons</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4"/>
+                        <span>Levels 1-{questTopic.lessons.length}</span>
+                    </div>
+                </div>
             </div>
-          )}
-
-          {analysisResult && (
-            <Alert variant={analysisResult.isCorrect ? 'default' : 'destructive'} className="w-full">
-              {analysisResult.isCorrect ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-              <AlertTitle>{analysisResult.isCorrect ? 'Great Job!' : 'Needs Improvement'}</AlertTitle>
-              <AlertDescription>{analysisResult.feedback}</AlertDescription>
-            </Alert>
-          )}
-        </CardFooter>
+        </CardHeader>
       </Card>
+      
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">Lessons</h2>
+        {questTopic.lessons.map((lesson, index) => (
+          <Card key={lesson.id} className="hover:border-primary/50 transition-colors">
+            <Link href={`/dashboard/quests/${questId}/${lesson.id}`} className="block">
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted font-bold text-muted-foreground">
+                  {lesson.level}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold">{lesson.title}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-1">{lesson.description}</p>
+                </div>
+                <div className="hidden sm:flex items-center gap-1 text-sm font-semibold text-primary">
+                  <Zap className="h-4 w-4" />
+                  <span>{lesson.xpReward} XP</span>
+                </div>
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-green-100 dark:bg-green-900">
+                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+              </CardContent>
+            </Link>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

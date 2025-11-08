@@ -4,134 +4,62 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { QuestCard, QuestCardSkeleton } from '@/components/quest-card';
+import { QuestCard } from '@/components/quest-card';
 
-const questsData = [
+export interface MiniLesson {
+  title: string;
+  content: string;
+}
+
+export interface MiniQuest {
+  title: string;
+  description: string;
+}
+
+export interface Lesson {
+  id: string;
+  level: number;
+  title: string;
+  learningGoals: string[];
+  miniLessons: MiniLesson[];
+  miniQuests: MiniQuest[];
+  xpReward: number;
+  badge: string;
+  description: string;
+}
+
+export interface QuestTopic {
+  topicId: string;
+  topic: string;
+  title: string;
+  imageUrlId: string;
+  description: string;
+  lessons: Lesson[];
+}
+
+export const questsData: (QuestTopic | { id: string; title: string; topic: string; level: number; xpReward: number; imageUrlId?: string; description: string; })[] = [
   {
-    id: 'py1',
-    title: '🐍 Your First Line of Code',
+    topicId: 'python',
     topic: 'Python',
-    level: 1,
-    xpReward: 100,
+    title: 'The Path of the Python',
     imageUrlId: 'quest-python',
-    description: 'Understand what Python is, print output, and learn syntax basics.'
-  },
-  {
-    id: 'py2',
-    title: '💎 Treasure of Variables',
-    topic: 'Python',
-    level: 2,
-    xpReward: 150,
-    imageUrlId: 'quest-python',
-    description: 'Understand variables, learn different data types, and perform type conversion.'
-  },
-  {
-    id: 'py3',
-    title: '⚙️ Math Magic',
-    topic: 'Python',
-    level: 3,
-    xpReward: 180,
-    imageUrlId: 'quest-python',
-    description: 'Use arithmetic & logical operators, understand precedence, and build expressions.'
-  },
-  {
-    id: 'py4',
-    title: '🧭 Path of Decisions',
-    topic: 'Python',
-    level: 4,
-    xpReward: 200,
-    imageUrlId: 'quest-python',
-    description: 'Learn to use if, elif, else statements, boolean logic, and nested conditions.'
-  },
-  {
-    id: 'py5',
-    title: '🔄 Cycle of Codes',
-    topic: 'Python',
-    level: 5,
-    xpReward: 250,
-    imageUrlId: 'quest-python',
-    description: 'Master for loops, while loops, and control statements like break and continue.'
-  },
-  {
-    id: 'py6',
-    title: '🧮 Magic Spells (Functions)',
-    topic: 'Python',
-    level: 6,
-    xpReward: 300,
-    imageUrlId: 'quest-python',
-    description: 'Define and call functions, understand parameters, return values, and variable scope.'
-  },
-  {
-    id: 'py7',
-    title: '📜 Scroll of Collections',
-    topic: 'Python',
-    level: 7,
-    xpReward: 350,
-    imageUrlId: 'quest-python',
-    description: 'Learn list creation, indexing, slicing, and the immutability of tuples.'
-  },
-  {
-    id: 'py8',
-    title: '🗝️ Map of Keys',
-    topic: 'Python',
-    level: 8,
-    xpReward: 400,
-    imageUrlId: 'quest-python',
-    description: 'Create dictionaries, modify them, and perform set operations to handle unique items.'
-  },
-  {
-    id: 'py9',
-    title: '✨ String Sorcery',
-    topic: 'Python',
-    level: 9,
-    xpReward: 450,
-    imageUrlId: 'quest-python',
-    description: 'Master string concatenation, slicing, formatting, and common string methods.'
-  },
-  {
-    id: 'py10',
-    title: '📁 Keeper of Files',
-    topic: 'Python',
-    level: 10,
-    xpReward: 500,
-    imageUrlId: 'quest-python',
-    description: 'Learn to read from and write to files using with open(), and handle different file modes.'
-  },
-  {
-    id: 'py11',
-    title: '⚠️ Guardian of Errors',
-    topic: 'Python',
-    level: 11,
-    xpReward: 550,
-    imageUrlId: 'quest-python',
-    description: 'Handle exceptions gracefully using try, except, and finally blocks.'
-  },
-  {
-    id: 'py12',
-    title: '🧰 Library Explorer',
-    topic: 'Python',
-    level: 12,
-    xpReward: 600,
-    imageUrlId: 'quest-python',
-    description: 'Learn to import and use powerful Python modules like math, random, and datetime.'
-  },
-  {
-    id: 'py13',
-    title: '🏰 Class of Heroes',
-    topic: 'Python',
-    level: 13,
-    xpReward: 650,
-    imageUrlId: 'quest-python',
-    description: 'Dive into Object-Oriented Programming by defining classes, objects, and using inheritance.'
-  },
-  {
-    id: 'py14',
-    title: '🏆 Python Master’s Challenge',
-    topic: 'Python',
-    level: 14,
-    xpReward: 1000,
-    imageUrlId: 'quest-python',
-    description: 'Combine everything you\'ve learned into one creative mini-project to prove your mastery.'
+    description: 'A comprehensive journey to master the Python programming language, from basic syntax to advanced concepts like object-oriented programming.',
+    lessons: [
+      { id: 'py1', level: 1, title: '🐍 Your First Line of Code', learningGoals: ['Understand what Python is', 'Print output', 'Learn syntax basics'], miniLessons: [{ title: 'What is Python?', content: 'A high-level, interpreted programming language.' }, { title: 'Writing your first program', content: 'Use the print() function to display output.' }, { title: 'Comments in Python', content: 'Use the # symbol for single-line comments.' }, { title: 'The print() function', content: 'Outputs text or variables to the console.' }], miniQuests: [{ title: '🧩 “Hello, World!”', description: 'Print “Hello, SketchQuest!”' }, { title: '⚡ “Comment Quest”', description: 'Add a comment explaining your code' }, { title: '🎯 “Syntax Master”', description: 'Spot and fix errors in sample code' }], xpReward: 100, badge: 'Code Beginner', description: 'Start your coding journey.' },
+      { id: 'py2', level: 2, title: '💎 Treasure of Variables', learningGoals: ['Understand variables', 'Learn different data types', 'Type conversion'], miniLessons: [{ title: 'What is a variable?', content: 'A container for storing data values.' }, { title: 'Data types: int, float, str, bool', content: 'Learn about numbers, text, and true/false values.' }, { title: 'Type casting', content: 'How to convert between data types, e.g., int() or str().' }, { title: 'Checking types with type()', content: 'Use the type() function to find a variable\'s type.' }], miniQuests: [{ title: '🎯 “Treasure Chest”', description: 'Assign variables to store gold coins, player name' }, { title: '🧩 “Type Hunter”', description: 'Identify the correct type of given values' }, { title: '⚡ “Conversion Wizard”', description: 'Convert string to integer' }], xpReward: 150, badge: 'Variable Explorer', description: 'Learn to store and manage data.' },
+      { id: 'py3', level: 3, title: '⚙️ Math Magic', learningGoals: ['Use arithmetic & logical operators', 'Understand precedence', 'Build expressions'], miniLessons: [], miniQuests: [{ title: '🧩 “Calculator Quest”', description: 'Create a mini calculator' }, { title: '🎯 “True or False?”', description: 'Use logical operators' }, { title: '⚡ “Battle of Brackets”', description: 'Solve precedence puzzles' }], xpReward: 180, badge: 'Math Magician', description: 'Perform calculations and logic.' },
+      { id: 'py4', level: 4, title: '🧭 Path of Decisions', learningGoals: ['if, elif, else', 'Boolean logic', 'Nested conditions'], miniLessons: [], miniQuests: [{ title: '🎯 “Weather Wizard”', description: 'Write code to decide if you need an umbrella' }, { title: '🧩 “Pass or Fail”', description: 'Grade student marks' }, { title: '⚡ “Guess the Number”', description: 'Simple if-else game' }], xpReward: 200, badge: 'Logic Knight', description: 'Control your code\'s flow.' },
+      { id: 'py5', level: 5, title: '🔄 Cycle of Codes', learningGoals: ['for loops, while loops', 'break and continue', 'Nested loops'], miniLessons: [], miniQuests: [{ title: '🎯 “Multiplication Matrix”', description: 'Generate 1–10 tables' }, { title: '⚡ “Countdown Quest”', description: 'Print countdown from 10' }, { title: '🧩 “Treasure Hunt”', description: 'Loop through list items' }], xpReward: 250, badge: 'Loop Master', description: 'Repeat actions with loops.' },
+      { id: 'py6', level: 6, title: '🧮 Magic Spells (Functions)', learningGoals: ['Defining & calling functions', 'Parameters & return values', 'Scope of variables'], miniLessons: [], miniQuests: [{ title: '🧩 “Spell Creator”', description: 'Write a function to print a greeting' }, { title: '🎯 “Sum Wizard”', description: 'Add two numbers using function' }, { title: '⚡ “Mystery Function”', description: 'Debug a faulty function' }], xpReward: 300, badge: 'Function Magician', description: 'Create reusable blocks of code.' },
+      { id: 'py7', level: 7, title: '📜 Scroll of Collections', learningGoals: ['List creation, indexing, slicing', 'Tuple immutability'], miniLessons: [], miniQuests: [{ title: '🎯 “Shopping Quest”', description: 'Store and print grocery items' }, { title: '⚡ “Slice the List”', description: 'Extract a portion of the list' }, { title: '🧩 “Count It”', description: 'Count elements in a list' }], xpReward: 350, badge: 'Collection Keeper', description: 'Organize data in lists and tuples.' },
+      { id: 'py8', level: 8, title: '🗝️ Map of Keys', learningGoals: ['Create and modify dictionaries', 'Add/remove keys and values', 'Set operations'], miniLessons: [], miniQuests: [{ title: '🧩 “Phone Book”', description: 'Create a dictionary of names & numbers' }, { title: '⚡ “Key Finder”', description: 'Check if a key exists' }, { title: '🎯 “Unique Collector”', description: 'Use sets to remove duplicates' }], xpReward: 400, badge: 'Map Master', description: 'Use key-value pairs and sets.' },
+      { id: 'py9', level: 9, title: '✨ String Sorcery', learningGoals: ['Concatenation, slicing, formatting', 'Common string methods'], miniLessons: [], miniQuests: [{ title: '🎯 “Word Reverser”', description: 'Reverse a given word' }, { title: '⚡ “Name Formatter”', description: 'Use .title() method' }, { title: '🧩 “Letter Counter”', description: 'Count characters in a string' }], xpReward: 450, badge: 'Wordsmith', description: 'Master text manipulation.' },
+      { id: 'py10', level: 10, title: '📁 Keeper of Files', learningGoals: ['Read and write files', 'Use with open()', 'File modes and handling'], miniLessons: [], miniQuests: [{ title: '🎯 “Create Log”', description: 'Write to a text file' }, { title: '⚡ “Read the Secret”', description: 'Read from a file and display' }, { title: '🧩 “Error Buster”', description: 'Handle file not found error' }], xpReward: 500, badge: 'File Keeper', description: 'Work with files on your computer.' },
+      { id: 'py11', level: 11, title: '⚠️ Guardian of Errors', learningGoals: ['try, except, finally', 'Handling multiple errors'], miniLessons: [], miniQuests: [{ title: '🎯 “Safe Division”', description: 'Handle division by zero' }, { title: '⚡ “Input Guard”', description: 'Catch invalid input' }, { title: '🧩 “Mystery Box”', description: 'Debug hidden errors' }], xpReward: 550, badge: 'Debugger', description: 'Handle errors gracefully.' },
+      { id: 'py12', level: 12, title: '🧰 Library Explorer', learningGoals: ['import statements', 'math, random, datetime modules'], miniLessons: [], miniQuests: [{ title: '🎯 “Dice Roller”', description: 'Use random.randint()' }, { title: '⚡ “Square Root Wizard”', description: 'Use math.sqrt()' }, { title: '🧩 “Date Tracker”', description: 'Print current date' }], xpReward: 600, badge: 'Library Explorer', description: 'Use powerful Python modules.' },
+      { id: 'py13', level: 13, title: '🏰 Class of Heroes', learningGoals: ['Define classes & objects', 'Inheritance, constructors', 'Methods & attributes'], miniLessons: [], miniQuests: [{ title: '🎯 “Hero Creator”', description: 'Create a Hero class with attributes' }, { title: '⚡ “Power Inheritance”', description: 'Create subclass Wizard(Hero)' }, { title: '🧩 “Battle Simulation”', description: 'Make two objects interact' }], xpReward: 650, badge: 'OOP Knight', description: 'Learn Object-Oriented Programming.' },
+      { id: 'py14', level: 14, title: '🏆 Python Master’s Challenge', learningGoals: ['Combine everything learned into one creative mini project.'], miniLessons: [], miniQuests: [], xpReward: 1000, badge: 'Python Master', description: 'Prove your mastery.' },
+    ]
   },
   {
     id: '1',
@@ -166,7 +94,6 @@ const questsData = [
     topic: 'Math',
     level: 1,
     xpReward: 100,
-    // No image for this one to test fallback
     description: 'Build a strong foundation in algebraic concepts, solving equations and inequalities.'
   },
 ];
@@ -217,7 +144,7 @@ export default function QuestsPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredQuests.length > 0 ? (
-          filteredQuests.map(quest => <QuestCard key={quest.id} quest={quest} />)
+          filteredQuests.map(quest => <QuestCard key={'topicId' in quest ? quest.topicId : quest.id} quest={quest} />)
         ) : (
           <p className="text-muted-foreground md:col-span-2 lg:col-span-3 xl:col-span-4 text-center">
             No quests found. Try a different search or filter.
