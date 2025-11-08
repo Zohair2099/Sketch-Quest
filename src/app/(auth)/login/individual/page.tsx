@@ -15,8 +15,8 @@ export default function IndividualLoginPage() {
   const router = useRouter();
   const auth = useAuth();
   const { toast } = useToast();
-  const [email, setEmail] = useState('demo@example.com');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -66,7 +66,7 @@ export default function IndividualLoginPage() {
           size="lg" 
           disabled={isLoading}
         >
-          {isLoading ? "Logging in..." : "Login"}
+          {isLoading ? "Logging in..." : "Student Login"}
         </Button>
       </form>
       <div className="mt-6 text-center text-sm">

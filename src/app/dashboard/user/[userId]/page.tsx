@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
 import { doc } from 'firebase/firestore';
 import {
   ChartContainer,
@@ -96,7 +96,9 @@ function EditProfileDialog({ user, userDocRef, userData, children }: { user: any
       setIsLoading(true);
       try {
         // Update Firebase Auth profile
-        await updateProfile(user, { displayName: username });
+        if (user.displayName !== username) {
+            await updateProfile(user, { displayName: username });
+        }
         
         // Update Firestore document
         updateDocumentNonBlocking(userDocRef, {
@@ -344,7 +346,7 @@ export default function ProfilePage() {
                             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                             <Bar dataKey="level" radius={8}>
                                 {skillData.map((entry, index) => (
-                                    <div key={`cell-${index}`} fill={entry.fill} />
+                                    <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
                             </Bar>
                         </BarChart>
@@ -441,15 +443,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-// A placeholder icon component
-function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-      <polyline points="22 4 12 14.01 9 11.01"/>
-    </svg>
-  );
-}
-
-    

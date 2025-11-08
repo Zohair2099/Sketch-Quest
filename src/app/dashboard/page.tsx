@@ -106,7 +106,7 @@ export default function DashboardPage() {
                                 />
                                 <YAxis hide />
                                 <ChartTooltip content={<ChartTooltipContent />} />
-                                <Bar dataKey="xp" fill="var(--color-xp)" radius={8} />
+                                <Bar dataKey="xp" fill="hsl(var(--primary))" radius={8} />
                             </BarChart>
                         </ChartContainer>
                     </CardContent>
@@ -147,5 +147,3 @@ export default function DashboardPage() {
         </div>
     );
 }
-
-    
