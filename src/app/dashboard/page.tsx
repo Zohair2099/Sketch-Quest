@@ -62,7 +62,7 @@ export default function DashboardPage() {
         <div className="space-y-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Welcome back, {user?.displayName || userData?.email?.split('@')[0] || 'Explorer'}!</CardTitle>
+                    <CardTitle>Welcome back, {userData?.username || 'Explorer'}!</CardTitle>
                     <CardDescription>Ready to continue your learning adventure?</CardDescription>
                 </CardHeader>
             </Card>
@@ -147,3 +147,5 @@ export default function DashboardPage() {
         </div>
     );
 }
+
+    

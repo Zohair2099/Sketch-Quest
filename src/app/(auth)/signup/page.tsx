@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 
 export default function SignupPage() {
@@ -18,6 +18,7 @@ export default function SignupPage() {
   const firestore = useFirestore();
   const { user } = useUser();
   const { toast } = useToast();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -43,22 +44,27 @@ export default function SignupPage() {
     }
     setIsLoading(true);
     
-    // We use the standard Firebase auth call here, which is non-blocking
-    // The onAuthStateChanged listener in our Firebase provider will handle the redirect.
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // This block executes on success.
+        
+        // Update Firebase Auth profile
+        await updateProfile(userCredential.user, {
+            displayName: username
+        });
+
         // Create a user document in Firestore.
         const userRef = doc(firestore, 'users', userCredential.user.uid);
         const newUserProfile = {
           id: userCredential.user.uid,
+          username: username,
           email: userCredential.user.email,
           role: 'Student',
           xp: 0,
           streak: 0,
           badges: [],
           avatar: '',
-          bio: '',
+          bio: `Welcome to my SketchQuest profile!`,
           institutionId: '',
           gradeYear: '',
           preferredLanguage: 'en',
@@ -71,13 +77,20 @@ export default function SignupPage() {
           title: "Account Created!",
           description: "Redirecting you to the dashboard...",
         });
+        // The onAuthStateChanged listener will handle the redirect automatically.
       })
       .catch((error) => {
         setIsLoading(false);
+        let description = "Could not create your account. Please try again.";
+        if (error.code === 'auth/email-already-in-use') {
+            description = "This email is already in use. Please log in or use a different email.";
+        } else if (error.code === 'auth/invalid-email') {
+            description = "Please enter a valid email address.";
+        }
         toast({
           variant: "destructive",
           title: "Signup Failed",
-          description: error.message || "Could not create your account. Please try again.",
+          description: description,
         });
       });
   };
@@ -88,7 +101,11 @@ export default function SignupPage() {
         <h1 className="text-3xl font-bold font-headline">Create your Account</h1>
         <p className="text-muted-foreground">Join SketchQuest and start your learning adventure!</p>
       </div>
-      <form onSubmit={handleSignup} className="space-y-6">
+      <form onSubmit={handleSignup} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="username">Username</Label>
+          <Input id="username" type="text" placeholder="Your awesome name" required value={username} onChange={e => setUsername(e.target.value)} disabled={isLoading} />
+        </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
           <Input id="email" type="email" placeholder="you@example.com" required value={email} onChange={e => setEmail(e.target.value)} disabled={isLoading} />
@@ -114,3 +131,5 @@ export default function SignupPage() {
     </>
   );
 }
+
+    

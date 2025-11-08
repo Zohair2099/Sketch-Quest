@@ -24,7 +24,12 @@ import {
 import Link from 'next/link';
 import { useSettings } from '@/context/settings-context';
 import { useToast } from '@/hooks/use-toast';
-import { defaultSettings } from '@/context/settings-context';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useState } from 'react';
+import { updateProfile } from 'firebase/auth';
 
 const skillData = [
   { name: 'Python', level: 0, fill: "var(--color-python)" },
@@ -69,6 +74,99 @@ const badges = [
 ];
 
 const recentActivities: any[] = []
+
+function EditProfileDialog({ user, userDocRef, userData, children }: { user: any; userDocRef: any, userData: any, children: React.ReactNode }) {
+  const { toast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
+  const [username, setUsername] = useState(userData?.username || '');
+  const [bio, setBio] = useState(userData?.bio || '');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSaveChanges = async () => {
+      if (!user || !userDocRef) return;
+      if (!username) {
+        toast({
+            variant: "destructive",
+            title: "Username required",
+            description: "Please enter a username.",
+        });
+        return;
+      }
+      
+      setIsLoading(true);
+      try {
+        // Update Firebase Auth profile
+        await updateProfile(user, { displayName: username });
+        
+        // Update Firestore document
+        updateDocumentNonBlocking(userDocRef, {
+            username: username,
+            bio: bio
+        });
+
+        toast({
+            title: "Profile Updated",
+            description: "Your changes have been saved successfully.",
+        });
+        setIsOpen(false);
+      } catch (error) {
+        console.error("Error updating profile: ", error);
+        toast({
+            variant: "destructive",
+            title: "Update Failed",
+            description: "Could not save your changes. Please try again.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+  };
+
+  return (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>{children}</DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                  <DialogTitle>Edit profile</DialogTitle>
+                  <DialogDescription>
+                      Make changes to your profile here. Click save when you're done.
+                  </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="username" className="text-right">
+                          Username
+                      </Label>
+                      <Input
+                          id="username"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="col-span-3"
+                      />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="bio" className="text-right">
+                          Bio
+                      </Label>
+                      <Textarea
+                          id="bio"
+                          value={bio}
+                          onChange={(e) => setBio(e.target.value)}
+                          className="col-span-3"
+                          placeholder="Tell us a little about yourself"
+                      />
+                  </div>
+              </div>
+              <DialogFooter>
+                  <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
+                  <Button type="submit" onClick={handleSaveChanges} disabled={isLoading}>
+                      {isLoading ? "Saving..." : "Save changes"}
+                  </Button>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
+  );
+}
+
 
 export default function ProfilePage() {
   const { user, isUserLoading } = useUser();
@@ -149,8 +247,8 @@ export default function ProfilePage() {
             <AvatarFallback>{user.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
           </Avatar>
           <div className="flex-1 text-center md:text-left">
-            <h1 className="text-3xl font-bold font-headline">{user.displayName || 'Alex Ryder'}</h1>
-            <p className="text-muted-foreground text-lg">“Future Tech Leader”</p>
+            <h1 className="text-3xl font-bold font-headline">{userData?.username || 'Alex Ryder'}</h1>
+            <p className="text-muted-foreground text-lg">“{userData?.bio || 'Future Tech Leader'}”</p>
             <div className="mt-2 flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
@@ -161,6 +259,14 @@ export default function ProfilePage() {
                     <span>Joined August 2024</span>
                 </div>
             </div>
+          </div>
+          <div className="flex-shrink-0">
+             <EditProfileDialog user={user} userDocRef={userDocRef} userData={userData}>
+                <Button variant="outline">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Profile
+                </Button>
+            </EditProfileDialog>
           </div>
         </CardContent>
       </Card>
@@ -304,19 +410,7 @@ export default function ProfilePage() {
                     <CardTitle>Social & Community</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="flex justify-around text-center">
-                        <div>
-                            <p className="text-2xl font-bold">0</p>
-                            <p className="text-sm text-muted-foreground">Followers</p>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold">0</p>
-                            <p className="text-sm text-muted-foreground">Following</p>
-                        </div>
-                    </div>
-                    <Separator />
-                    <h4 className="font-semibold">Team Info</h4>
-                    <p className="text-sm text-muted-foreground text-center py-4">You are not part of a team yet.</p>
+                    <p className="text-sm text-muted-foreground text-center py-4">Social features coming soon!</p>
                 </CardContent>
             </Card>
 
@@ -325,11 +419,11 @@ export default function ProfilePage() {
                     <CardTitle>Settings & Customization</CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col space-y-2">
-                    <Button variant="ghost" className="justify-start" asChild>
-                        <Link href={`/dashboard/user/${user.uid}`}>
-                            <Edit className="mr-2 h-4 w-4" /> Edit Profile
-                        </Link>
-                    </Button>
+                    <EditProfileDialog user={user} userDocRef={userDocRef} userData={userData}>
+                       <Button variant="ghost" className="justify-start">
+                         <Edit className="mr-2 h-4 w-4" /> Edit Profile
+                       </Button>
+                    </EditProfileDialog>
                      <Button variant="ghost" className="justify-start" asChild>
                         <Link href="/dashboard/settings">
                             <Shield className="mr-2 h-4 w-4" /> Privacy Controls
@@ -357,3 +451,5 @@ function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
