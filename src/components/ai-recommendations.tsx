@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,23 +7,27 @@ import { recommendNextLessons } from '@/ai/ai-lesson-recommendations';
 import { useUser } from '@/firebase';
 import { Lightbulb } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
+import { questsData } from '@/app/dashboard/quests/page';
 
-// Hardcoded sample data for demonstration
-const availableLessonsSample = `
-- Quest ID: 1, Title: The Wonders of the Cosmos, Topic: Science, Difficulty: 2
-- Quest ID: 2, Title: Introduction to JavaScript, Topic: Coding, Difficulty: 1
-- Quest ID: 3, Title: The Art of the Renaissance, Topic: Art, Difficulty: 3
-- Quest ID: 4, Title: Algebra Basics, Topic: Math, Difficulty: 1
-- Quest ID: 5, Title: World War II History, Topic: History, Difficulty: 4
-`;
+// Function to format quest data for the AI prompt
+function formatAvailableLessons() {
+  return questsData.map(quest => {
+    if ('topicId' in quest) {
+        // This is a QuestTopic with multiple lessons
+        return `Quest Series: "${quest.title}" (Topic: ${quest.topic})\nDescription: ${quest.description}\nLessons available: ${quest.lessons.length}`;
+    } else {
+        // This is a single quest
+        return `Quest: "${quest.title}" (Topic: ${quest.topic}, Level: ${quest.level})\nDescription: ${quest.description}`;
+    }
+  }).join('\n\n');
+}
 
 const learningHistorySample = `
 Completed Quests:
-- Quest ID: 2, Title: Introduction to JavaScript, Score: 95%
-- Quest ID: 4, Title: Algebra Basics, Score: 88%
+- None yet. This is a new student.
 
-Areas of Difficulty:
-- In "Algebra Basics", the student struggled with questions involving quadratic equations.
+Areas of Interest:
+- The student has shown interest in programming and wants to start with something beginner-friendly.
 `;
 
 
@@ -36,10 +41,11 @@ export function AiRecommendations() {
       if (user) {
         setIsLoading(true);
         try {
+          const availableLessons = formatAvailableLessons();
           const result = await recommendNextLessons({
             studentId: user.uid,
             learningHistory: learningHistorySample,
-            availableLessons: availableLessonsSample,
+            availableLessons: availableLessons,
           });
           setRecommendations(result.recommendedLessons);
         } catch (error) {
