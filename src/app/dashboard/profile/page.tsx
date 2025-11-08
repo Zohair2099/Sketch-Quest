@@ -18,7 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import {
-  Activity, Award, BarChart3, Book, Bot, Calendar, Edit, Flame, Goal, Mail, Shield, Star, Swords, Target, Trophy, UserPlus, Users
+  Activity, Award, BarChart3, Book, Bot, Calendar, Edit, FlaskConical, Flame, Goal, Mail, Shield, Star, Swords, Target, Trash2, Trophy, UserPlus, Users
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -246,6 +246,24 @@ export default function ProfilePage() {
                 </div>
             </CardContent>
           </Card>
+
+          {/* Advanced Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Advanced Settings</CardTitle>
+              <CardDescription>Handle with care. These actions are irreversible.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col sm:flex-row gap-4">
+              <Button variant="destructive">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Reset Account
+              </Button>
+              <Button variant="outline">
+                <FlaskConical className="mr-2 h-4 w-4" />
+                Enter Test Mode
+              </Button>
+            </CardContent>
+          </Card>
         </div>
         
         {/* Right Sidebar */}
@@ -316,5 +334,3 @@ function CheckCircle(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
