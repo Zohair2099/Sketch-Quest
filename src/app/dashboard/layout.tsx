@@ -1,8 +1,9 @@
+
 'use client';
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Book, BarChart2, Home, Loader, User } from 'lucide-react';
+import { Book, BarChart2, Home, Loader, User, Bot } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -35,6 +36,13 @@ export default function DashboardLayout({
     { href: '/dashboard/profile', icon: User, label: t('profile') },
   ];
 
+  const bottomNavItems = [
+    { href: '/dashboard', icon: Home, label: t('dashboard') },
+    { href: '/dashboard/quests', icon: Book, label: t('quests') },
+    { href: '/dashboard/chat', icon: Bot, label: 'Chat' },
+    { href: '/dashboard/profile', icon: User, label: t('profile') },
+  ];
+
   React.useEffect(() => {
     if (!isUserLoading && !user) {
       router.push('/login');
@@ -55,7 +63,7 @@ export default function DashboardLayout({
       <main className="flex-1 p-4 md:p-8 animate-in fade-in-50 pb-20 md:pb-8">
         {children}
       </main>
-      {isMobile && <BottomSidebar navItems={navItems} />}
+      {isMobile && <BottomSidebar navItems={bottomNavItems} />}
     </div>
   );
 }

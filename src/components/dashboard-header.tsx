@@ -9,6 +9,7 @@ import {
   LogOut,
   PanelLeft,
   LucideIcon,
+  Bot,
 } from 'lucide-react';
 
 import {
@@ -47,9 +48,17 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
   if (isMobile) {
     return (
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <Logo />
-        </Link>
+        <div className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+              <Logo />
+            </Link>
+             <Button variant="outline" size="icon" asChild>
+                <Link href="/dashboard/chat">
+                    <Bot className="h-5 w-5" />
+                    <span className="sr-only">AI Chat</span>
+                </Link>
+            </Button>
+        </div>
         <UserMenu />
       </header>
     );
@@ -57,10 +66,16 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 hidden h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:flex">
-       <div className="flex h-14 items-center">
+       <div className="flex h-14 items-center gap-4">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Logo />
         </Link>
+        <Button variant="outline" asChild>
+            <Link href="/dashboard/chat">
+                <Bot className="mr-2 h-4 w-4" />
+                AI Chat
+            </Link>
+        </Button>
       </div>
 
       {/* Mobile Menu (remains for smaller screen sizes if needed, though hidden by main logic) */}
