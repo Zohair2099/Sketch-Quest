@@ -38,7 +38,7 @@ export function Header() {
         </nav>
         <div className="flex items-center space-x-4">
           <Button variant="ghost" asChild>
-            <Link href="/login">{t('login')}</Link>
+            <Link href="/login">Student Login</Link>
           </Button>
           <Button asChild>
             <Link href="/dashboard">{t('get_started')}</Link>

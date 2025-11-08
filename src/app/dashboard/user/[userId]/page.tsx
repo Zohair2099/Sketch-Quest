@@ -162,14 +162,6 @@ export default function ProfilePage() {
                 </div>
             </div>
           </div>
-          <div className="flex gap-2">
-             <Button>
-                <UserPlus className="mr-2 h-4 w-4" /> Follow
-             </Button>
-             <Button variant="outline">
-                <Mail className="mr-2 h-4 w-4" /> Message
-             </Button>
-          </div>
         </CardContent>
       </Card>
 

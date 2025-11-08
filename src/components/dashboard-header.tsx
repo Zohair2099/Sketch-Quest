@@ -55,7 +55,7 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
             </Link>
              <Button variant="ghost" size="icon" asChild>
                 <Link href="/dashboard/chatbot">
-                    <Bot className="h-5 w-5" />
+                    <Bot className="h-6 w-6 text-yellow-500" />
                 </Link>
             </Button>
         </div>
@@ -75,7 +75,7 @@ export function DashboardHeader({ navItems }: DashboardHeaderProps) {
                 <TooltipTrigger asChild>
                      <Button variant="ghost" size="icon" className="ml-2" asChild>
                         <Link href="/dashboard/chatbot">
-                            <Bot className="h-5 w-5" />
+                            <Bot className="h-6 w-6 text-yellow-500" />
                         </Link>
                     </Button>
                 </TooltipTrigger>
